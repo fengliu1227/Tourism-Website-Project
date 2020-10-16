@@ -1,8 +1,5 @@
 # Tourism-Website-Porject
- Final Project for CS-546: Web Programming.
-
-2020 Fall.
-
+ Final Project for CS-546: Web Programming, 2020 Fall<br>
 ## About us
 Group member:<br>
 1.Feng Liu<br>
