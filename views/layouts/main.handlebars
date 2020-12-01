@@ -3,9 +3,22 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Document</title>
+    <title>Tourism Web</title>
+    <link rel="stylesheet" href="../public/css/styles.css">
+
 </head>
 <body>
-    
+    <nav>
+        <a href="/">Home</a>
+        {{!-- {{#if userLoggedIn}} --}}
+        <a href="/">Profile</a>
+        <a href="/">Manage</a>
+        <a href="/">Logout</a>
+        {{!-- {{else}} --}}
+        <a href="/" >Login</a>
+        <a href="/">Sign up</a>
+        {{!-- {{/if}} --}}
+    </nav>
+    {{{body}}}
 </body>
 </html>
