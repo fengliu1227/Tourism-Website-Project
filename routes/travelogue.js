@@ -1,38 +1,50 @@
-const express = require('express');
+const express = require("express");
 const router = express.Router();
-const data = require('../data');
+const data = require('../data/');
 const travelogues = data.travelogues;
 
-router.get('/private', async (req, res) => {
-    if (req.session.user) {
-        let userId = req.session.user.userId;
-        let result = await travelogues.getTravelogueByUserId(userId);
-        if(result){
-            res.render('travelogues/private', {result, noEmpty: true});
-        }else{
-            res.render('travelogues/private', {empty: true});
-        }
-    }else {
-        res.redirect('/users/login')
-    }
+router.get('/', async(req, res) => {
+    res.render('travelogues/search');
 });
 
-router.post('/private/travelogues', async (req, res) => {
-    if (req.session.user) {
-        let user = req.session.user;
-        let userId = user.userId;
-        let attricationId = req.attricationId;
-        let description = req.description;
+router.get('/search', async(req, res) => {
+    res.render('travelogues/search');
+});
 
-        let result = await travelogues.addTravelogue(userId, attricationId, description);
-        if(result){
-            res.render('travelogues/addTravelogue', {success: true});
-        }else{
-            res.render('travelogues/addTravelogue', {error: true});
-        }
-    }else {
+router.post('/result', async(req, res) => {
+    console.log(req.body);
+    let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+    res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, travelogue: traveloguesList });
+
+    //for test without data
+    // var a = [{ title: "?????", content: "!!!!!" }];
+    // res.render('travelogues/result', { Research: true, Detail: false, keyword: "lalallalala", Travelogue: a });
+});
+
+router.post('/detail', async(req, res) => {
+    let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
+    res.render('travelogues/result', { Research: false, Detail: true, Travelogue: currentTravelogue });
+});
+
+router.get("/add", async(req, res) => {
+    if (req.session.user) {
+        res.render('travelogues/add');
+    } else {
         res.redirect('/users/login')
     }
+    // for test without data
+    // res.render('travelogues/add');
 });
+
+
+router.get("/mine", async(req, res) => {
+    if (req.session.user) {
+        let travelogueList = await travelogues.getTraveloguesByUserId(req.session.user.userId);
+        res.render('travelogues/myTravelogues'), { travelogue: travelogueList };
+    } else {
+        res.redirect('/users/login')
+    }
+})
+
 
 module.exports = router;

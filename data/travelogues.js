@@ -1,76 +1,82 @@
 const { ObjectId } = require('mongodb');
 
 const mongoCollections = require("../config/mongoCollections");
-const travelogues = mongoCollections.travleogues;
+const travelogues = mongoCollections.travelogues;
+const users = require('../data/users');
+const attractions = require('../data/attractions');
 
-async function addTravelogue(userId, attricationId, description) {
-    const traveloguesCollection = await travelogues();
-    let newTravelogue = {
-        userId: userId,
-        attricationId: attricationId,
-        description: description,
-    };
-    const insertInfo = await traveloguesCollection.insertOne(newTravelogue);
-    if (insertInfo.insertedCount === 0) throw "could not add Travelogue";
-    const newId = insertInfo.insertedId + "";
-    const Travelogue = await getTravelogueById(newId);
-    return Travelogue;
-}
+let exportedMothod = {
+    async addTravelogues(userId, relatedAttractoinId, travelogue) {
+        if (!userId && !relatedAttractoinId && !travelogue) throw 'all fields need to input a value';
+        const traveloguesCollection = await travelogues();
+        let newTravelogues = {
+            userId: userId,
+            relatedAttractoinId: relatedAttractoinId,
+            travelogue: travelogue
+        };
+        const insertInfo = await traveloguesCollection.insertOne(newTravelogues);
+        if (insertInfo.insertedCount === 0) throw "add travelogues failed";
+        const newId = insertInfo.insertedId;
+        try {
+            await attractions.addTravelogueToAttraction(relatedAttractoinId, newId.toString());
+            await users.addTravelogueToUser(userId, newId.toString());
+        } catch (e) {
+            throw "add travelogues failed";
+        }
+        const currentTravelogue = await this.getTraveloguesById(newId.toString());
+        return currentTravelogue;
+    },
+    async getTraveloguesById(id) {
+        if (!id) throw "no id provided";
+        const traveloguesCollection = await travelogues();
+        const travelogue = await traveloguesCollection.findOne({ _id: ObjectId(id) });
+        if (!travelogue) throw "travelogue with that id does not exist";
+        return travelogue;
+    },
 
-async function updateTravelogue(id, travelogue) {
-    if (!id) throw 'Please provide an id';
-    if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
+    async getTraveloguesByUserId(userId) {
+        if (!userId) throw 'No useId provided';
+        const traveloguesCollection = await travelogues();
+        const travelogue = await traveloguesCollection.findOne({ userId: ObjectId(userId) });
+        if (!travelogue) throw "Opps! Not Found the travelogues of that user";
+        return travelogue;
+    },
 
-    const traveloguesCollection = await travelogues();
-    const updateTravelogueData = {};
-    let parsedId = ObjectId(id);
-    const oldTravelogue = await this.getTravelogueById(id);
+    async getTraveloguesByAttractionId(attractionId) {
+        const traveloguesCollection = await travelogues();
+        const travelogue = await traveloguesCollection.findOne({ relatedAttractoinId: ObjectId(attractionId) });
 
-    updateTravelogueData.userId = oldTravelogue.userId;
-    updateTravelogueData.attricationId = oldTravelogue.attricationId;
+        if (!travelogue) throw "comment with that id does not exist";
+        return travelogue;
+    },
 
-    if (travelogue.description) {
-        updateTravelogueData.description = travelogue.description;
+    async getTraveloguesBySearch(searchTerm) {
+        if (!searchTerm) throw 'No keyword provided!?';
+        const query = new RegExp(searchTerm, 'i');
+        const traveloguesCollection = await travelogues();
+        const traveloguesList = await traveloguesCollection.find({ "travelogue.Name": query }).toArray();
+        return traveloguesList;
+    },
+
+    async removeTravelogue(id) {
+        if (!id) throw 'no id provided';
+        const traveloguesCollection = await travelogues();
+        let travelogue = null;
+        try {
+            travelogue = await await this.getTraveloguesById(id);
+        } catch (e) {
+            console.log(e);
+        }
+        try {
+            const deletionInfo = await traveloguesCollection.removeOne({ _id: ObjectId(id) });
+            if (deletionInfo.deletedCount === 0) throw 'Error: delete failed';
+            await attractions.removeTravelogueFromAttraction(travelogue.relatedAttractoinId, id);
+            await users.removeTravelogueFromUser(travelogue.userId, id);
+        } catch (e) {
+            throw "remove travelogues failed";
+        }
+        return { "travelogueId": id, "deleted": true };
     }
-
-    await traveloguesCollection.updateOne({ _id: parsedId }, { $set: updateTravelogueData });
-    return await this.getTravelogueById(id);
 }
 
-async function getTravelogueById(id) {
-    const traveloguesCollection = await travelogues();
-    const travelogue = await traveloguesCollection.findOne({ _id: ObjectId(id) });
-
-    if (!travelogue) throw "comment with that id does not exist";
-    return travelogue;
-}
-
-async function getTravelogueByUserId(userId) {
-    const traveloguesCollection = await travelogues();
-    const travelogue = await traveloguesCollection.findOne({ userId: ObjectId(userId) });
-
-    if (!travelogue) throw "comment with that id does not exist";
-    return travelogue;
-}
-
-async function deleteTravelogueById(id) {
-    if (!id) {
-        throw "provide an id for deleting travelogue";
-    }
-    if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
-    const traveloguesCollection = await travleogues();
-
-    const deletionInfo = await traveloguesCollection.removeOne({ _id: ObjectId(id) });
-    if (deletionInfo.deletedCount === 0) {
-        throw `Could not delete travelogue with this id of ${id}`;
-    }
-    return true;
-}
-
-module.exports = {
-    addTravelogue,
-    updateTravelogue,
-    getTravelogueById,
-    getTravelogueByUserId,
-    deleteTravelogueById
-}
+module.exports = exportedMothod;
