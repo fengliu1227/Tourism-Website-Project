@@ -48,7 +48,7 @@ router.post('/login', async(req, res) => {
                     // lastName: users[i].userName.lastName,
                     userId: users[i]._id
                 }
-                return res.redirect('/users/private');
+                return res.render('partials/index',{loggedIn:true});
             }
         }
         return res.status(401).render('users/login', {
@@ -67,7 +67,7 @@ router.get('/private', async(req, res) => {
     let users = await usersData.getAllUsers();
     for(let i=0; i<users.length; i++) {
         if (users[i].email==req.session.user.email) {
-            return res.render('users/profile', {user: users[i]})
+            return res.render('users/profile', {user: users[i],loggedIn:true})
         }
     }
 })
@@ -126,7 +126,13 @@ router.post('/signup', async(req, res) => {
             userName,
             gender
         );
-        res.redirect('/')
+        req.session.user = {
+            email: useremail,
+            // firstName: userName.firstName,
+            // lastName: userName.lastName,
+            userId: newUser._id
+        }
+        return res.render('partials/index',{loggedIn:true});
     }catch(e) {
         res.status(401).render('users/login', {
             error: e,

@@ -7,13 +7,16 @@ const travelogueRoute = require('./travelogue');
 
 const constructorMethod = (app) =>{
     app.get('/',(req,res)=>{
-        res.render('partials/index');
+        if(req.session.user){
+            res.render('partials/index',{loggedIn:true});
+        }else{
+            res.render('partials/index',{loggedIn:false});
+        }
     });
     app.use('/users', usersRoutes);
     app.use('/attractions',attractions);
     app.use('/comments', commentsRoute);
     app.use('/travelogues', travelogueRoute);
-    app.use('/',router);
     app.use('*',(req,res)=>{
         res.status(404).json({error: 'Not found'});
     })
