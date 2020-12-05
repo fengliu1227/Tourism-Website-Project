@@ -3,7 +3,9 @@
     var edit_btn = $('#edit');
     var submit_btn = $('#submit-change');
     var error = $('#error');
-
+    var add_btn = $('#addAttraction');
+    var attractionInfo = $('#attractionInfo');
+    var submit_add_btn = $('#submit-new-attraction');
     function editUserInfo() {
         submit_btn.show();
         userInfo.empty();
@@ -25,10 +27,13 @@
         userInfo.show();
         userInfo.append(userInf);
     }
-
     edit_btn.click(function (event) {
         event.preventDefault();
         editUserInfo();
+    })
+    add_btn.click(function(event){
+        event.preventDefault();
+        attractionInfo.show();
     })
 
     

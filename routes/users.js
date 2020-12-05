@@ -176,7 +176,7 @@ router.patch('/private', async(req, res) => {
                 req.session.user.userId,
                 updatedObj
             );
-            return res.render('users/profile', {user: updateUser})
+            return res.render('users/profile', {user: updateUser,loggedIn:true});
         }catch(e) {
             res.status(401).render('users/profile', {
                 user: await usersData.getUserById(req.session.user.userId),
@@ -188,7 +188,8 @@ router.patch('/private', async(req, res) => {
         res.status(401).render('users/profile', {
             user: await usersData.getUserById(req.session.user.userId),
             error: 'You need to provide infomation',
-            hasErrors: true
+            hasErrors: true,
+            loggedIn:true
         });    
     }
 })
