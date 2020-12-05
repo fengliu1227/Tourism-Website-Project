@@ -34,3 +34,5 @@ router.post('/private/travelogues', async (req, res) => {
         res.redirect('/users/login')
     }
 });
+
+module.exports = router;

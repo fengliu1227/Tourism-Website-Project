@@ -34,3 +34,5 @@ router.post('/private/comments', async (req, res) => {
         res.redirect('/users/login')
     }
 });
+
+module.exports = router;
