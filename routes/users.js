@@ -72,8 +72,8 @@ router.get('/private', async(req, res) => {
     }
 })
 
-router.post('/signin', async(req, res) => {
-    let {useremail, password} = req.body;
+router.post('/signup', async(req, res) => {
+    let {useremail, password,firstName,lastName,gender} = req.body;
 
     if(!useremail) {
         res.status(401).render('users/login', {
@@ -92,15 +92,41 @@ router.post('/signin', async(req, res) => {
         // res.status(400).json({error: 'You need to provide a password'});
         return;
     }
+    if(!firstName) {
+        res.status(401).render('users/login', {
+            error: 'You need to provide a firstName',
+            hasErrors: true
+        });
+        // res.status(400).json({error: 'You need to provide a password'});
+        return;
+    }
+    if(!lastName) {
+        res.status(401).render('users/login', {
+            error: 'You need to provide a lastName',
+            hasErrors: true
+        });
+        // res.status(400).json({error: 'You need to provide a password'});
+        return;
+    }
+    if(!gender) {
+        res.status(401).render('users/login', {
+            error: 'You need to provide a gender',
+            hasErrors: true
+        });
+        // res.status(400).json({error: 'You need to provide a password'});
+        return;
+    }
     useremail = useremail.toLowerCase();
-    console.log(useremail);
-
+    // console.log(useremail);
+    let userName = {firstName : firstName,lastName:lastName};
     try {
         const newUser = await usersData.createUser(
             useremail,
-            password
+            password,
+            userName,
+            gender
         );
-        res.redirect('/users/login')
+        res.redirect('/')
     }catch(e) {
         res.status(401).render('users/login', {
             error: e,

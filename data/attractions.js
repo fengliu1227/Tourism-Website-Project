@@ -8,7 +8,7 @@ async function addAttractions(userId, relatedCommentsId, relatedTravelogueId, de
     let newAttractions = {
         userId: userId,
         relatedCommentsId: relatedCommentsId,
-        relatedTravelogueId: relatedCommentsId,
+        relatedTravelogueId: relatedTravelogueId,
         description: description
     };
     const insertInfo = await attractionCollection.insertOne(newAttractions);

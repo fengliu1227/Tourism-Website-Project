@@ -3,9 +3,13 @@
     <ul>
         {{#each attractions}}
             <li>{{description.Name}}</li>
-            <li>{{description.Rating}}</li>
-            <li>{{description.Img}}</li>
+            <li>{{description.Rating}}</li> 
+            <li><img src= "{{description.Img}}"/></li>
+            <li>{{description.Price}}$</li>
             <li>{{description.Content}}</li>
+            <li>{{description.Category}}</li>
+            <li>{{description.Address}}</li>
+            <li>{{relatedCommentsId.length}}</li>
         {{/each}}
     </ul>
 </div>

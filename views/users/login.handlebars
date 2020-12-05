@@ -1,4 +1,4 @@
-<form id="login-form" method="POST">
+<form id="login-form" method="POST" action="/users/login">
     <div class="form-group">
         <label for="input-useremail">User Eamil</label>
         <input type="email" id="input-usereamil" name="useremail" placeholder="usereamil" value="{{input-usereamil}}">
@@ -18,7 +18,46 @@
       {{/if}}
     </div>
     <div class="form-group">
-        <button type="submit" class="submit-btn" id="logIn" formaction="/users/login">log in</button>
-        <button type="submit" class="submit-btn" id="signIn" formaction="/users/signin">sign in</button>
+        <button type="submit" class="submit-btn" id="logIn">log in</button>
+    </div>
+</form>
+
+<form id="signup-form" method="POST" action="/users/signup">
+    <div class="form-group">
+        <label for="input-useremail">User Eamil</label>
+        <input type="email" id="input-usereamil" name="useremail" placeholder="usereamil" value="{{input-usereamil}}">
+    </div>
+
+    <div class="form-group">
+        <label for="input-password">Password</label>
+        <input type="password" id="input-password" name="password" value="{{input-password}}">
+    </div>
+    <div class="form-group">
+        <label for="input-firstName">First Name</label>
+        <input type="text" id="input-firstName" name="firstName" value="{{input-firstName}}">
+    </div>
+    <div class="form-group">
+        <label for="input-lastName">Last Name</label>
+        <input type="text" id="input-lastName" name="lastName" value="{{input-lastName}}">
+    </div>
+    <div>
+        <input type="radio" id="male" name="gender" value="male">
+        <label for="male">Male</label>
+        <input type="radio" id="female" name="gender" value="female">
+        <label for="female">Female</label>
+        <input type="radio" id="other" name="gender" value="other">
+        <label for="other">Other</label>
+    </div>
+    <div class="form-group hidden" id="error-container" hidden>
+        <div class="alert alert-danger text-goes-here">
+        </div>
+    </div>
+    <div class="form-group">
+      {{#if hasErrors}}
+      <p class="error">{{error}}</p>
+      {{/if}}
+    </div>
+    <div class="form-group">
+        <button type="submit" class="submit-btn" id="signUp">sign up</button>
     </div>
 </form>
