@@ -1,0 +1,58 @@
+<main>
+  <article class="post">
+      <div>
+          <h2>User {{user._id}}</h2>
+          <p>Username: firstName: {{ user.userName.firstName }}, lastName: {{user.userName.lastName}}</p>
+          <p>Email: {{user.email}}</p>
+          <p>Gender: {{user.gender}}</p>
+          <dl>
+              <dt>Comments:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each user.commentId}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul> 
+              </dd> 
+              <dt>Spots:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each user.spotsId}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul> 
+              </dd> 
+              <dt>travelogue:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each user.travelogueId}}
+                    <li>{{this}}</li>
+                    {{/each}}
+                </ul> 
+              </dd> 
+          </dl>
+      </div>
+              
+      <form id="profile-form" method="post">
+      <div id="userInfo" hidden></div>
+
+      <div class="profile-group">
+        {{#if hasErrors}}
+        <p class="error">{{error}}</p>
+        {{/if}}
+      </div>
+      <div class="profile-group">
+        <button type="button" class="submit-btn" id="edit">edit</button>
+        <button type="submit" class="submit-btn" id="submit-change" hidden>submit</button>
+      </div>
+      <input name="_method" value="patch" hidden/>
+      </form>
+  </article>
+  <br>
+  <br>
+  <a href="/users/logout">Logout</a>
+
+  <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+  <script src="/public/js/profile.js"></script>
+</main>

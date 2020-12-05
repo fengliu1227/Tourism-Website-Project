@@ -1,0 +1,17 @@
+{{#if Research}}
+    <h1>{{keyword}}</h1>
+    <div>
+        <ul>
+        {{#each Travelogue}}
+            <li>{{this.title}}</li>
+            <li>{{this.content}}</li>
+        {{/each}}
+        </ul>
+    </div>
+{{/if}}
+{{#if Detail}}
+    <h1>{{Travelogue.title}}</h1>
+    <div>
+        <p>{{Travelogue.content}}</p>
+    </div>
+{{/if}}
