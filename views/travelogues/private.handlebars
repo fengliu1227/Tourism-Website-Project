@@ -1,0 +1,10 @@
+{{#if empty}}
+<p class="error">you don't have any travelogues yet</p>
+{{/if}}
+{{#if noEmpty}}
+<ol>
+    {{#each result.description}}
+    <li>{{this}}</li>
+    {{/each}}
+</ol>
+{{/if}}
