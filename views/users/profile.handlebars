@@ -35,7 +35,21 @@
       </div>
               
       <form id="profile-form" method="post">
-        <div id="userInfo" hidden></div>
+        <div id="userInfo" hidden>
+
+            <label for="input-firstName">User firstName</label>
+            <input type="text" id="input-firstName" name="userFirstName">
+
+            <label for="input-lastName">User lastName</label>
+            <input type="text" id="input-lastName" name="userLastName">
+
+            <label for="input-gender">Gender</label>
+            <select id="input-gender" name="gender">
+              <option value="male">Male</option>
+              <option value="female">Female</option>
+              <option value="other">Other</option>
+            </select>
+        </div>
 
         <div class="profile-group">
           {{#if hasErrors}}
