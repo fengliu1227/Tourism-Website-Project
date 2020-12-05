@@ -11,10 +11,28 @@ router.post('/Search', async (req,res)=>{
     res.render('partials/SearchResult',{searchTerm : req.body.searchTerm, attractions:attractionList,loggedIn : loggedIn});
 });
 router.post("/add", async(req,res)=>{
-    const attraction =  await attractions.addAttractions(req.body.userId,req.body.relatedCommentsId,req.body.relatedTravelogueId,req.body.description);
+    // if(!user.session.user){
+    //     res.render('/');
+    //     return;
+    // }
+    console.log(req.session.user);
+    userId = req.session.user.userId;
+    relatedCommentsId = [];
+    relatedTravelogueId = [];
+    description = {
+        Name:req.body.attractionName,
+        Category:req.body.attractionCategory,
+        Rating:req.body.attractionRating,
+        Img:req.body.attractionImg,
+        Price:req.body.attractionPrice,
+        Content:req.body.attractionContent,
+        Address:req.body.attractionAddress
+    }
+    const attraction =  await attractions.addAttractions(userId,relatedCommentsId,relatedTravelogueId,description);
+
+    
     res.json(attraction);
 })
-
 
 module.exports = router;
 

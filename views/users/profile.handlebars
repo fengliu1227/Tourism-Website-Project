@@ -1,4 +1,5 @@
 <main>
+  <div>
   <article class="post">
       <div>
           <h2>User {{user._id}}</h2>
@@ -34,20 +35,51 @@
       </div>
               
       <form id="profile-form" method="post">
-      <div id="userInfo" hidden></div>
+        <div id="userInfo" hidden></div>
 
-      <div class="profile-group">
-        {{#if hasErrors}}
+        <div class="profile-group">
+          {{#if hasErrors}}
         <p class="error">{{error}}</p>
-        {{/if}}
-      </div>
-      <div class="profile-group">
-        <button type="button" class="submit-btn" id="edit">edit</button>
-        <button type="submit" class="submit-btn" id="submit-change" hidden>submit</button>
-      </div>
-      <input name="_method" value="patch" hidden/>
+          {{/if}}
+        </div>
+        <div class="profile-group">
+          <button type="button" class="submit-btn" id="edit">edit</button>
+          <button type="submit" class="submit-btn" id="submit-change" hidden>submit</button>
+        </div>
+        <input name="_method" value="patch" hidden/>
       </form>
   </article>
+  </div>
+  <div>
+  <form id="attraction-form" method="post" action="/attractions/add">
+          <button type="button"class="submit-btn"id="addAttraction">add Attraction</button>
+          <div id="attractionInfo" class="attraction-group" hidden>
+
+                <label for="input-attraction-name">Attraction Name : </label>
+                <input type="text" id="input-attraction-name" name="attractionName">
+
+                <label for="input-attraction-category">Attraction Category : </label>
+                <input type="text" id="input-attraction-category" name="attractionCategory">
+
+                <label for="input-attraction-img">Attraction Img URL : </label>
+                <input type="text" id="input-attraction-img" name="attractionImg">
+
+                <label for="input-attraction-address">Attraction Address : </label>
+                <input type="text" id="input-attraction-address" name="attractionAddress">
+
+                <label for="input-attraction-rating">Attraction Rating : </label>
+                <input type="number" id="input-attraction-rating" name="attractionRating" min="0" max="5">
+
+                <label for="input-attraction-price">Attraction Price : </label>
+                <input type="number" id="input-attraction-price" name="attractionPrice" min="0">
+
+                <label for="input-attraction-content">Attraction Content : </label>
+                <textarea type="text" id="input-attraction-content" name="attractionContent"></textarea>
+
+            <button type="submit"class="submit-btn"id="submit-new-attraction">submit</button>
+          </div>
+        </form>
+  </div>
   <a href="/users/logout">Logout</a>
 
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
