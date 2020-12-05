@@ -1,5 +1,5 @@
 const { ObjectId } = require('mongodb');
-
+const users = require('./users');
 const mongoCollections = require("../config/mongoCollections");
 const attractions = mongoCollections.attractions;
 
@@ -15,6 +15,7 @@ async function addAttractions(userId, relatedCommentsId, relatedTravelogueId, de
     if (insertInfo.insertedCount === 0) throw "could not add attraction";
     const newId = insertInfo.insertedId + "";
     const attraction = await getAttraction(newId);
+    await users.updateUser(userId, {spotsId: newId});
     return attraction;
 }
 async function getAttraction(id) {
