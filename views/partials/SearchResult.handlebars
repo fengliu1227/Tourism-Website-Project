@@ -2,7 +2,14 @@
 <div>
     <ul>
         {{#each attractions}}
-
+            {{!-- <li>{{description.Name}}</li>
+            <li>{{description.Rating}}</li> 
+            <li><img src= "{{description.Img}}"/></li>
+            <li>{{description.Price}}$</li>
+            <li>{{description.Content}}</li>
+            <li>{{description.Category}}</li>
+            <li>{{description.Address}}</li>
+            <li>{{relatedCommentsId.length}}</li> --}}
             <li>
                 <a href = "/attractions/{{this._id}}">{{this.description.Name}}</a>
             </li>
