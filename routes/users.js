@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const usersData = data.users;
+const attractions = data.attractions;
 const bcrypt = require('bcrypt');
 const { updateUser } = require('../data/users');
 const saltRounds = 16;
@@ -65,9 +66,14 @@ router.post('/login', async(req, res) => {
 
 router.get('/private', async(req, res) => {
     let users = await usersData.getAllUsers();
+    let spots = [];
     for(let i=0; i<users.length; i++) {
         if (users[i].email==req.session.user.email) {
-            return res.render('users/profile', {user: users[i],loggedIn:true})
+            for(let j=0; j<users[i].spotsId.length; j++) {
+                let spotName = await attractions.getAttraction(users[i].spotsId[j]);
+                spots.push(spotName.description.Name)
+            }
+            return res.render('users/profile', {user: users[i], spots: spots, loggedIn:true})
         }
     }
 })
