@@ -4,6 +4,7 @@ const attractions = require('./attractions');
 // const commentData = require('./comments');
 const comments = require('./comments');
 const travelogues = require('./travelogues');
+const users = require('./users');
 module.exports = {
     users: usersData,
     attractions: attractions,
@@ -12,6 +13,7 @@ module.exports = {
     comments: comments,
     travelogues: travelogues
 };
+
 
 /* user data format:
     userName: {firstName: 'N/A', lastName: 'N/A'},
@@ -27,7 +29,7 @@ attaction data format:
     userId : userId,
     relatedCommentsId : relatedCommentsId,
     relatedTravelogueId : relatedCommentsId,
-    description : description
+    description :{Name,Category,Rating,Img,Price,Content,Address}
 
 travelogue data format:
     userId: userId,

@@ -11,20 +11,28 @@ router.get('/search', async(req, res) => {
     res.render('travelogues/search');
 });
 
+router.get('/found/:id', async(req, res) => {
+    if (!req.params.id) {
+        throw 'You must provide an id!!!';
+    }
+    try {
+        const travelogue = await travelogues.getTraveloguesById(req.params.id);
+        res.render('travelogues/result', {
+            Research: false,
+            Detail: true,
+            Travelogue: travelogue
+        });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
+    }
+});
+
 router.post('/result', async(req, res) => {
     console.log(req.body);
     let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
     res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, travelogue: traveloguesList });
-
-    //for test without data
-    // var a = [{ title: "?????", content: "!!!!!" }];
-    // res.render('travelogues/result', { Research: true, Detail: false, keyword: "lalallalala", Travelogue: a });
 });
 
-router.post('/detail', async(req, res) => {
-    let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
-    res.render('travelogues/result', { Research: false, Detail: true, Travelogue: currentTravelogue });
-});
 
 router.get("/add", async(req, res) => {
     if (req.session.user) {
@@ -32,8 +40,12 @@ router.get("/add", async(req, res) => {
     } else {
         res.redirect('/users/login')
     }
-    // for test without data
-    // res.render('travelogues/add');
+});
+
+router.post("/add", async(req, res) => {
+    let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
+    await travelogues.addTravelogues(req.session.user.userId, req.body.AttractionIdForTravelogue, currentTravelogue);
+    res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
 });
 
 

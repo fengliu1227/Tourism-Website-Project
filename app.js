@@ -18,7 +18,7 @@ app.use(
     secret: "I'm tired",
     saveUninitialized: true,
     resave: false,
-    cookie: { maxAge: 180000 }
+    // cookie: { maxAge: 180000 }
   })
 );
 

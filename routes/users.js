@@ -2,6 +2,7 @@ const express = require('express');
 const router = express.Router();
 const data = require('../data');
 const usersData = data.users;
+const attractions = data.attractions;
 const bcrypt = require('bcrypt');
 const { updateUser } = require('../data/users');
 const saltRounds = 16;
@@ -48,7 +49,7 @@ router.post('/login', async(req, res) => {
                     // lastName: users[i].userName.lastName,
                     userId: users[i]._id
                 }
-                return res.redirect('/users/private');
+                return res.render('partials/index',{loggedIn:true});
             }
         }
         return res.status(401).render('users/login', {
@@ -64,16 +65,17 @@ router.post('/login', async(req, res) => {
 });
 
 router.get('/private', async(req, res) => {
-    let users = await usersData.getAllUsers();
-    for(let i=0; i<users.length; i++) {
-        if (users[i].email==req.session.user.email) {
-            return res.render('users/profile', {user: users[i]})
-        }
+    let curUser = await usersData.getUserById(req.session.user.userId);
+    let spots = [];
+    for(let j=0; j<curUser.spotsId.length; j++) {
+        let spot = await attractions.getAttraction(curUser.spotsId[j]);
+        spots.push(spot);
     }
+    return res.render('users/profile', {user: curUser, spots: spots, loggedIn:true})
 })
 
-router.post('/signin', async(req, res) => {
-    let {useremail, password} = req.body;
+router.post('/signup', async(req, res) => {
+    let {useremail, password,firstName,lastName,gender} = req.body;
 
     if(!useremail) {
         res.status(401).render('users/login', {
@@ -92,15 +94,47 @@ router.post('/signin', async(req, res) => {
         // res.status(400).json({error: 'You need to provide a password'});
         return;
     }
+    if(!firstName) {
+        res.status(401).render('users/login', {
+            error: 'You need to provide a firstName',
+            hasErrors: true
+        });
+        // res.status(400).json({error: 'You need to provide a password'});
+        return;
+    }
+    if(!lastName) {
+        res.status(401).render('users/login', {
+            error: 'You need to provide a lastName',
+            hasErrors: true
+        });
+        // res.status(400).json({error: 'You need to provide a password'});
+        return;
+    }
+    if(!gender) {
+        res.status(401).render('users/login', {
+            error: 'You need to provide a gender',
+            hasErrors: true
+        });
+        // res.status(400).json({error: 'You need to provide a password'});
+        return;
+    }
     useremail = useremail.toLowerCase();
-    console.log(useremail);
-
+    // console.log(useremail);
+    let userName = {firstName : firstName,lastName:lastName};
     try {
         const newUser = await usersData.createUser(
             useremail,
-            password
+            password,
+            userName,
+            gender
         );
-        res.redirect('/users/login')
+        req.session.user = {
+            email: useremail,
+            // firstName: userName.firstName,
+            // lastName: userName.lastName,
+            userId: newUser._id
+        }
+        return res.render('partials/index',{loggedIn:true});
     }catch(e) {
         res.status(401).render('users/login', {
             error: e,
@@ -144,7 +178,7 @@ router.patch('/private', async(req, res) => {
                 req.session.user.userId,
                 updatedObj
             );
-            return res.render('users/profile', {user: updateUser})
+            return res.redirect('/users/private');
         }catch(e) {
             res.status(401).render('users/profile', {
                 user: await usersData.getUserById(req.session.user.userId),
@@ -156,7 +190,8 @@ router.patch('/private', async(req, res) => {
         res.status(401).render('users/profile', {
             user: await usersData.getUserById(req.session.user.userId),
             error: 'You need to provide infomation',
-            hasErrors: true
+            hasErrors: true,
+            loggedIn:true
         });    
     }
 })
