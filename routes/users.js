@@ -65,17 +65,13 @@ router.post('/login', async(req, res) => {
 });
 
 router.get('/private', async(req, res) => {
-    let users = await usersData.getAllUsers();
+    let curUser = await usersData.getUserById(req.session.user.userId);
     let spots = [];
-    for(let i=0; i<users.length; i++) {
-        if (users[i].email==req.session.user.email) {
-            for(let j=0; j<users[i].spotsId.length; j++) {
-                let spotName = await attractions.getAttraction(users[i].spotsId[j]);
-                spots.push(spotName.description.Name)
-            }
-            return res.render('users/profile', {user: users[i], spots: spots, loggedIn:true})
-        }
+    for(let j=0; j<curUser.spotsId.length; j++) {
+        let spot = await attractions.getAttraction(curUser.spotsId[j]);
+        spots.push(spot);
     }
+    return res.render('users/profile', {user: curUser, spots: spots, loggedIn:true})
 })
 
 router.post('/signup', async(req, res) => {
