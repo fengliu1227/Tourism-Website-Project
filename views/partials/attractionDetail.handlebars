@@ -1,0 +1,36 @@
+<h1>{{Attractions.description.Name}}</h1>
+<div>
+    <h2>Attraction Information:</h2>
+    <ul>
+            <li>{{Attractions.description.Rating}}</li> 
+            <li><img src= "{{Attractions.description.Img}}"/></li>
+            <li>${{Attractions.description.Price}}</li>
+            <li>{{Attractions.description.Content}}</li>
+            <li>{{Attractions.description.Category}}</li>
+            <li>{{Attractions.description.Address}}</li>
+    </ul>
+</div>
+
+<div>
+    <h2>Comments:</h2>
+</div>
+
+<div>
+    <h2>Related Travelogues:</h2>
+    <ul>
+        {{#each Travelogues}}
+        <li>
+            <a href = "/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a>
+        </li> 
+        {{/each}}
+        </ul>
+    <a href="/travelogues/add">post your unique travelogue about this attraction</a>
+</div>
+
+    <div type="hidden">
+        <input id="attractionId-add-travelogue" type="hidden" value={{Attractions._id}} />
+    </div>
+
+<script type="text/javascript">
+    localStorage.setItem('attractionIdForAddTravelogue', document.getElementById("attractionId-add-travelogue").value);
+</script>

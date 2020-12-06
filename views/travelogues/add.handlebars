@@ -1,9 +1,5 @@
 <form method="post">
     <div class="form-group">
-        <label>Attraction Name <input id="attaction-name-input" name="attactionName" type="text" /></label>
-    </div>
-
-    <div class="form-group">
         <label>Travelogue Title</Title><textarea id="travelogue-title-input" name="travelogueTitle"></textarea></label>
     </div>
 
@@ -12,7 +8,12 @@
     </div>
 
     <div class="form-group">
-        <button type="submit" class="submit-btn" id="submit" formaction="/travelogues/detail">Show your unique experience</button>
+        <button type="submit" class="submit-btn" id="submit" formaction="/travelogues/add">Show your unique experience</button>
+    </div>
+
+    
+    <div type="hidden">
+        <input id="attractionId-toAdd" type="hidden" name="AttractionIdForTravelogue" value="1"/>
     </div>
 
     <div class="form-group">
@@ -21,7 +22,15 @@
         {{/if}}
         {{#if success}}
         <p class="success">add travelogue successfully!</p>
+        <h1>{{Travelogue.title}}</h1>
+
+        <p>{{Travelogue.content}}</p>
+
         {{/if}}
     </div>
 
+<script type="text/javascript">
+        document.getElementById("attractionId-toAdd").value = localStorage.getItem('attractionIdForAddTravelogue');
+        localStorage.clear('attractionIdForAddTravelogue');
+</script>
 </form>

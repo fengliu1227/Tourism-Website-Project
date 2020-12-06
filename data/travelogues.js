@@ -10,8 +10,8 @@ let exportedMothod = {
         if (!userId && !relatedAttractoinId && !travelogue) throw 'all fields need to input a value';
         const traveloguesCollection = await travelogues();
         let newTravelogues = {
-            userId: userId,
-            relatedAttractoinId: relatedAttractoinId,
+            userId: userId.toString(),
+            relatedAttractoinId: relatedAttractoinId.toString(),
             travelogue: travelogue
         };
         const insertInfo = await traveloguesCollection.insertOne(newTravelogues);
@@ -46,7 +46,7 @@ let exportedMothod = {
         const traveloguesCollection = await travelogues();
         const travelogue = await traveloguesCollection.findOne({ relatedAttractoinId: ObjectId(attractionId) });
 
-        if (!travelogue) throw "comment with that id does not exist";
+        if (!travelogue) throw "travelogue with that id does not exist";
         return travelogue;
     },
 
@@ -67,6 +67,7 @@ let exportedMothod = {
         } catch (e) {
             console.log(e);
         }
+
         try {
             const deletionInfo = await traveloguesCollection.removeOne({ _id: ObjectId(id) });
             if (deletionInfo.deletedCount === 0) throw 'Error: delete failed';

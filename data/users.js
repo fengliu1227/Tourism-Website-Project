@@ -32,7 +32,7 @@ async function getUserById(id) {
     return getUser;
 }
 
-async function createUser(email,password,userName,gender) {
+async function createUser(email, password, userName, gender) {
     if (!email || !password || !userName || !gender) throw 'Please provide all fields'
     let reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
     if (!reg.test(email)) throw 'Email is not valid';
@@ -142,7 +142,7 @@ async function addTravelogueToUser(userId, travelogueId) {
 async function removeTravelogueFromUser(userId, travelogueId) {
     let currentUser = await this.getUserById(userId);
     const newTravelogue = {};
-    newTravelogue.travelogue = [];
+    newTravelogue.travelogueId = [];
     let index = 0;
     for (let i of currentUser.travelogueId) {
         if (i.id.toString() == travelogueId) continue;

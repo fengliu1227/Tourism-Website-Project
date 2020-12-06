@@ -3,21 +3,37 @@ const users = require('./users');
 const mongoCollections = require("../config/mongoCollections");
 const attractions = mongoCollections.attractions;
 
-async function addAttractions(userId, relatedCommentsId, relatedTravelogueId, description) {
+// async function addAttractions(userId, relatedCommentsId, relatedTravelogueId, description) {
+//     const attractionCollection = await attractions();
+//     let newAttractions = {
+//         userId: userId,
+//         relatedCommentsId: relatedCommentsId,
+//         relatedTravelogueId: relatedTravelogueId,
+//         description: description
+//     };
+//     const insertInfo = await attractionCollection.insertOne(newAttractions);
+//     if (insertInfo.insertedCount === 0) throw "could not add attraction";
+//     const newId = insertInfo.insertedId + "";
+//     const attraction = await getAttraction(newId);
+//     await users.updateUser(userId, {spotsId: newId});
+//     return attraction;
+// }
+async function addAttractions(userId, description) {
     const attractionCollection = await attractions();
     let newAttractions = {
         userId: userId,
-        relatedCommentsId: relatedCommentsId,
-        relatedTravelogueId: relatedTravelogueId,
+        relatedCommentsId: [],
+        relatedTravelogueId: [],
         description: description
     };
     const insertInfo = await attractionCollection.insertOne(newAttractions);
     if (insertInfo.insertedCount === 0) throw "could not add attraction";
     const newId = insertInfo.insertedId + "";
     const attraction = await getAttraction(newId);
-    await users.updateUser(userId, {spotsId: newId});
+    await users.updateUser(userId, { spotsId: newId });
     return attraction;
 }
+
 async function getAttraction(id) {
     // if (!id) throw "id must be given";
     // if (typeof(id) === "string") id = ObjectId.createFromHexString(id);
@@ -36,7 +52,7 @@ async function getAttractionBySearch(searchTerm) {
 
 //add Attraction To User data, added by feng liu
 async function addTravelogueToAttraction(attractionId, travelogueId) {
-    let currentAttaction = await this.getAttraction(newId);
+    let currentAttaction = await this.getAttraction(attractionId);
 
     const attractionCollection = await attractions();
     const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $addToSet: { relatedTravelogueId: { id: travelogueId.toString() } } });
@@ -45,12 +61,12 @@ async function addTravelogueToAttraction(attractionId, travelogueId) {
         // throw 'Error: update failed';
         return;
     }
-    return await this.getAttraction(newId);
+    return await this.getAttraction(attractionId);
 }
 
 //remove Attraction from User data, added by feng liu
 async function removeTravelogueFromAttraction(attractionId, travelogueId) {
-    let currentAttaction = await this.getAttraction(newId);
+    let currentAttaction = await this.getAttraction(attractionId);
     const newTravelogue = {};
     newTravelogue.travelogue = [];
     let index = 0;
@@ -61,7 +77,7 @@ async function removeTravelogueFromAttraction(attractionId, travelogueId) {
     const attractionCollection = await attractions();
     const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: newTravelogue });
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
-    await this.getAttraction(newId);
+    await this.getAttraction(attractionId);
 }
 
 module.exports = {
