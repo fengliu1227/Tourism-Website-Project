@@ -182,7 +182,7 @@ router.patch('/private', async(req, res) => {
                 req.session.user.userId,
                 updatedObj
             );
-            return res.render('users/profile', {user: updateUser,loggedIn:true});
+            return res.redirect('/users/private');
         }catch(e) {
             res.status(401).render('users/profile', {
                 user: await usersData.getUserById(req.session.user.userId),
