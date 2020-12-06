@@ -1,5 +1,8 @@
 <main>
+<<<<<<< HEAD
   <div>
+=======
+>>>>>>> 81a50f33f42b93985de65d556b528d732d6a51c1
   <article class="post">
       <div>
           <h2>User {{user._id}}</h2>
@@ -18,8 +21,13 @@
               <dt>Spots:</dt> 
               <dd> 
                 <ul> 
+<<<<<<< HEAD
                     {{#each spots}}
                     <li><a href="/">{{description.Name}}</a></li>
+=======
+                    {{#each user.spotsId}}
+                    <li>{{this}}</li>
+>>>>>>> 81a50f33f42b93985de65d556b528d732d6a51c1
                     {{/each}}
                 </ul> 
               </dd> 
@@ -35,6 +43,7 @@
       </div>
               
       <form id="profile-form" method="post">
+<<<<<<< HEAD
         <div id="userInfo" hidden>
 
             <label for="input-firstName">User firstName</label>
@@ -94,6 +103,24 @@
           </div>
         </form>
   </div>
+=======
+      <div id="userInfo" hidden></div>
+
+      <div class="profile-group">
+        {{#if hasErrors}}
+        <p class="error">{{error}}</p>
+        {{/if}}
+      </div>
+      <div class="profile-group">
+        <button type="button" class="submit-btn" id="edit">edit</button>
+        <button type="submit" class="submit-btn" id="submit-change" hidden>submit</button>
+      </div>
+      <input name="_method" value="patch" hidden/>
+      </form>
+  </article>
+  <br>
+  <br>
+>>>>>>> 81a50f33f42b93985de65d556b528d732d6a51c1
   <a href="/users/logout">Logout</a>
 
   <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
