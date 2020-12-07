@@ -7,10 +7,10 @@ const bcrypt = require('bcrypt');
 const { updateUser } = require('../data/users');
 const saltRounds = 16;
 
-router.get('/', async (req, res) => {
+router.get('/', async(req, res) => {
     if (req.session.user) {
         return res.redirect('/users/private')
-    }else {
+    } else {
         return res.redirect('/users/login')
     }
 });
@@ -22,7 +22,7 @@ router.get('/', async (req, res) => {
 router.get('/login', async(req, res) => {
     if (req.session.user) {
         return res.redirect('/users/private')
-    }else {
+    } else {
         res.render('users/login')
         return
     }
@@ -30,33 +30,42 @@ router.get('/login', async(req, res) => {
 })
 
 router.post('/login', async(req, res) => {
+    console.log(req.body);
     let users = await usersData.getAllUsers();
-    let {useremail, password} = req.body;
+    let useremail = req.body.useremail;
+    let password = req.body.password;
     // console.log(useremail);
     // console.log(password);
     try {
-        for(let i=0; i<users.length; i++) {
+        for (let i = 0; i < users.length; i++) {
             // console.log(users[i]);
             // console.log(users[i].password);
             useremail = useremail.toLowerCase();
             // console.log(useremail);
             let match = await bcrypt.compare(password, users[i].password);
             // console.log(match);
-            if(match && useremail == users[i].email) {
+            if (match && useremail == users[i].email) {
                 req.session.user = {
-                    email: users[i].email,
-                    // firstName: users[i].userName.firstName,
-                    // lastName: users[i].userName.lastName,
-                    userId: users[i]._id
+                        email: users[i].email,
+                        // firstName: users[i].userName.firstName,
+                        // lastName: users[i].userName.lastName,
+                        userId: users[i]._id
+                    }
+                    //modified
+                if (req.body.pageFrom && req.body.pageFrom == "profile") {
+                    res.redirect('/users/private');
                 }
-                return res.render('partials/index',{loggedIn:true});
+                if (req.body.pageFrom && req.body.pageFrom == "add" && req.body.attractionToAddId) {
+                    res.redirect('/attractions/found/' + req.body.attractionToAddId);
+                }
+                return res.render('partials/index', { loggedIn: true });
             }
         }
         return res.status(401).render('users/login', {
             error: 'Please provide a valid email or password',
             hasErrors: true
         });
-    }catch (e) {
+    } catch (e) {
         return res.status(401).render('users/login', {
             error: 'Please provide a valid email or password',
             hasErrors: true
@@ -67,17 +76,17 @@ router.post('/login', async(req, res) => {
 router.get('/private', async(req, res) => {
     let curUser = await usersData.getUserById(req.session.user.userId);
     let spots = [];
-    for(let j=0; j<curUser.spotsId.length; j++) {
+    for (let j = 0; j < curUser.spotsId.length; j++) {
         let spot = await attractions.getAttraction(curUser.spotsId[j]);
         spots.push(spot);
     }
-    return res.render('users/profile', {user: curUser, spots: spots, loggedIn:true})
+    return res.render('users/profile', { user: curUser, spots: spots, loggedIn: true })
 })
 
 router.post('/signup', async(req, res) => {
-    let {useremail, password,firstName,lastName,gender} = req.body;
+    let { useremail, password, firstName, lastName, gender } = req.body;
 
-    if(!useremail) {
+    if (!useremail) {
         res.status(401).render('users/login', {
             error: 'You need to provide user email',
             hasErrors: true
@@ -86,7 +95,7 @@ router.post('/signup', async(req, res) => {
         return;
     }
 
-    if(!password) {
+    if (!password) {
         res.status(401).render('users/login', {
             error: 'You need to provide a password',
             hasErrors: true
@@ -94,7 +103,7 @@ router.post('/signup', async(req, res) => {
         // res.status(400).json({error: 'You need to provide a password'});
         return;
     }
-    if(!firstName) {
+    if (!firstName) {
         res.status(401).render('users/login', {
             error: 'You need to provide a firstName',
             hasErrors: true
@@ -102,7 +111,7 @@ router.post('/signup', async(req, res) => {
         // res.status(400).json({error: 'You need to provide a password'});
         return;
     }
-    if(!lastName) {
+    if (!lastName) {
         res.status(401).render('users/login', {
             error: 'You need to provide a lastName',
             hasErrors: true
@@ -110,7 +119,7 @@ router.post('/signup', async(req, res) => {
         // res.status(400).json({error: 'You need to provide a password'});
         return;
     }
-    if(!gender) {
+    if (!gender) {
         res.status(401).render('users/login', {
             error: 'You need to provide a gender',
             hasErrors: true
@@ -120,7 +129,7 @@ router.post('/signup', async(req, res) => {
     }
     useremail = useremail.toLowerCase();
     // console.log(useremail);
-    let userName = {firstName : firstName,lastName:lastName};
+    let userName = { firstName: firstName, lastName: lastName };
     try {
         const newUser = await usersData.createUser(
             useremail,
@@ -134,8 +143,8 @@ router.post('/signup', async(req, res) => {
             // lastName: userName.lastName,
             userId: newUser._id
         }
-        return res.render('partials/index',{loggedIn:true});
-    }catch(e) {
+        return res.render('partials/index', { loggedIn: true });
+    } catch (e) {
         res.status(401).render('users/login', {
             error: e,
             hasErrors: true
@@ -145,54 +154,54 @@ router.post('/signup', async(req, res) => {
 })
 
 router.patch('/private', async(req, res) => {
-    const {userFirstName, userLastName, gender} = req.body;
+    const { userFirstName, userLastName, gender } = req.body;
     let userName = {};
-    let updatedObj = {userName};
+    let updatedObj = { userName };
     try {
         const oldUser = await usersData.getUserById(req.session.user.userId);
         // console.log(oldUser);
         console.log(userFirstName.trim().length)
-        if(userFirstName.trim().length && userFirstName !== oldUser.userName.firstName) {
+        if (userFirstName.trim().length && userFirstName !== oldUser.userName.firstName) {
             updatedObj.userName.firstName = userFirstName;
-        }else {
+        } else {
             updatedObj.userName.firstName = oldUser.userName.firstName;
         }
-            
-        if(userLastName.trim().length && userLastName !== oldUser.userName.lastName) {
+
+        if (userLastName.trim().length && userLastName !== oldUser.userName.lastName) {
             updatedObj.userName.lastName = userLastName;
-        }else {
+        } else {
             updatedObj.userName.lastName = oldUser.userName.lastName;
         }
 
-        if(gender && gender !== oldUser.gender)
+        if (gender && gender !== oldUser.gender)
             updatedObj.gender = gender;
-    }catch(e) {
+    } catch (e) {
         console.log(e);
-        res.status(404).json({error: e});
+        res.status(404).json({ error: e });
         return;
     }
 
-    if(Object.keys(updatedObj).length !== 0 && Object.keys(userName).length !== 0) {
+    if (Object.keys(updatedObj).length !== 0 && Object.keys(userName).length !== 0) {
         try {
             const updateUser = await usersData.updateUser(
                 req.session.user.userId,
                 updatedObj
             );
             return res.redirect('/users/private');
-        }catch(e) {
+        } catch (e) {
             res.status(401).render('users/profile', {
                 user: await usersData.getUserById(req.session.user.userId),
                 error: 'You need to provide infomation',
                 hasErrors: true
             });
         }
-    }else {
+    } else {
         res.status(401).render('users/profile', {
             user: await usersData.getUserById(req.session.user.userId),
             error: 'You need to provide infomation',
             hasErrors: true,
-            loggedIn:true
-        });    
+            loggedIn: true
+        });
     }
 })
 

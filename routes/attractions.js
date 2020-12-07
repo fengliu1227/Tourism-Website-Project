@@ -5,7 +5,7 @@ const attractions = data.attractions;
 const travelogues = data.travelogues;
 
 //router added(FL)
-router.get('/:id', async(req, res) => {
+router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }

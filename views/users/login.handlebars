@@ -1,12 +1,12 @@
 <form id="login-form" method="POST" action="/users/login">
     <div class="form-group">
-        <label for="input-useremail">User Eamil</label>
-        <input type="email" id="input-usereamil" name="useremail" placeholder="usereamil" value="{{input-usereamil}}">
+        <label for="input-useremail-login">User Email</label>
+        <input type="email" id="input-usereamil-login" name="useremail" placeholder="useremail" value="{{input-usereamil}}">
     </div>
 
     <div class="form-group">
-        <label for="input-password">password</label>
-        <input type="password" id="input-password" name="password" value="{{input-password}}">
+        <label for="input-password-login">password</label>
+        <input type="password" id="input-password-login" name="password" value="{{input-password}}">
     </div>
     <div class="form-group hidden" id="error-container" hidden>
         <div class="alert alert-danger text-goes-here">
@@ -18,19 +18,25 @@
       {{/if}}
     </div>
     <div class="form-group">
-        <button type="submit" class="submit-btn" id="logIn">log in</button>
+        <button type="submit" class="submit-btn" id="logIn" formaction="/users/login">log in</button>
+    </div>
+{{!-- modified --}}
+    <div type="hidden">
+        <input id="pageFrom" type="hidden" name="pageFrom"/>
+        <input id="attractionToAddId" type="hidden" name="attractionToAddId"/>
+        
     </div>
 </form>
 
 <form id="signup-form" method="POST" action="/users/signup">
     <div class="form-group">
-        <label for="input-useremail">User Eamil</label>
-        <input type="email" id="input-usereamil" name="useremail" placeholder="usereamil" value="{{input-usereamil}}">
+        <label for="input-useremail-signin">User Email</label>
+        <input type="email" id="input-usereamil-signin" name="useremail" placeholder="useremail" value="{{input-usereamil}}">
     </div>
 
     <div class="form-group">
-        <label for="input-password">Password</label>
-        <input type="password" id="input-password" name="password" value="{{input-password}}">
+        <label for="input-password-signin">Password</label>
+        <input type="password" id="input-password-signin" name="password" value="{{input-password}}">
     </div>
     <div class="form-group">
         <label for="input-firstName">First Name</label>
@@ -61,3 +67,12 @@
         <button type="submit" class="submit-btn" id="signUp">sign up</button>
     </div>
 </form>
+
+<script type="text/javascript">
+if(localStorage.getItem('pageDeriveFrom')){
+    document.getElementById("pageFrom").value = localStorage.getItem('pageDeriveFrom');
+}
+if(localStorage.getItem('attractionIdToAdd')){
+    document.getElementById("attractionToAddId").value = localStorage.getItem('attractionIdToAdd');
+}
+</script>
