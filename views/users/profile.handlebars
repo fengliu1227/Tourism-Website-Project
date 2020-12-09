@@ -36,7 +36,6 @@
               
       <form id="profile-form" method="post">
         <div id="userInfo" hidden>
-
             <label for="input-firstName">User firstName</label>
             <input type="text" id="input-firstName" name="userFirstName">
 
@@ -49,17 +48,17 @@
               <option value="female">Female</option>
               <option value="other">Other</option>
             </select>
+            <div class="profile-group">
+              {{#if hasErrors}}
+            <p class="error">{{error}}</p>
+              {{/if}}
+            </div>
+            <div class="profile-group">
+              <button type="submit" class="submit-btn" id="submit-change">submit</button>
+              <button type="button" id="cancelSubmitProfile">cancel</button>
+            </div>
         </div>
-
-        <div class="profile-group">
-          {{#if hasErrors}}
-        <p class="error">{{error}}</p>
-          {{/if}}
-        </div>
-        <div class="profile-group">
-          <button type="button" class="submit-btn" id="edit">edit</button>
-          <button type="submit" class="submit-btn" id="submit-change" hidden>submit</button>
-        </div>
+        <button type="button" class="submit-btn" id="edit">edit</button>
         <input name="_method" value="patch" hidden/>
       </form>
   </article>
@@ -91,6 +90,7 @@
                 <textarea type="text" id="input-attraction-content" name="attractionContent"></textarea>
 
             <button type="submit"class="submit-btn"id="submit-new-attraction">submit</button>
+            <button type="button"class="submit-btn"id="cancel-new-attraction">cancel</button>
           </div>
         </form>
   </div>
