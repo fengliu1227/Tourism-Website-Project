@@ -3,6 +3,8 @@ const router = express.Router();
 const data = require('../data');
 const usersData = data.users;
 const attractions = data.attractions;
+const travelogues = data.travelogues;
+const comments = data.comments;
 const bcrypt = require('bcrypt');
 const { updateUser } = require('../data/users');
 const saltRounds = 16;
@@ -79,7 +81,17 @@ router.get('/private', async(req, res) => {
         let spot = await attractions.getAttraction(curUser.spotsId[j]);
         spots.push(spot);
     }
-    return res.render('users/profile', { user: curUser, spots: spots, loggedIn: true })
+    let travelogueList = [];
+    for (let x of curUser.travelogueId) {
+        let travelogue = await travelogues.getTraveloguesById(x.id);
+        travelogueList.push(travelogue);
+    }
+    let commentsList = [];
+    for (let x of curUser.commentId) {
+        let comment = await comments.getCommentsById(x.id);
+        commentsList.push(comment);
+    }
+    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, loggedIn: true })
 })
 
 router.post('/signup', async(req, res) => {
