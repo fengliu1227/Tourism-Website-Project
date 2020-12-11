@@ -11,8 +11,16 @@
     </ul>
 </div>
 
-<div>
+<div id="show-comments">
     <h2>Comments:</h2>
+        <dl id="commentsList"></dl>
+</div>
+<div class="search-card-center">
+    <form id="add-comment-form" method="POST">
+        <label for="new-comment-input">New Comment</label><br>
+        <textarea id="new-comment-input" name="newComment" placeholder="before you submit your comment,log in first!"></textarea>
+        <button type="submit" class="submit-btn" id="new-comment-submit">Submit</button>
+    </form>
 </div>
 
 <div>
@@ -28,11 +36,13 @@
 </div>
 
     <div type="hidden">
-        <input id="attractionId-add-travelogue" type="hidden" value={{Attractions._id}} />
+        <input id="attractionId-add-travelogue" name="attractionIdDetailPage"type="hidden" value={{Attractions._id}} />
     </div>
-
 <script type="text/javascript">
     localStorage.setItem('attractionIdForAddTravelogue', document.getElementById("attractionId-add-travelogue").value);
     localStorage.setItem('pageDeriveFrom', "add");
     localStorage.setItem('attractionIdToAdd', document.getElementById("attractionId-add-travelogue").value);
 </script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="/public/js/ajax.js"></script>

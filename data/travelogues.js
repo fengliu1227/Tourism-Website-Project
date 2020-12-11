@@ -6,19 +6,19 @@ const users = require('../data/users');
 const attractions = require('../data/attractions');
 
 let exportedMothod = {
-    async addTravelogues(userId, relatedAttractoinId, travelogue) {
-        if (!userId && !relatedAttractoinId && !travelogue) throw 'all fields need to input a value';
+    async addTravelogues(userId, relatedAttractionId, travelogue) {
+        if (!userId && !relatedAttractionId && !travelogue) throw 'all fields need to input a value';
         const traveloguesCollection = await travelogues();
         let newTravelogues = {
             userId: userId.toString(),
-            relatedAttractoinId: relatedAttractoinId.toString(),
+            relatedAttractionId: relatedAttractionId.toString(),
             travelogue: travelogue
         };
         const insertInfo = await traveloguesCollection.insertOne(newTravelogues);
         if (insertInfo.insertedCount === 0) throw "add travelogues failed";
         const newId = insertInfo.insertedId;
         try {
-            await attractions.addTravelogueToAttraction(relatedAttractoinId, newId.toString());
+            await attractions.addTravelogueToAttraction(relatedAttractionId, newId.toString());
             await users.addTravelogueToUser(userId, newId.toString());
         } catch (e) {
             throw "add travelogues failed";
@@ -37,14 +37,14 @@ let exportedMothod = {
     async getTraveloguesByUserId(userId) {
         if (!userId) throw 'No useId provided';
         const traveloguesCollection = await travelogues();
-        const travelogue = await traveloguesCollection.findOne({ userId: ObjectId(userId) });
+        const travelogue = await traveloguesCollection.findOne({ userId: userId });
         if (!travelogue) throw "Opps! Not Found the travelogues of that user";
         return travelogue;
     },
 
     async getTraveloguesByAttractionId(attractionId) {
         const traveloguesCollection = await travelogues();
-        const travelogue = await traveloguesCollection.findOne({ relatedAttractoinId: ObjectId(attractionId) });
+        const travelogue = await traveloguesCollection.findOne({ relatedAttractionId: attractionId });
 
         if (!travelogue) throw "travelogue with that id does not exist";
         return travelogue;
@@ -63,7 +63,7 @@ let exportedMothod = {
         const traveloguesCollection = await travelogues();
         let travelogue = null;
         try {
-            travelogue = await await this.getTraveloguesById(id);
+            travelogue = await this.getTraveloguesById(id);
         } catch (e) {
             console.log(e);
         }
@@ -71,7 +71,7 @@ let exportedMothod = {
         try {
             const deletionInfo = await traveloguesCollection.removeOne({ _id: ObjectId(id) });
             if (deletionInfo.deletedCount === 0) throw 'Error: delete failed';
-            await attractions.removeTravelogueFromAttraction(travelogue.relatedAttractoinId, id);
+            await attractions.removeTravelogueFromAttraction(travelogue.relatedAttractionId, id);
             await users.removeTravelogueFromUser(travelogue.userId, id);
         } catch (e) {
             throw "remove travelogues failed";

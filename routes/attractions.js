@@ -2,6 +2,7 @@ const express = require("express");
 const router = express.Router();
 const data = require('../data/');
 const attractions = data.attractions;
+const comments = data.comments;
 const travelogues = data.travelogues;
 
 //router added(FL)
@@ -16,18 +17,46 @@ router.get('/found/:id', async(req, res) => {
         for (let x of attraction.relatedTravelogueId) {
             traveloguesList[index++] = await travelogues.getTraveloguesById(x.id);
         }
+        let commentsList = [];
+        let index2 = 0;
+        for (let x of attraction.relatedCommentsId) {
+            commentsList[index2++] = await comments.getCommentsById(x.id);
+        }
+
         res.render('partials/attractionDetail', {
             Attractions: attraction,
-            Travelogues: traveloguesList
+            Travelogues: traveloguesList,
+            Comments: commentsList
         });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
     }
 });
 
+router.post('/found/:id', async(req, res) => {
+    if (!req.params.id) {
+        throw 'You must provide an id!!!';
+    }
+    console.log(res.body);
+    // console.log(req.session.user);
+    // try {
+    //     const comment = await comments.addComments(req.params.id);
+    //     let traveloguesList = [];
+    //     let index = 0;
+    //     for (let x of attraction.relatedTravelogueId) {
+    //         traveloguesList[index++] = await travelogues.getTraveloguesById(x.id);
+    //     }
+    //     res.render('partials/attractionDetail', {
+    //         Attractions: attraction,
+    //         Travelogues: traveloguesList
+    //     });
+    // } catch (e) {
+    //     res.status(404).render('error/error', { error: e });
+    // }
+});
+
 router.post('/Search', async(req, res) => {
     let attractionList = await attractions.getAttractionBySearch(req.body.searchTerm);
-    console.log(attractionList.length);
     let loggedIn = false;
     if (req.session.user) loggedIn = true;
     res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn });
