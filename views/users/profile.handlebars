@@ -10,8 +10,8 @@
               <dt>Comments:</dt> 
               <dd> 
                 <ul> 
-                    {{#each user.commentId}}
-                    <li>{{this}}</li>
+                    {{#each Comments}}
+                    <li>{{this.comment}}</li>
                     {{/each}}
                 </ul> 
               </dd> 
@@ -19,15 +19,15 @@
               <dd> 
                 <ul> 
                     {{#each spots}}
-                    <li><a href="/">{{description.Name}}</a></li>
+                    <li><a href="/attractions/found/{{this._id}}">{{this.description.Name}}</a></li>
                     {{/each}}
                 </ul> 
               </dd> 
               <dt>travelogue:</dt> 
               <dd> 
                 <ul> 
-                    {{#each user.travelogueId}}
-                    <li>{{this}}</li>
+                    {{#each Travelogues}}
+                    <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a></li>
                     {{/each}}
                 </ul> 
               </dd> 
