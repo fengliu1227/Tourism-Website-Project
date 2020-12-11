@@ -146,10 +146,41 @@ async function removeTravelogueFromUser(userId, travelogueId) {
     let index = 0;
     for (let i of currentUser.travelogueId) {
         if (i.id.toString() == travelogueId) continue;
-        newReview.reviews[index++] = i;
+        newTravelogue.travelogueId[index++] = i;
     }
     const usersCollection = await users();
     const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $set: newTravelogue });
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
+    return await this.getUserById(userId);
+}
+
+
+//add Comment To User data, added by feng liu
+async function addCommentToUser(userId, commentId) {
+    let currentUser = await this.getUserById(userId);
+
+    const usersCollection = await users();
+    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $addToSet: { commentId: { id: commentId.toString() } } });
+
+    if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
+        // throw 'Error: update failed';
+        return;
+    }
+    return await this.getUserById(userId);
+}
+
+//remove Comment from User data, added by feng liu
+async function removeCommentFromUser(userId, commentId) {
+    let currentUser = await this.getUserById(userId);
+    const newComment = {};
+    newComment.commentId = [];
+    let index = 0;
+    for (let i of currentUser.commentId) {
+        if (i.id.toString() == commentId) continue;
+        newComment.commentId[index++] = i;
+    }
+    const usersCollection = await users();
+    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $set: newComment });
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
     return await this.getUserById(userId);
 }
@@ -161,6 +192,7 @@ module.exports = {
     updateUser,
     deleteUser,
     addTravelogueToUser,
-    removeTravelogueFromUser
-
+    removeTravelogueFromUser,
+    addCommentToUser,
+    removeCommentFromUser
 }

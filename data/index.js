@@ -5,6 +5,7 @@ const attractions = require('./attractions');
 const comments = require('./comments');
 const travelogues = require('./travelogues');
 const users = require('./users');
+const e = require('express');
 module.exports = {
     users: usersData,
     attractions: attractions,
@@ -13,6 +14,18 @@ module.exports = {
     comments: comments,
     travelogues: travelogues
 };
+main = async() => {
+    const user = await users.createUser("email@email.com", "1", "test", "male");
+    const attraction = await attractions.addAttractions(user._id, { Name: "name", Category: "category", Rating: "test", Img: "test", Price: "test", Content: "test", Address: "test" });
+    const travelogue1 = await travelogues.addTravelogues(user._id, attraction._id, { title: "test tilte3", content: "test content3" });
+    const comment1 = await comments.addComments(user._id, attraction._id, "it is great--test3");
+    const travelogue2 = await travelogues.addTravelogues(user._id, attraction._id, { title: "test tilte4", content: "test content4" });
+    const comment2 = await comments.addComments(user._id, attraction._id, "it is great--test4");
+
+
+
+};
+// main();
 
 
 /* user data format:

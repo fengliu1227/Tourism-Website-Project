@@ -30,7 +30,6 @@ router.get('/login', async(req, res) => {
 })
 
 router.post('/login', async(req, res) => {
-    console.log(req.body);
     let users = await usersData.getAllUsers();
     let useremail = req.body.useremail;
     let password = req.body.password;

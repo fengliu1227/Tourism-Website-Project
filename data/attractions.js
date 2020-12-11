@@ -50,7 +50,8 @@ async function getAttractionBySearch(searchTerm) {
     return attractionList;
 }
 
-//add Attraction To User data, added by feng liu
+
+//add Travelogue To Attraction data, added by feng liu
 async function addTravelogueToAttraction(attractionId, travelogueId) {
     let currentAttaction = await this.getAttraction(attractionId);
 
@@ -64,15 +65,15 @@ async function addTravelogueToAttraction(attractionId, travelogueId) {
     return await this.getAttraction(attractionId);
 }
 
-//remove Attraction from User data, added by feng liu
+//remove Travelogue from Atrraction data, added by feng liu
 async function removeTravelogueFromAttraction(attractionId, travelogueId) {
     let currentAttaction = await this.getAttraction(attractionId);
     const newTravelogue = {};
-    newTravelogue.travelogue = [];
+    newTravelogue.relatedTravelogueId = [];
     let index = 0;
     for (let i of currentAttaction.relatedTravelogueId) {
         if (i.id.toString() == travelogueId) continue;
-        newReview.reviews[index++] = i;
+        newTravelogue.relatedTravelogueId[index++] = i;
     }
     const attractionCollection = await attractions();
     const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: newTravelogue });
@@ -80,10 +81,43 @@ async function removeTravelogueFromAttraction(attractionId, travelogueId) {
     await this.getAttraction(attractionId);
 }
 
+
+
+//add Comment To Attraction data, added by feng liu
+async function addCommentToAttraction(attractionId, commentId) {
+    let currentAttaction = await this.getAttraction(attractionId);
+
+    const attractionCollection = await attractions();
+    const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $addToSet: { relatedCommentsId: { id: commentId.toString() } } });
+
+    if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
+        // throw 'Error: update failed';
+        return;
+    }
+    return await this.getAttraction(attractionId);
+}
+
+//remove Travelogue from Atrraction data, added by feng liu
+async function removeCommentFromAttraction(attractionId, commentId) {
+    let currentAttaction = await this.getAttraction(attractionId);
+    const newComment = {};
+    newComment.relatedCommentsId = [];
+    let index = 0;
+    for (let i of currentAttaction.relatedCommentsId) {
+        if (i.id.toString() == commentId) continue;
+        newComment.relatedCommentsId[index++] = i;
+    }
+    const attractionCollection = await attractions();
+    const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: newComment });
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
+    await this.getAttraction(attractionId);
+}
 module.exports = {
     addAttractions,
     getAttraction,
     getAttractionBySearch,
     addTravelogueToAttraction,
-    removeTravelogueFromAttraction
+    removeTravelogueFromAttraction,
+    addCommentToAttraction,
+    removeCommentFromAttraction
 }
