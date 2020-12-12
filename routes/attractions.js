@@ -66,10 +66,8 @@ router.post("/add", async(req, res) => {
     //     res.render('/');
     //     return;
     // }
-    console.log(req.session.user);
+    console.log(req.body);
     userId = req.session.user.userId;
-    relatedCommentsId = [];
-    relatedTravelogueId = [];
     description = {
         Name: req.body.attractionName,
         Category: req.body.attractionCategory,
@@ -79,7 +77,7 @@ router.post("/add", async(req, res) => {
         Content: req.body.attractionContent,
         Address: req.body.attractionAddress
     }
-    const attraction = await attractions.addAttractions(userId, relatedCommentsId, relatedTravelogueId, description);
+    const attraction = await attractions.addAttractions(userId, description);
 
 
     res.json(attraction);
