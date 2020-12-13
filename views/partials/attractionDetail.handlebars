@@ -11,6 +11,11 @@
     </ul>
 </div>
 
+{{#if isAdmin}}
+<p>You can delete this attraction</p>
+<button type="submit" class="delete-attraction" id="delete-attraction">Delete</button>
+{{/if}}
+
 <div id="show-comments">
     <h2>Comments:</h2>
         <dl id="commentsList"></dl>

@@ -43,6 +43,17 @@ app.use('/users/private', (req, res, next) => {
     }
 })
 
+app.use((req, res, next) => {
+  if(!req.session.user) {
+    req.admin = false
+  }else if(req.session.user.isAdmin.default) {
+    req.admin = true
+  }else {
+    req.admin = false
+  }
+  next();
+})
+
 configRoutes(app);
 
 app.listen(3000, () => {

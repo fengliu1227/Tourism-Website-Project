@@ -26,7 +26,8 @@ router.get('/found/:id', async(req, res) => {
         res.render('partials/attractionDetail', {
             Attractions: attraction,
             Travelogues: traveloguesList,
-            Comments: commentsList
+            Comments: commentsList,
+            isAdmin: req.admin
         });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
