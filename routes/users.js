@@ -109,6 +109,7 @@ router.get('/private', async(req, res) => {
         let comment = await comments.getCommentsById(x.id);
         commentsList.push(comment);
     }
+    let deleteInfoList = []
     if(req.admin) {
         let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
         deleteInfoList = deleteInfo.deleteInfo
