@@ -109,7 +109,12 @@ router.get('/private', async(req, res) => {
         let comment = await comments.getCommentsById(x.id);
         commentsList.push(comment);
     }
-    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, loggedIn: true })
+    let deleteInfoList = []
+    if(req.admin) {
+        let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
+        deleteInfoList = deleteInfo.deleteInfo
+    }
+    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin})
 })
 
 router.post('/signup', async(req, res) => {

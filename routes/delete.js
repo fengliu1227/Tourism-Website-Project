@@ -29,7 +29,7 @@ router.get('/attractions/:id', async(req, res) => {
         let deleteInfo = {
             Time: currentTime,
             Type: 'attraction',
-            Infomation: attraction.description.Name
+            Information: attraction.description.Name
         };
         console.log(deleteInfo);
         await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
