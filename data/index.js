@@ -5,6 +5,7 @@ const attractions = require('./attractions');
 const comments = require('./comments');
 const travelogues = require('./travelogues');
 const users = require('./users');
+const adminDeleteInfo = require('./adminDeleteInfo');
 const e = require('express');
 module.exports = {
     users: usersData,
@@ -12,7 +13,8 @@ module.exports = {
     // reviews: reviewData,
     // comments: commentData
     comments: comments,
-    travelogues: travelogues
+    travelogues: travelogues,
+    adminDeleteInfo: adminDeleteInfo
 };
 main = async() => {
     const user = await users.createUser("email@email.com", "1", "test", "male");
