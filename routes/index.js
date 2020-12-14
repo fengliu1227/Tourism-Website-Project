@@ -5,6 +5,7 @@ const usersRoutes = require('./users')
 const commentsRoute = require('./comments');
 const travelogueRoute = require('./travelogue');
 const apiRoutes = require('./api');
+const deleteRoutes = require('./delete')
 
 const constructorMethod = (app) => {
     app.get('/', (req, res) => {
@@ -19,6 +20,7 @@ const constructorMethod = (app) => {
     app.use('/attractions', attractions);
     app.use('/comments', commentsRoute);
     app.use('/travelogues', travelogueRoute);
+    app.use('/delete', deleteRoutes);
     app.use('*', (req, res) => {
         res.status(404).json({ error: 'Not found' });
     })
