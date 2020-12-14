@@ -31,6 +31,19 @@
                     {{/each}}
                 </ul> 
               </dd> 
+              {{#if isAdmin}}
+              <dt>Delete Information:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each DeleteInfo}}
+                    <li>Time: {{this.Time}}</li>
+                    <li>Type: {{this.Type}}</li>
+                    <li>Information: {{this.Information}}</li>
+                    <br>
+                    {{/each}}
+                </ul> 
+              </dd> 
+              {{/if}}
           </dl>
       </div>
               
