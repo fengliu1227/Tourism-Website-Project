@@ -18,5 +18,6 @@ module.exports = {
     reviews: getCollectionFn("reviews"),
     attractions: getCollectionFn("attractions"),
     comments: getCollectionFn("comments"),
-    travelogues: getCollectionFn("travelogues")
+    travelogues: getCollectionFn("travelogues"),
+    adminDeleteInfo: getCollectionFn("adminDeleteInfo")
 };

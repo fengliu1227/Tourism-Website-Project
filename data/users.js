@@ -185,6 +185,21 @@ async function removeCommentFromUser(userId, commentId) {
     return await this.getUserById(userId);
 }
 
+async function removeAttractionFromUserByAdmin(userId, attractionId) {
+    let currentUser = await this.getUserById(userId);
+    const newAttraction = {};
+    newAttraction.spotsId = [];
+    let index = 0;
+    for (let i of currentUser.spotsId) {
+        if (i.toString() == attractionId) continue;
+        newAttraction.spotsId[index++] = i;
+    }
+    const usersCollection = await users();
+    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $set: newAttraction });
+    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
+    return await this.getUserById(userId);
+}
+
 module.exports = {
     getAllUsers,
     createUser,
@@ -194,5 +209,6 @@ module.exports = {
     addTravelogueToUser,
     removeTravelogueFromUser,
     addCommentToUser,
-    removeCommentFromUser
+    removeCommentFromUser,
+    removeAttractionFromUserByAdmin
 }

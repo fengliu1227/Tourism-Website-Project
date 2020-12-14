@@ -5,6 +5,7 @@ const usersData = data.users;
 const attractions = data.attractions;
 const travelogues = data.travelogues;
 const comments = data.comments;
+const adminDeleteInfo = data.adminDeleteInfo;
 const bcrypt = require('bcrypt');
 const { updateUser } = require('../data/users');
 const saltRounds = 16;
@@ -176,6 +177,7 @@ router.post('/signup', async(req, res) => {
                     default: true
                 }
             }
+            const createAdmin = await adminDeleteInfo.createAdmin(useremail);
         }else{
             req.session.user = {
             email: useremail,
