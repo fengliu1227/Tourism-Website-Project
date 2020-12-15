@@ -1,10 +1,34 @@
 <main>
+    <a href="/travelogues/add">post your unique travelogue about this attraction</a>
     <div class="search-card-center">
         <h1>Exploring travelogues</h1>
         <p>Find some new idea for your next trip!</p>
-        <form id="noteSearch-form" method="POST" action="/attractions/Search">
-            <input id="submit-search-note" type="text" name="searchTerm" class = "searchFields" placeholder="some keywords to explore new idea"/>
-            <button type="submit" id="serach-button" formaction="/travelogues/result">Find new Idea</button>
+        <form id="travelogues-Search-form" method="POST" action="/attractions/Search">
+            <input id="submit-search-travelogues" type="text" name="searchTerm" class = "searchFields" placeholder="some keywords to explore new idea"/>
+            <button type="submit" id="serach-button" formaction="/travelogues">Find new Idea</button>
         </form>
     </div>
+
+    {{#if Research}}
+    <h2>{{keyword}}</h2>
+    <div>
+        <ul>
+        {{#each Travelogue}}
+        <li>
+            <a href = "/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a>
+        </li>
+        {{/each}}
+        </ul>
+    </div>
+{{/if}}
+{{#if Detail}}
+    <h2>{{Travelogue.travelogue.title}}</h2>
+    <div>
+        <p>{{Travelogue.travelogue.content}}</p>
+    </div>
+{{/if}}
 </main>
+
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="/public/js/travelogues-ajax.js"></script>

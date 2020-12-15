@@ -5,11 +5,13 @@ const data = require('../data');
 const travelogues = data.travelogues;
 
 router.get('/', async(req, res) => {
-    res.render('travelogues/search');
+    res.render('travelogues/search', { Research: false, Detail: false });
 });
 
-router.get('/search', async(req, res) => {
-    res.render('travelogues/search');
+router.post('/', async(req, res) => {
+    console.log(req.body);
+    let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+    res.render('travelogues/search', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, Travelogue: traveloguesList });
 });
 
 router.get('/found/:id', async(req, res) => {
@@ -51,8 +53,8 @@ router.post("/add", async(req, res) => {
     let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
     console.log(currentTravelogue);
     await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
-    // res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
-    res.json(currentTravelogue);
+    res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
+
 });
 
 
