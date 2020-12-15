@@ -5,7 +5,9 @@ const data = require('../data');
 const travelogues = data.travelogues;
 
 router.get('/', async(req, res) => {
-    res.render('travelogues/search', { Research: false, Detail: false });
+    let loggedIn = false;
+    if(req.session.user) loggedIn = true; 
+    res.render('travelogues/search', { Research: false, Detail: false ,loggedIn:loggedIn});
 });
 
 router.post('/', async(req, res) => {
@@ -23,7 +25,7 @@ router.get('/found/:id', async(req, res) => {
     try {
         const travelogue = await travelogues.getTraveloguesById(req.params.id);
         // console.log(travelogue.travelogue.content);
-        res.render('travelogues/result', {
+        res.render('travelogues/search', {
             Research: false,
             Detail: true,
             Travelogue: travelogue,

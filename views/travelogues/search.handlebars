@@ -1,5 +1,5 @@
 <main>
-    <a href="/travelogues/add">post your unique travelogue about this attraction</a>
+    {{!-- <a href="/travelogues/add">post your unique travelogue about this attraction</a> --}}
     <div class="search-card-center">
         <h1>Exploring travelogues</h1>
         <p>Find some new idea for your next trip!</p>
@@ -24,7 +24,7 @@
 {{#if Detail}}
     <h2>{{Travelogue.travelogue.title}}</h2>
     <div>
-        <p>{{Travelogue.travelogue.content}}</p>
+        {{{Travelogue.travelogue.content}}}
     </div>
 {{/if}}
 </main>
