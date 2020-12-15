@@ -47,11 +47,7 @@
     <a href="/travelogues/add">post your unique travelogue about this attraction</a>
 </div>
 
-    <div type="hidden">
-        <input id="attractionId-add-travelogue" name="attractionIdDetailPage"type="hidden" value={{Attractions._id}} />
-    </div>
 <script type="text/javascript">
-    localStorage.setItem('attractionIdForAddTravelogue', document.getElementById("attractionId-add-travelogue").value);
     localStorage.setItem('pageDeriveFrom', "add");
     localStorage.setItem('attractionIdToAdd', document.getElementById("attractionId-add-travelogue").value);
 </script>
