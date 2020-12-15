@@ -1,15 +1,18 @@
 const express = require("express");
 const router = express.Router();
-const data = require('../data/');
+const data = require('../data');
 const travelogues = data.travelogues;
 
 router.get('/', async(req, res) => {
-    res.render('travelogues/search');
+    res.render('travelogues/search', { Research: false, Detail: false });
 });
 
-router.get('/search', async(req, res) => {
-    res.render('travelogues/search');
+router.post('/', async(req, res) => {
+    console.log(req.body);
+    let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+    res.render('travelogues/search', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, Travelogue: traveloguesList });
 });
+
 
 router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
@@ -17,7 +20,7 @@ router.get('/found/:id', async(req, res) => {
     }
     try {
         const travelogue = await travelogues.getTraveloguesById(req.params.id);
-        res.render('travelogues/result', {
+        res.render('travelogues/search', {
             Research: false,
             Detail: true,
             Travelogue: travelogue
@@ -25,12 +28,6 @@ router.get('/found/:id', async(req, res) => {
     } catch (e) {
         res.status(404).render('error/error', { error: e });
     }
-});
-
-router.post('/result', async(req, res) => {
-    console.log(req.body);
-    let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
-    res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, travelogue: traveloguesList });
 });
 
 
@@ -44,7 +41,7 @@ router.get("/add", async(req, res) => {
 
 router.post("/add", async(req, res) => {
     let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
-    await travelogues.addTravelogues(req.session.user.userId, req.body.AttractionIdForTravelogue, currentTravelogue);
+    await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
     res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
 });
 

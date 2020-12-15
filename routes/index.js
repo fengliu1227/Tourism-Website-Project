@@ -3,7 +3,7 @@ const router = express.Router();
 const attractions = require("./attractions");
 const usersRoutes = require('./users')
 const commentsRoute = require('./comments');
-const travelogueRoute = require('./travelogue');
+const travelogueRoute = require('./travelogues');
 const apiRoutes = require('./api');
 const deleteRoutes = require('./delete')
 
