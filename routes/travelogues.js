@@ -10,12 +10,19 @@ router.get('/', async(req, res) => {
     res.render('travelogues/search', { Research: false, Detail: false ,loggedIn:loggedIn});
 });
 
-router.post('/', async(req, res) => {
-    console.log(req.body);
-    let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
-    res.render('travelogues/search', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, Travelogue: traveloguesList });
-});
+// router.post('/', async(req, res) => {
+//     console.log(req.body);
+//     let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+//     res.render('travelogues/search', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, Travelogue: traveloguesList });
+// });
 
+router.post('/Search',async(req,res)=>{
+    let travelogueList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+    let loggedIn = false;
+    if (req.session.user) loggedIn = true;
+    console.log(travelogueList);
+    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn});
+})
 router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
         throw 'You must provide an id!!!';
@@ -25,9 +32,7 @@ router.get('/found/:id', async(req, res) => {
     try {
         const travelogue = await travelogues.getTraveloguesById(req.params.id);
         // console.log(travelogue.travelogue.content);
-        res.render('travelogues/search', {
-            Research: false,
-            Detail: true,
+        res.render('travelogues/travelogueDetail', {
             Travelogue: travelogue,
             loggedIn:loggedIn
         });
