@@ -1,36 +1,56 @@
 <form method="post">
-    <div class="form-group">
-        <label>Travelogue Title</Title><textarea id="travelogue-title-input" name="travelogueTitle"></textarea></label>
+    <div class="tool-bar">
+            <button type="button" id="btn1">Bold</button>
+            <button type="button" id="btn2">Hyperlink</button>
+            <button type="button" id="btn3">Image</button>
     </div>
-
-    <div class="form-group">
-        <label>Travelogue content<textarea id="travelogue-content-input" name="travelogueContent"></textarea></label>
+    <div class="travelogueTitle">
+        <input type="text" id="travelogueTitle" name="travelogueTitle">
     </div>
-
-    <div class="form-group">
-        <button type="submit" class="submit-btn" id="submit" formaction="/travelogues/add">Show your unique experience</button>
+    <div id="hyperlink_bar" hidden>
+            <label for="hyper_link">please input the url for the selected text</label>
+            <input type="url" id="hyper_link">
+            <button type="button" id="submit_hyper_link">submit</button>
+            <button type="button" id="cancel_hyper_link">cancel</button>
     </div>
-
-    
-    <div type="hidden">
-        <input id="attractionId-toAdd" type="hidden" name="AttractionIdForTravelogue" value="1"/>
+    <div id="img_bar" hidden>
+            <label for="img_link">please input the url for input image</label>
+            <input type="url" id="img_link">
+            <button type="button" id="submit_img_link">submit</button>
+            <button type="button" id="cancel_img_link">cancel</button>
     </div>
-
-    <div class="form-group">
-        {{#if error}}
-        <p class="error">can't add this comment, please try again</p>
-        {{/if}}
-        {{#if success}}
-        <p class="success">add travelogue successfully!</p>
-        <h1>{{Travelogue.title}}</h1>
-
-        <p>{{Travelogue.content}}</p>
-
-        {{/if}}
-    </div>
-
-<script type="text/javascript">
-        document.getElementById("attractionId-toAdd").value = localStorage.getItem('attractionIdForAddTravelogue');
-        localStorage.clear('attractionIdForAddTravelogue');
-</script>
+    <div id="editor" class="editor" contenteditable="true" name="travelogueContent"></div>   
+    <button type="submit" id="travelogue_submit_btn">submit</button>
 </form>
+<script>
+        btn1.onclick=()=>{
+        document.execCommand("bold");
+    }
+    btn2.onclick=()=>{
+        hyperlink_bar.removeAttribute("hidden");
+        submit_hyper_link.addEventListener("click",function(){
+            document.execCommand("createlink",null,hyper_link.value);
+            hyper_link.value ="";
+            hyperlink_bar.hidden = true;
+        })
+        cancel_hyper_link.addEventListener("click",function(){
+            hyper_link.value ="";
+            hyperlink_bar.hidden = true;
+        })
+    }
+    btn3.onclick=()=>{
+        img_bar.removeAttribute("hidden");
+        submit_img_link.addEventListener("click",function(){
+            document.execCommand('insertHTML', 0, '<img src="' + img_link.value + '" alt="' + "add image successfully!" + '" />');
+            img_link.value ="";
+            img_bar.hidden = true;
+        }) 
+        cancel_img_link.addEventListener("click",function(){
+            img_link.value ="";
+            img_bar.hidden = true;
+        })    
+    }
+</script>
+ <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+    <script src="/public/js/travelogue.js"></script>
