@@ -67,4 +67,66 @@ router.get('/attractions/:id', async(req, res) => {
     }
 })
 
+router.get('/travelogues/:id', async(req, res) => {
+    if (!req.admin) {
+        throw 'You are not administrator';
+    }
+    try{
+        const thisTravelogue = await travelogues.getTraveloguesById(req.params.id)
+        const currentTime = new Date().toString();
+        let deleteInfo = {
+            Time: currentTime,
+            Type: 'travelogue',
+            Information: thisTravelogue.travelogue.title
+        };
+        console.log(deleteInfo);
+        await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
+
+        try {
+            await travelogues.removeTravelogue(req.params.id)
+            res.status(200).json({
+                "attractionId": req.params.id, 
+                "deleted": true,
+                "deleteInfo": deleteInfo
+            })
+        }catch(e) {
+            res.status(500).json({error: e})
+        }
+    }catch(e) {
+        res.status(404).json({error: e});
+        return;
+    }
+})
+
+router.get('/comments/:id', async(req, res) => {
+    if (!req.admin) {
+        throw 'You are not administrator';
+    }
+    try{
+        const thisComment = await comments.getCommentsById(req.params.id)
+        const currentTime = new Date().toString();
+        let deleteInfo = {
+            Time: currentTime,
+            Type: 'comment',
+            Information: thisComment.comment
+        };
+        console.log(deleteInfo);
+        await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
+
+        try {
+            await comments.removeComment(req.params.id)
+            res.status(200).json({
+                "attractionId": req.params.id, 
+                "deleted": true,
+                "deleteInfo": deleteInfo
+            })
+        }catch(e) {
+            res.status(500).json({error: e})
+        }
+    }catch(e) {
+        res.status(404).json({error: e});
+        return;
+    }
+})
+
 module.exports = router;
