@@ -11,6 +11,10 @@
         <button type="submit" class="submit-btn" id="submit" formaction="/travelogues/add">Show your unique experience</button>
     </div>
 
+    
+    <div type="hidden">
+        <input id="attractionId-toAdd" type="hidden" name="AttractionIdForTravelogue" value="1"/>
+    </div>
 
     <div class="form-group">
         {{#if error}}
@@ -25,4 +29,8 @@
         {{/if}}
     </div>
 
+<script type="text/javascript">
+        document.getElementById("attractionId-toAdd").value = localStorage.getItem('attractionIdForAddTravelogue');
+        localStorage.clear('attractionIdForAddTravelogue');
+</script>
 </form>
