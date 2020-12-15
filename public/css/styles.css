@@ -60,3 +60,10 @@ nav a:hover{
     box-sizing: border-box;
     border: 1px solid #cf4300;
 }
+#editor{
+    background-color:rgb(245, 247, 248);
+    border: 1px solid #ccc;
+    height: auto;
+    width:100%;
+    outline: auto;
+}
