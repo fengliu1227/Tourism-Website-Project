@@ -112,6 +112,24 @@ async function removeCommentFromAttraction(attractionId, commentId) {
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
     await this.getAttraction(attractionId);
 }
+
+async function deleteAttraction (id) {
+    if(!id) throw 'Please provide an id';
+    if(typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
+
+    const attractionCollection = await attractions();
+
+    let parsedId = ObjectId(id);
+    
+    const deletionInfo = await attractionCollection.removeOne({_id: parsedId});
+    if (deletionInfo.deletedCount===0) {
+        throw `Could not delete attraction with this id of ${id}`;
+    }
+    console.log('Delete succeed')
+
+    return true;
+}
+
 module.exports = {
     addAttractions,
     getAttraction,
@@ -119,5 +137,6 @@ module.exports = {
     addTravelogueToAttraction,
     removeTravelogueFromAttraction,
     addCommentToAttraction,
-    removeCommentFromAttraction
+    removeCommentFromAttraction,
+    deleteAttraction
 }
