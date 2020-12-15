@@ -1,7 +1,7 @@
 (function($) {
     var commentsList = $('#commentsList');
     var searchTraveloguesForm = $('travelogues-Search-form');
-    var newComment = $('#new-comment-input');
+    var searchTerm = $('#submit-search-travelogues');
     var newCommentButton = $('#new-comment-submit');
     var attractionId = $('#attractionId-add-travelogue');
 
