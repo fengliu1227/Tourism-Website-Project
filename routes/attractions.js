@@ -80,8 +80,8 @@ router.post("/add", async(req, res) => {
     }
     const attraction = await attractions.addAttractions(userId, description);
 
+    res.render('partials/attractionDetail', { searchTerm: req.body.searchTerm, Attractions: attraction, loggedIn: true });
 
-    res.json(attraction);
 })
 
 module.exports = router;
