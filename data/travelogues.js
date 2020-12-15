@@ -6,19 +6,19 @@ const users = require('../data/users');
 const attractions = require('../data/attractions');
 
 let exportedMothod = {
-    async addTravelogues(userId, relatedAttractionId, travelogue) {
-        if (!userId && !relatedAttractionId && !travelogue) throw 'all fields need to input a value';
+    async addTravelogues(userId, travelogue) {
+        if (!userId && !travelogue) throw 'all fields need to input a value';
         const traveloguesCollection = await travelogues();
         let newTravelogues = {
             userId: userId.toString(),
-            relatedAttractionId: relatedAttractionId.toString(),
+            // relatedAttractionId: relatedAttractionId.toString(),
             travelogue: travelogue
         };
         const insertInfo = await traveloguesCollection.insertOne(newTravelogues);
         if (insertInfo.insertedCount === 0) throw "add travelogues failed";
         const newId = insertInfo.insertedId;
         try {
-            await attractions.addTravelogueToAttraction(relatedAttractionId, newId.toString());
+            // await attractions.addTravelogueToAttraction(relatedAttractionId, newId.toString());
             await users.addTravelogueToUser(userId, newId.toString());
         } catch (e) {
             throw "add travelogues failed";

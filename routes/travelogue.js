@@ -1,6 +1,7 @@
+const { json } = require("express");
 const express = require("express");
 const router = express.Router();
-const data = require('../data/');
+const data = require('../data');
 const travelogues = data.travelogues;
 
 router.get('/', async(req, res) => {
@@ -15,12 +16,16 @@ router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }
+    let loggedIn = false;
+    if(req.session.user) loggedIn = true;
     try {
         const travelogue = await travelogues.getTraveloguesById(req.params.id);
+        console.log(travelogue.travelogue.content);
         res.render('travelogues/result', {
             Research: false,
             Detail: true,
-            Travelogue: travelogue
+            Travelogue: travelogue,
+            loggedIn:loggedIn
         });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
@@ -44,8 +49,10 @@ router.get("/add", async(req, res) => {
 
 router.post("/add", async(req, res) => {
     let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
-    await travelogues.addTravelogues(req.session.user.userId, req.body.AttractionIdForTravelogue, currentTravelogue);
-    res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
+    console.log(currentTravelogue);
+    await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
+    // res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
+    res.json(currentTravelogue);
 });
 
 
