@@ -20,7 +20,7 @@ router.get('/found/:id', async(req, res) => {
     if(req.session.user) loggedIn = true;
     try {
         const travelogue = await travelogues.getTraveloguesById(req.params.id);
-        console.log(travelogue.travelogue.content);
+        // console.log(travelogue.travelogue.content);
         res.render('travelogues/result', {
             Research: false,
             Detail: true,
@@ -41,7 +41,7 @@ router.post('/result', async(req, res) => {
 
 router.get("/add", async(req, res) => {
     if (req.session.user) {
-        res.render('travelogues/add');
+        res.render('travelogues/add',{loggedIn:true});
     } else {
         res.redirect('/users/login')
     }

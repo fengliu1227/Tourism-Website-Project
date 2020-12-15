@@ -83,7 +83,7 @@ router.post("/add", async(req, res) => {
     }
     const attraction = await attractions.addAttractions(userId, description);
 
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn });
+    res.render('partials/attractionDetail', { searchTerm: req.body.searchTerm, Attractions: attraction, loggedIn: true });
 })
 
 module.exports = router;
