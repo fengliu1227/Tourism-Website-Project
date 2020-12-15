@@ -16,3 +16,10 @@
         {{/each}}
     </ul>
 </div>
+<div>
+    <ul>
+        {{#each travelogues}}
+            <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a></li>
+        {{/each}}
+    </ul>
+</div>

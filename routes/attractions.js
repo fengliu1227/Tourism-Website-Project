@@ -60,7 +60,8 @@ router.post('/Search', async(req, res) => {
     let attractionList = await attractions.getAttractionBySearch(req.body.searchTerm);
     let loggedIn = false;
     if (req.session.user) loggedIn = true;
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn });
+    console.log(attractionList);
+    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn});
 });
 router.post("/add", async(req, res) => {
     // if(!user.session.user){
