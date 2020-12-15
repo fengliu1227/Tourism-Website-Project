@@ -10,8 +10,6 @@ router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }
-    let loggedIn = false;
-    if(req.session.user) loggedIn = true;
     try {
         const attraction = await attractions.getAttraction(req.params.id);
         let traveloguesList = [];
@@ -29,8 +27,7 @@ router.get('/found/:id', async(req, res) => {
             Attractions: attraction,
             Travelogues: traveloguesList,
             Comments: commentsList,
-            isAdmin: req.admin,
-            loggedIn:loggedIn
+            isAdmin: req.admin
         });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
@@ -83,7 +80,8 @@ router.post("/add", async(req, res) => {
     }
     const attraction = await attractions.addAttractions(userId, description);
 
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn });
+
+    res.json(attraction);
 })
 
 module.exports = router;
