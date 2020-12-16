@@ -1,11 +1,15 @@
+<div id="loginsignupTable">
+
+<div id="loginTable">
 <form id="login-form" method="POST" action="/users/login">
+<h1>Log In</h1>
     <div class="form-group">
-        <label for="input-useremail-login">User Email</label>
+        <label for="input-useremail-login"> User Email</label>
         <input type="email" id="input-usereamil-login" name="useremail" placeholder="useremail" value="{{input-usereamil}}">
     </div>
 
     <div class="form-group">
-        <label for="input-password-login">password</label>
+        <label for="input-password-login">Password  </label>
         <input type="password" id="input-password-login" name="password" value="{{input-password}}">
     </div>
     <div class="form-group hidden" id="error-container" hidden>
@@ -27,8 +31,11 @@
         
     </div>
 </form>
+</div>
 
+<div id="sighupTable">
 <form id="signup-form" method="POST" action="/users/signup">
+    <h1>Sign Up</h1>
     <div class="form-group">
         <label for="input-useremail-signin">User Email</label>
         <input type="email" id="input-usereamil-signin" name="useremail" placeholder="useremail" value="{{input-usereamil}}">
@@ -67,7 +74,9 @@
         <button type="submit" class="submit-btn" id="signUp">sign up</button>
     </div>
 </form>
+</div>
 
+</div>
 <script type="text/javascript">
 if(localStorage.getItem('pageDeriveFrom')){
     document.getElementById("pageFrom").value = localStorage.getItem('pageDeriveFrom');

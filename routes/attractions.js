@@ -21,7 +21,6 @@ router.get('/found/:id', async(req, res) => {
         for (let x of attraction.relatedCommentsId) {
             commentsList[index2++] = await comments.getCommentsById(x.id);
         }
-
         res.render('partials/attractionDetail', {
             Attractions: attraction,
             Comments: commentsList,
