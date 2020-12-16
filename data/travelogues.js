@@ -39,13 +39,6 @@ let exportedMothod = {
         return travelogue;
     },
 
-    // async getTraveloguesByAttractionId(attractionId) {
-    //     const traveloguesCollection = await travelogues();
-    //     const travelogue = await traveloguesCollection.findOne({ relatedAttractionId: attractionId });
-
-    //     if (!travelogue) throw "travelogue with that id does not exist";
-    //     return travelogue;
-    // },
 
     async getTraveloguesBySearch(searchTerm) {
         if (!searchTerm) throw 'No keyword provided!?';
