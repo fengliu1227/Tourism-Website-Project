@@ -17,19 +17,21 @@ router.get('/comments/:id', async(req, res) => {
     let index = 0;
     for (let x of commentsList) {
         let user = await users.getUserById(x.userId);
-        commentWithUserName[index++] = { user: user.userName, comment: x.comment };
+        commentWithUserName[index++] = { user: user.userName, rating: x.rating, comment: x.comment };
     }
     res.json(commentWithUserName);
 });
 
 router.post('/addComment', async(req, res) => {
+    console.log(req.body);
+    console.log(req.body.rating);
     if (req.session.user) {
         try {
-            let newComment = await comments.addComments(req.session.user.userId, req.body.attractionId, req.body.comment);
+            let newComment = await comments.addComments(req.session.user.userId, req.body.attractionId, req.body.rating, req.body.comment);
             let user = await users.getUserById(newComment.userId);
             let name = user.userName;
             let comment = newComment;
-            res.json({ user: name, comment: comment.comment });
+            res.json({ user: name, rating: comment.rating, comment: comment.comment });
             return;
         } catch (e) {
             res.status(404).render('error/error', { error: e });

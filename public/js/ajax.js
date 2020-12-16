@@ -4,18 +4,21 @@
     var newComment = $('#new-comment-input');
     var newCommentButton = $('#new-comment-submit');
     var attractionId = $('#attractionId-add-travelogue');
+    var ratingFromComment = $('#input-comment-attraction-rating');
 
     function appendComments(List) {
         for (var i of List) {
-            commentsList.append("<dt>" + i.user + "<dt>");
-            commentsList.append("<dd>" + i.comment + "<dd>");
+            commentsList.append("<dt> From:" + i.user + "<dt>");
+            commentsList.append("<dd> Rating:" + i.rating + "<dd>");
+            commentsList.append("<dd> Content:" + i.comment + "<dd>");
         }
     }
 
     function addComment(item) {
         if (item) {
-            commentsList.append("<dt>" + item[0].user + "</dt>");
-            commentsList.append("<dd>" + item[0].comment + "</dd>");
+            commentsList.append("<dt> From:" + item[0].user + "</dt>");
+            commentsList.append("<dd> Rating:" + item[0].rating + "<dd>");
+            commentsList.append("<dd> Content:" + item[0].comment + "</dd>");
         } else {
             return;
         }
@@ -39,7 +42,7 @@
         var requestConfig = {
             method: 'POST',
             url: '/api/addComment',
-            data: { comment: newComment.val(), attractionId: attractionId.val() },
+            data: { comment: newComment.val(), rating: ratingFromComment.val(), attractionId: attractionId.val() },
             dataType: "json",
             success: function(data) {},
             error: function(err) {
@@ -50,6 +53,7 @@
         $.ajax(requestConfig).then(function(responseMessage) {
             var newElement = $(responseMessage);
             newComment.val('');
+            ratingFromComment.val('');
             addComment(newElement);
         })
     });

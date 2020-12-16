@@ -22,7 +22,9 @@
 </div>
 <div class="search-card-center">
     <form id="add-comment-form" method="POST">
-        <label for="new-comment-input">New Comment</label><br>
+        <label for="input-attraction-rating">Rating for this attraction: </label><br>
+        <input type="number" id="input-comment-attraction-rating" placeholder="from 0 to 5(need integer)" name="attractionRating" min="0" max="5"><br>
+        <label for="new-comment-input">Leave your new comment:</label><br>
         <textarea id="new-comment-input" name="newComment" placeholder="before you submit your comment,log in first!"></textarea>
         <button type="submit" class="submit-btn" id="new-comment-submit">Submit</button>
     </form>
