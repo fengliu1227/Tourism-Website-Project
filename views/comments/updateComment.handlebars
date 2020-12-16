@@ -1,0 +1,44 @@
+{{#if sucuess}}
+<div class="search-card-center">
+    <p>You already update your comment!</p>
+</div>
+{{/if}}
+
+<div class="search-card-center">
+    <form id="add-comment-form" method="POST">
+        <input type="radio" id="box1" name="changeWhich" value="ratingOnly" />Change Rating Only<br>
+        <input type="radio" id="box2" name="changeWhich" value="commentOnly" />Change Comment Only<br>
+        <input type="radio" id="box3" name="changeWhich" value="all" />Change All<br>
+        <label id="rating-label" for="input-update-rating">Rating for this attraction: </label><br>
+        <input type="number" id="input-update-rating" placeholder="from 0 to 5(need integer)" name="updatedRating" min="0" max="5"><br>
+        <label id="comment-label" for="updated-comment-input">Leave your new comment:</label><br>
+        <textarea id="updated-comment-input" name="updatedComment" placeholder="update your comment!"></textarea>
+        <button type="submit" class="submit-btn" id="updated-comment-submit">Submit</button>
+    </form>
+</div>
+
+<div class="search-card-center">
+    <a href="/users/private">Back</a>
+</div>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script>
+    $('#box1').click(function(){
+        $('#rating-label').show();
+        $('#input-update-rating').show();
+        $('#comment-label').hide();
+        $('#updated-comment-input').hide();
+    })
+    $('#box2').click(function(){
+        $('#rating-label').hide();
+        $('#input-update-rating').hide();
+        $('#comment-label').show();
+        $('#updated-comment-input').show();
+    })
+    $('#box3').click(function(){
+        $('#rating-label').show();
+        $('#input-update-rating').show();
+        $('#comment-label').show();
+        $('#updated-comment-input').show();
+    })
+</script>
