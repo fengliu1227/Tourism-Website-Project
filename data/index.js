@@ -16,10 +16,7 @@ module.exports = {
     travelogues: travelogues,
     adminDeleteInfo: adminDeleteInfo
 };
-main = async function() {
-        await comments.addComments("5fd9b1b9e0f189eef1726b78", "5fd9b60fc981c9f0e5fc928c", "0", "test")
-    }
-    // main();
+
 
 
 /* user data format:

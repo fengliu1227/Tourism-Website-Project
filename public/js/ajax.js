@@ -48,7 +48,7 @@
             dataType: "json",
             success: function(data) {},
             error: function(err) {
-                alert("something went wrong");
+                window.location.href = "/users/login"
             }
 
         }
