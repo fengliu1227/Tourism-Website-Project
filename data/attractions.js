@@ -3,21 +3,6 @@ const users = require('./users');
 const mongoCollections = require("../config/mongoCollections");
 const attractions = mongoCollections.attractions;
 
-// async function addAttractions(userId, relatedCommentsId, relatedTravelogueId, description) {
-//     const attractionCollection = await attractions();
-//     let newAttractions = {
-//         userId: userId,
-//         relatedCommentsId: relatedCommentsId,
-//         relatedTravelogueId: relatedTravelogueId,
-//         description: description
-//     };
-//     const insertInfo = await attractionCollection.insertOne(newAttractions);
-//     if (insertInfo.insertedCount === 0) throw "could not add attraction";
-//     const newId = insertInfo.insertedId + "";
-//     const attraction = await getAttraction(newId);
-//     await users.updateUser(userId, {spotsId: newId});
-//     return attraction;
-// }
 async function addAttractions(userId, description) {
     const attractionCollection = await attractions();
     let newAttractions = {
@@ -35,7 +20,7 @@ async function addAttractions(userId, description) {
 }
 
 async function getAttraction(id) {
-    // if (!id) throw "id must be given";
+    if (!id) throw "id must be given";
     // if (typeof(id) === "string") id = ObjectId.createFromHexString(id);
     const attractionCollection = await attractions();
     const attraction = await attractionCollection.findOne({ _id: ObjectId(id) });
@@ -113,16 +98,16 @@ async function removeCommentFromAttraction(attractionId, commentId) {
     await this.getAttraction(attractionId);
 }
 
-async function deleteAttraction (id) {
-    if(!id) throw 'Please provide an id';
-    if(typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
+async function deleteAttraction(id) {
+    if (!id) throw 'Please provide an id';
+    if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
 
     const attractionCollection = await attractions();
 
     let parsedId = ObjectId(id);
-    
-    const deletionInfo = await attractionCollection.removeOne({_id: parsedId});
-    if (deletionInfo.deletedCount===0) {
+
+    const deletionInfo = await attractionCollection.removeOne({ _id: parsedId });
+    if (deletionInfo.deletedCount === 0) {
         throw `Could not delete attraction with this id of ${id}`;
     }
     console.log('Delete succeed')

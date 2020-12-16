@@ -7,16 +7,15 @@ const travelogues = data.travelogues;
 
 //router added(FL)
 router.get('/found/:id', async(req, res) => {
+
+    console.log(req.params);
+
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }
     try {
+        console.log(typeof(req.params.id) + "  in the router " + req.params.id);
         const attraction = await attractions.getAttraction(req.params.id);
-        let traveloguesList = [];
-        let index = 0;
-        for (let x of attraction.relatedTravelogueId) {
-            traveloguesList[index++] = await travelogues.getTraveloguesById(x.id);
-        }
         let commentsList = [];
         let index2 = 0;
         for (let x of attraction.relatedCommentsId) {
@@ -25,7 +24,6 @@ router.get('/found/:id', async(req, res) => {
 
         res.render('partials/attractionDetail', {
             Attractions: attraction,
-            Travelogues: traveloguesList,
             Comments: commentsList,
             isAdmin: req.admin
         });
@@ -34,34 +32,12 @@ router.get('/found/:id', async(req, res) => {
     }
 });
 
-router.post('/found/:id', async(req, res) => {
-    if (!req.params.id) {
-        throw 'You must provide an id!!!';
-    }
-    console.log(res.body);
-    // console.log(req.session.user);
-    // try {
-    //     const comment = await comments.addComments(req.params.id);
-    //     let traveloguesList = [];
-    //     let index = 0;
-    //     for (let x of attraction.relatedTravelogueId) {
-    //         traveloguesList[index++] = await travelogues.getTraveloguesById(x.id);
-    //     }
-    //     res.render('partials/attractionDetail', {
-    //         Attractions: attraction,
-    //         Travelogues: traveloguesList
-    //     });
-    // } catch (e) {
-    //     res.status(404).render('error/error', { error: e });
-    // }
-});
 
 router.post('/Search', async(req, res) => {
     let attractionList = await attractions.getAttractionBySearch(req.body.searchTerm);
     let loggedIn = false;
     if (req.session.user) loggedIn = true;
-    console.log(attractionList);
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn});
+    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn });
 });
 router.post("/add", async(req, res) => {
     // if(!user.session.user){
