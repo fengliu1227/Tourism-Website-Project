@@ -14,20 +14,18 @@ router.get('/found/:id', async(req, res) => {
     try {
         // console.log(typeof(req.params.id) + "  in the router " + req.params.id);
         const attraction = await attractions.getAttraction(req.params.id);
-        console.log(attraction);
         let commentsList = [];
         let index2 = 0;
         for (let x of attraction.relatedCommentsId) {
             commentsList[index2++] = await comments.getCommentsById(x.id);
         }
-        console.log(commentsList)
         res.render('partials/attractionDetail', {
             Attractions: attraction,
             Comments: commentsList,
-            isAdmin: req.admin
+            isAdmin: req.admin,
+            loggedIn: req.session.user
         });
     } catch (e) {
-        console.log("!");
         res.status(404).render('error/error', { error: e });
     }
 });
@@ -57,7 +55,7 @@ router.post("/add", async(req, res) => {
     }
     const attraction = await attractions.addAttractions(userId, description);
 
-    res.render('partials/attractionDetail', { searchTerm: req.body.searchTerm, Attractions: attraction,isAdmin: req.admin, loggedIn: true });
+    res.render('partials/attractionDetail', {Attractions: attraction,isAdmin: req.admin, loggedIn: true });
 
 })
 
