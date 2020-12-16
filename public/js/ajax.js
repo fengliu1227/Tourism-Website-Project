@@ -49,7 +49,7 @@
         }
         $.ajax(requestConfig).then(function(responseMessage) {
             var newElement = $(responseMessage);
-            console.log(newElement)
+            newComment.val('');
             addComment(newElement);
         })
     });
