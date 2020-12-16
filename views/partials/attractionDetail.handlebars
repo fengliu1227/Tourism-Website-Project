@@ -34,7 +34,11 @@
         <input id="attractionId-add-travelogue" name="attractionIdDetailPage"type="hidden" value={{Attractions._id}} />
     </div>
 
-
-{{!-- <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+<script type="text/javascript">
+    localStorage.setItem('attractionIdForAddTravelogue', document.getElementById("attractionId-add-travelogue").value);
+    localStorage.setItem('pageDeriveFrom', "add");
+    localStorage.setItem('attractionIdToAdd', document.getElementById("attractionId-add-travelogue").value);
+</script>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
         crossorigin="anonymous"></script>
-<script src="/public/js/ajax.js"></script> --}}
+<script src="/public/js/ajax.js"></script>
