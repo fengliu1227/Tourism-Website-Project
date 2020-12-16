@@ -6,12 +6,15 @@ const users = require('../data/users');
 const attractions = require('../data/attractions');
 
 let exportedMothod = {
-    async addComments(userId, relatedAttractionId, comment) {
+    async addComments(userId, relatedAttractionId, rating, comment) {
         if (!userId && !relatedAttractionId && !comment) throw 'all fields need to input a value';
         const commentsCollection = await comments();
         let newComments = {
             userId: userId.toString(),
             relatedAttractionId: relatedAttractionId.toString(),
+            like: 0,
+            unlike: 0,
+            rating: rating,
             comment: comment
         };
         const insertInfo = await commentsCollection.insertOne(newComments);

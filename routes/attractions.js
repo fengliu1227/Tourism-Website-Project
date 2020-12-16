@@ -8,13 +8,13 @@ const travelogues = data.travelogues;
 //router added(FL)
 router.get('/found/:id', async(req, res) => {
 
-    console.log(req.params);
+    // console.log(req.params);
 
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }
     try {
-        console.log(typeof(req.params.id) + "  in the router " + req.params.id);
+        // console.log(typeof(req.params.id) + "  in the router " + req.params.id);
         const attraction = await attractions.getAttraction(req.params.id);
         let commentsList = [];
         let index2 = 0;
