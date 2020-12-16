@@ -1,11 +1,10 @@
+<h1 id="travelogueEditorTitle">Share your own unique experience~!</h1>
+<div id="travelogueEditor">
 <form method="post">
     <div class="tool-bar">
             <button type="button" id="btn1">Bold</button>
             <button type="button" id="btn2">Hyperlink</button>
             <button type="button" id="btn3">Image</button>
-    </div>
-    <div class="travelogueTitle">
-        <input type="text" id="travelogueTitle" name="travelogueTitle">
     </div>
     <div id="hyperlink_bar" hidden>
             <label for="hyper_link">please input the url for the selected text</label>
@@ -19,9 +18,16 @@
             <button type="button" id="submit_img_link">submit</button>
             <button type="button" id="cancel_img_link">cancel</button>
     </div>
+    <div class="travelogueTitle">
+        <label for="travelogueTitle">Title:</label>
+        <input type="text" id="travelogueTitle" name="travelogueTitle">
+    </div>
     <div id="editor" class="editor" contenteditable="true" name="travelogueContent"></div>   
-    <button type="submit" id="travelogue_submit_btn">submit</button>
+    <div>
+    <button type="submit" class="searchbtn" id="travelogue_submit_btn">submit</button>
+    </div>
 </form>
+</div>
 <script>
         btn1.onclick=()=>{
         document.execCommand("bold");
