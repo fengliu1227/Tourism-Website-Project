@@ -8,14 +8,14 @@
     function appendComments(List) {
         for (var i of List) {
             commentsList.append("<dt>" + i.user + "<dt>");
-            commentsList.append("<dl>" + i.comment + "<dl>");
+            commentsList.append("<dd>" + i.comment + "<dd>");
         }
     }
 
     function addComment(item) {
         if (item) {
             commentsList.append("<dt>" + item[0].user + "</dt>");
-            commentsList.append("<dl>" + item[0].comment + "</dl>");
+            commentsList.append("<dd>" + item[0].comment + "</dd>");
         } else {
             return;
         }
