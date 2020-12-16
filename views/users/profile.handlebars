@@ -1,5 +1,6 @@
 <main>
-  <div>
+  <h1 class="profileTitle">User Info Card</h1>
+  <div id="userInfoTable">
   <article class="post">
       <div>
           <h2>User {{user._id}}</h2>
@@ -46,25 +47,31 @@
               {{/if}}
           </dl>
       </div>
-              
+      <div>    
       <form id="profile-form" method="post">
         <div id="userInfo" hidden>
-            <label for="input-firstName">User firstName</label>
-            <input type="text" id="input-firstName" name="userFirstName">
-
-            <label for="input-lastName">User lastName</label>
-            <input type="text" id="input-lastName" name="userLastName">
-
-            <label for="input-gender">Gender</label>
-            <select id="input-gender" name="gender">
+            <div>
+              <div>
+                <label for="input-firstName">User First Name</label>
+                <input type="text" id="input-firstName" name="userFirstName">
+              </div>
+            <div>
+              <label for="input-lastName">User Last Name</label>
+              <input type="text" id="input-lastName" name="userLastName">
+            </div>
+            <div>
+              <label for="input-gender">Gender</label>
+              <select id="input-gender" name="gender">
               <option value="male">Male</option>
               <option value="female">Female</option>
               <option value="other">Other</option>
-            </select>
+              </select>
+            </div>
             <div class="profile-group">
               {{#if hasErrors}}
             <p class="error">{{error}}</p>
               {{/if}}
+            </div>
             </div>
             <div class="profile-group">
               <button type="submit" class="submit-btn" id="submit-change">submit</button>
@@ -74,39 +81,43 @@
         <button type="button" class="submit-btn" id="edit">edit</button>
         <input name="_method" value="patch" hidden/>
       </form>
+      </div>
   </article>
   </div>
-  <div>
+  <h1 class="profileTitle">Write your own attractions or travelogue!</h1>
+  <div id="functionTable">
   <form id="attraction-form" method="post" action="/attractions/add">
           <button type="button"class="submit-btn"id="addAttraction">add Attraction</button>
           <div id="attractionInfo" class="attraction-group" hidden>
-
+              <div>
                 <label for="input-attraction-name">Attraction Name : </label>
                 <input type="text" id="input-attraction-name" name="attractionName">
-
+              </div>
                 <label for="input-attraction-category">Attraction Category : </label>
                 <input type="text" id="input-attraction-category" name="attractionCategory">
-
+              <div>
                 <label for="input-attraction-img">Attraction Img URL : </label>
                 <input type="url" id="input-attraction-img" name="attractionImg">
-
+              </div>
                 <label for="input-attraction-address">Attraction Address : </label>
                 <input type="text" id="input-attraction-address" name="attractionAddress">
-
+              <div>
                 <label for="input-attraction-rating">Attraction Rating : </label>
                 <input type="number" id="input-attraction-rating" name="attractionRating" min="0" max="5">
-
+              </div>
                 <label for="input-attraction-price">Attraction Price : </label>
                 <input type="number" id="input-attraction-price" name="attractionPrice" min="0">
-
+            <div> 
                 <label for="input-attraction-content">Attraction Content : </label>
                 <textarea type="text" id="input-attraction-content" name="attractionContent"></textarea>
-
+            </div>
+            <div>
             <button type="submit"class="submit-btn"id="submit-new-attraction">submit</button>
             <button type="button"class="submit-btn"id="cancel-new-attraction">cancel</button>
+            </div>
           </div>
         </form>
-          <a href="/travelogues/add"> Write travelogue</a>
+          <a href="/travelogues/add"> Write Travelogue</a>
   </div>
 
 <script type="text/javascript">
