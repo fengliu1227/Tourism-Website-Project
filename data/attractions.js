@@ -8,7 +8,7 @@ async function addAttractions(userId, description) {
     let newAttractions = {
         userId: userId,
         relatedCommentsId: [],
-        numOfComments: 0,
+        numOfComments: 1,
         description: description
     };
     const insertInfo = await attractionCollection.insertOne(newAttractions);
@@ -36,45 +36,29 @@ async function getAttractionBySearch(searchTerm) {
 }
 
 
-//add Travelogue To Attraction data, added by feng liu
-async function addTravelogueToAttraction(attractionId, travelogueId) {
-    let currentAttaction = await this.getAttraction(attractionId);
-
+//add Comment To Attraction data, added by feng liu
+async function addCommentToAttraction(attractionId, commentId, rating) {
     const attractionCollection = await attractions();
-    const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $addToSet: { relatedTravelogueId: { id: travelogueId.toString() } } });
-
+    const targetAttraction = await attractionCollection.findOne({ _id: ObjectId(attractionId) });
+    console.log(Number(targetAttraction.description.Rating));
+    console.log(targetAttraction.numOfComments);
+    let newRating = await caculateRating(Number(targetAttraction.description.Rating), Number(rating), targetAttraction.numOfComments);
+    newRating = Math.floor(newRating * 100) / 100;
+    let newDescription = {
+        Name: targetAttraction.description.Name,
+        Category: targetAttraction.description.Category,
+        Rating: newRating.toString(),
+        Img: targetAttraction.description.Img,
+        Price: targetAttraction.description.Price,
+        Content: targetAttraction.description.Content,
+        Address: targetAttraction.description.Address
+    }
+    let updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: { numOfComments: targetAttraction.numOfComments + 1, description: newDescription } });
     if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
         // throw 'Error: update failed';
         return;
     }
-    return await this.getAttraction(attractionId);
-}
-
-//remove Travelogue from Atrraction data, added by feng liu
-async function removeTravelogueFromAttraction(attractionId, travelogueId) {
-    let currentAttaction = await this.getAttraction(attractionId);
-    const newTravelogue = {};
-    newTravelogue.relatedTravelogueId = [];
-    let index = 0;
-    for (let i of currentAttaction.relatedTravelogueId) {
-        if (i.id.toString() == travelogueId) continue;
-        newTravelogue.relatedTravelogueId[index++] = i;
-    }
-    const attractionCollection = await attractions();
-    const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: newTravelogue });
-    if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
-    await this.getAttraction(attractionId);
-}
-
-
-
-//add Comment To Attraction data, added by feng liu
-async function addCommentToAttraction(attractionId, commentId) {
-    let currentAttaction = await this.getAttraction(attractionId);
-
-    const attractionCollection = await attractions();
-    const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $addToSet: { relatedCommentsId: { id: commentId.toString() } } });
-
+    updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $addToSet: { relatedCommentsId: { id: commentId.toString() } } });
     if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
         // throw 'Error: update failed';
         return;
@@ -115,12 +99,22 @@ async function deleteAttraction(id) {
     return true;
 }
 
+async function caculateRating(oldRating, newRating, number) {
+    if (number == 0) {
+        let result = (oldRating + newRating) / (number + 1);
+        console.log("newRating = " + result);
+        return result;
+    } else {
+        let result = (oldRating * number + newRating) / (number + 1);
+        console.log("newRating = " + result);
+        return result;
+    }
+}
+
 module.exports = {
     addAttractions,
     getAttraction,
     getAttractionBySearch,
-    addTravelogueToAttraction,
-    removeTravelogueFromAttraction,
     addCommentToAttraction,
     removeCommentFromAttraction,
     deleteAttraction

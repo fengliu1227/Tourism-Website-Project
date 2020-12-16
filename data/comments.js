@@ -20,8 +20,9 @@ let exportedMothod = {
         const insertInfo = await commentsCollection.insertOne(newComments);
         if (insertInfo.insertedCount === 0) throw "add comments failed";
         const newId = insertInfo.insertedId;
+
         try {
-            await attractions.addCommentToAttraction(relatedAttractionId, newId.toString());
+            await attractions.addCommentToAttraction(relatedAttractionId, newId.toString(), rating);
             await users.addCommentToUser(userId, newId.toString());
         } catch (e) {
             throw "add comment failed";
@@ -53,13 +54,6 @@ let exportedMothod = {
         return comment;
     },
 
-    // async getTraveloguesBySearch(searchTerm) {
-    //     if (!searchTerm) throw 'No keyword provided!?';
-    //     const query = new RegExp(searchTerm, 'i');
-    //     const traveloguesCollection = await travelogues();
-    //     const traveloguesList = await traveloguesCollection.find({ "travelogue.Name": query }).toArray();
-    //     return traveloguesList;
-    // },
 
     async removeComment(id) {
         if (!id) throw 'no id provided';

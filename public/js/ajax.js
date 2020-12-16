@@ -5,6 +5,7 @@
     var newCommentButton = $('#new-comment-submit');
     var attractionId = $('#attractionId-add-travelogue');
     var ratingFromComment = $('#input-comment-attraction-rating');
+    var rating = $('#detail-attration-rating');
 
     function appendComments(List) {
         for (var i of List) {
@@ -16,6 +17,7 @@
 
     function addComment(item) {
         if (item) {
+            rating.html(item[0].newRating);
             commentsList.append("<dt> From:" + item[0].user + "</dt>");
             commentsList.append("<dd> Rating:" + item[0].rating + "<dd>");
             commentsList.append("<dd> Content:" + item[0].comment + "</dd>");
@@ -46,7 +48,7 @@
             dataType: "json",
             success: function(data) {},
             error: function(err) {
-                window.location.href = "/users/login"
+                alert("something went wrong");
             }
 
         }
