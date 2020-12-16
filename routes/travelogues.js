@@ -6,8 +6,8 @@ const travelogues = data.travelogues;
 
 router.get('/', async(req, res) => {
     let loggedIn = false;
-    if(req.session.user) loggedIn = true; 
-    res.render('travelogues/search', { Research: false, Detail: false ,loggedIn:loggedIn});
+    if (req.session.user) loggedIn = true;
+    res.render('travelogues/search', { Research: false, Detail: false, loggedIn: loggedIn });
 });
 
 // router.post('/', async(req, res) => {
@@ -16,25 +16,24 @@ router.get('/', async(req, res) => {
 //     res.render('travelogues/search', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, Travelogue: traveloguesList });
 // });
 
-router.post('/Search',async(req,res)=>{
+router.post('/Search', async(req, res) => {
     let travelogueList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
     let loggedIn = false;
     if (req.session.user) loggedIn = true;
-    console.log(travelogueList);
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn});
+    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
 })
 router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }
     let loggedIn = false;
-    if(req.session.user) loggedIn = true;
+    if (req.session.user) loggedIn = true;
     try {
         const travelogue = await travelogues.getTraveloguesById(req.params.id);
         // console.log(travelogue.travelogue.content);
         res.render('travelogues/travelogueDetail', {
             Travelogue: travelogue,
-            loggedIn:loggedIn
+            loggedIn: loggedIn
         });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
@@ -50,7 +49,7 @@ router.post('/result', async(req, res) => {
 
 router.get("/add", async(req, res) => {
     if (req.session.user) {
-        res.render('travelogues/add',{loggedIn:true});
+        res.render('travelogues/add', { loggedIn: true });
     } else {
         res.redirect('/users/login')
     }
