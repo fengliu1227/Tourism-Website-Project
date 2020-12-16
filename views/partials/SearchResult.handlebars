@@ -3,23 +3,21 @@
 <div id="attractionTable">
 {{#each attractions}}
 <div class="attraction" onclick="location.href='/attractions/found/{{this._id}}';">
-    <div class="attraction_img"style="float:left"><img src= "{{description.Img}}" width="150" height="144"/></div>
+    <div class="attraction_img" style="float:left"><img src= "{{description.Img}}" width="150" height="144" alt="{{description.Name}}"/></div>
     <div class="attraction_text">
         <p>{{description.Name}}</p>
         <p>Rating : {{description.Rating}}/5 | {{relatedCommentsId.length}} comments | $ {{description.Price}} /per</p>
         <p>{{description.Category}} | {{description.Address}}</p>
         {{description.Content}}
-    {{!-- </div>
-    <a href = "/attractions/found/{{this._id}}">{{this.description.Name}}</a>
-    </div> --}}
     </div>
 </div>
 {{/each}}
 </div>
+<div>
     <ul>
         {{#each travelogues}}
             <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a></li>
         {{/each}}
     </ul>
 </div>
-<div>
+</div>
