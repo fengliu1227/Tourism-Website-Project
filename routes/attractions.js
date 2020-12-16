@@ -8,8 +8,6 @@ const travelogues = data.travelogues;
 //router added(FL)
 router.get('/found/:id', async(req, res) => {
 
-    // console.log(req.params);
-
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }

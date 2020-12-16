@@ -17,7 +17,7 @@ router.get('/comments/:id', async(req, res) => {
     let index = 0;
     for (let x of commentsList) {
         let user = await users.getUserById(x.userId);
-        commentWithUserName[index++] = { user: user.userName, rating: x.rating, comment: x.comment };
+        commentWithUserName[index++] = { user: user.userName.firstName + " " + user.userName.lastName, rating: x.rating, comment: x.comment };
     }
     res.json(commentWithUserName);
 });

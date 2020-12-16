@@ -41,7 +41,6 @@ let exportedMothod = {
 
 
     async getTraveloguesBySearch(searchTerm) {
-        if (!searchTerm) throw 'No keyword provided!?';
         const query = new RegExp(searchTerm, 'i');
         const traveloguesCollection = await travelogues();
         const traveloguesList = await traveloguesCollection.find({ "travelogue.title": query }).toArray();
