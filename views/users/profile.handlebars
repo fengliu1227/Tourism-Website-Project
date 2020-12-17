@@ -22,7 +22,10 @@
               <dd> 
                 <ul> 
                     {{#each spots}}
-                    <li><a href="/attractions/found/{{this._id}}">{{this.description.Name}}</a></li>
+                    <li>
+                      <a href="/attractions/found/{{this._id}}">{{this.description.Name}}</a>
+                      <a id='delete-atrraction' href="/delete/userAttractions/{{this._id}}">Delete</a>
+                    </li>
                     {{/each}}
                 </ul> 
               </dd> 
@@ -68,6 +71,10 @@
               <option value="female">Female</option>
               <option value="other">Other</option>
               </select>
+            </div>
+            <div>
+              <label for="input-password">Change password</label>
+              <input type="text" id="input-password" name="password">
             </div>
             <div class="profile-group">
               {{#if hasErrors}}
@@ -121,6 +128,8 @@
         </form>
           <a href="/travelogues/add"> Write Travelogue</a>
   </div>
+
+  <a href="/delete/users/{{user._id}}">Delete this account!!</a>
 
 <script type="text/javascript">
     localStorage.setItem('pageDeriveFrom', "profile");

@@ -111,4 +111,53 @@ router.get('/comments/:id', async(req, res) => {
     }
 })
 
+router.get('/users/:id', async(req, res) => {
+    try{
+        await users.deleteUser(req.params.id);
+        req.session.destroy();
+        res.redirect('/');
+    }catch(e){
+        res.status(500).json({error: e})
+        return
+    }
+})
+
+router.get('/userAttractions/:id', async(req, res) => {
+    try {
+        const attraction = await attractions.getAttraction(req.params.id);
+        let commentsList = [];
+        let index2 = 0;
+        for (let x of attraction.relatedCommentsId) {
+            commentsList[index2++] = await comments.getCommentsById(x.id);
+        }
+
+        // for(let i=0; i<traveloguesList.length; i++) {
+        //     try {
+        //         await travelogues.removeTravelogue(traveloguesList[i]._id);
+        //     }catch(e) {
+        //         res.status(400).json({error: e})
+        //         return;
+        //     }
+        // }
+        for (let i = 0; i < commentsList.length; i++) {
+            try {
+                await comments.removeComment(commentsList[i]._id);
+            } catch (e) {
+                res.status(400).json({ error: e })
+                return;
+            }
+        }
+        try {
+            await attractions.deleteAttraction(req.params.id)
+            await users.removeAttractionFromUserByAdmin(attraction.userId, req.params.id);
+            res.redirect('/users/private')
+        } catch (e) {
+            res.status(500).json({ error: e })
+        }
+    } catch (e) {
+        res.status(404).json({ error: 'Attraction not found' });
+        return;
+    }
+})
+
 module.exports = router;
