@@ -6,6 +6,7 @@ const users = data.users;
 const attractions = data.attractions;
 
 
+
 router.get('/comments/:id', async(req, res) => {
     const currentAttraction = await attractions.getAttraction(req.params.id);
     let commentsList = [];
@@ -25,18 +26,42 @@ router.get('/comments/:id', async(req, res) => {
 router.post('/addComment', async(req, res) => {
 
     if (req.session.user) {
-        try {
-            let newComment = await comments.addComments(req.session.user.userId, req.body.attractionId, req.body.rating, req.body.comment);
-            let user = await users.getUserById(newComment.userId);
-            let attraction = await attractions.getAttraction(req.body.attractionId);
-            let name = user.userName.firstName + " " + user.userName.lastName;
-            console.log(name);
-            let comment = newComment;
-            res.json({ user: name, rating: comment.rating, newRating: attraction.description.Rating, comment: comment.comment });
-            return;
-        } catch (e) {
-            res.status(404).render('error/error', { error: e });
+        let user = await users.getUserById(req.session.user.userId);
+        for (let x of user.commentedAttraction) {
+            console.log(x.id);
+            if (x.id == req.body.attractionId) {
+                res.json({ error: "already" });
+                return;
+            }
         }
+        let newComment = await comments.addComments(req.session.user.userId, req.body.attractionId, req.body.rating, req.body.comment);
+        await users.addAttractionIdToUserWhenAddComment(newComment.userId, req.body.attractionId);
+        let attraction = await attractions.getAttraction(req.body.attractionId);
+        let name = user.userName.firstName + " " + user.userName.lastName;
+        console.log(name);
+        let comment = newComment;
+        res.json({ user: name, rating: comment.rating, newRating: attraction.description.Rating, comment: comment.comment });
+        return;
+        // try {
+        //     let user = await users.getUserById(newComment.userId);
+        //     for (let x of user.commentedAttraction) {
+        //         console.log(x.id);
+        //         if (x.id == req.body.attractionId) {
+        //             res.json({ error: "already" });
+        //             return;
+        //         }
+        //     }
+        //     let newComment = await comments.addComments(req.session.user.userId, req.body.attractionId, req.body.rating, req.body.comment);
+        //     await users.addAttractionIdToUserWhenAddComment(newComment.userId, req.body.attractionId);
+        //     let attraction = await attractions.getAttraction(req.body.attractionId);
+        //     let name = user.userName.firstName + " " + user.userName.lastName;
+        //     console.log(name);
+        //     let comment = newComment;
+        //     res.json({ user: name, rating: comment.rating, newRating: attraction.description.Rating, comment: comment.comment });
+        //     return;
+        // } catch (e) {
+        //     res.status(404).render('error/error', { error: e });
+        // }
     } else {
         res.redirect('/users/login');
     }

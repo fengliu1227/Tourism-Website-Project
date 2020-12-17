@@ -54,7 +54,8 @@ async function createUser(email, password, userName, gender) {
         privilege: 0,
         commentId: [],
         spotsId: [],
-        travelogueId: []
+        travelogueId: [],
+        commentedAttraction: []
     };
     const newInsertInformation = await usersCollection.insertOne(newUser);
     if (newInsertInformation.insertedCount === 0) throw 'Insert failed!';
@@ -200,6 +201,19 @@ async function removeAttractionFromUserByAdmin(userId, attractionId) {
     return await this.getUserById(userId);
 }
 
+//add Attraction Id when a user add a comment
+async function addAttractionIdToUserWhenAddComment(userId, AtrractionId) {
+
+    const usersCollection = await users();
+    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $addToSet: { commentedAttraction: { id: AtrractionId.toString() } } });
+
+    if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
+        // throw 'Error: update failed';
+        return;
+    }
+    return await this.getUserById(userId);
+}
+
 module.exports = {
     getAllUsers,
     createUser,
@@ -210,5 +224,6 @@ module.exports = {
     removeTravelogueFromUser,
     addCommentToUser,
     removeCommentFromUser,
-    removeAttractionFromUserByAdmin
+    removeAttractionFromUserByAdmin,
+    addAttractionIdToUserWhenAddComment
 }

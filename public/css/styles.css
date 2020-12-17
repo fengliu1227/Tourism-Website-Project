@@ -380,3 +380,17 @@ ul li{
     width:100%;
     outline: auto;
 }
+#travelogueShowTable{
+    opacity: 0.8;
+    background-color: #ffffff;
+    box-sizing: border-box;
+    display: block;
+    width: 55%;
+    box-shadow: 0 4px 8px 0 rgba(218, 243, 149, 0.2);
+    border-radius: 15px;
+    padding: 1%;
+    margin: auto;
+    margin-top: 5%;
+    font-size:30px;
+    font-weight: bold;
+}
