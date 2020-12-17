@@ -20,7 +20,7 @@ router.post('/Search', async(req, res) => {
     let travelogueList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
     let loggedIn = false;
     if (req.session.user) loggedIn = true;
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
+    res.render('partials/SearchResult', {travelogueSearch:true, searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
 })
 router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
