@@ -24,13 +24,17 @@
 </div>
 <div id="comments-editor" class="search-card-center">
     <form id="add-comment-form" method="POST">
-
-
-        <label for="input-comment-attraction-rating">Rating for this attraction: </label><br>
-        <input type="number" id="input-comment-attraction-rating" placeholder="from 0 to 5(need integer)" name="attractionRating" min="0" max="5"><br>
-        <label for="new-comment-input">Leave your new comment:</label><br>
+        <div>
+        <label for="input-comment-attraction-rating">Rating for this attraction: </label>
+        <input type="number" id="input-comment-attraction-rating" placeholder="from 0 to 5(need integer)" name="attractionRating" min="0" max="5">
+        </div>
+        <div>
+        <label for="new-comment-input">Leave your new comment:</label>
         <textarea id="new-comment-input" name="newComment" placeholder="before you submit your comment,log in first!"></textarea>
+        </div>
+        <div>
         <button type="submit" class="submit-btn" id="new-comment-submit">Submit</button>
+        </div>
     </form>
 </div>
 
