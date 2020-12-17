@@ -22,10 +22,6 @@ router.get('/', async(req, res) => {
     }
 });
 
-// router.get('/', async (req, res) => {
-//     return res.redirect('/users/login')
-// });
-
 
 router.get('/login', async(req, res) => {
     try {
@@ -109,33 +105,39 @@ router.post('/login', async(req, res) => {
 
 
 router.get('/private', async(req, res) => {
+  try{
+    let curUser = await usersData.getUserById(req.session.user.userId);
 
-    try {
-        let curUser = await usersData.getUserById(req.session.user.userId);
-        let spots = [];
-        for (let j = 0; j < curUser.spotsId.length; j++) {
-            let spot = await attractions.getAttraction(curUser.spotsId[j]);
-            spots.push(spot);
-        }
-        let travelogueList = [];
-        for (let x of curUser.travelogueId) {
-            let travelogue = await travelogues.getTraveloguesById(x.id);
-            travelogueList.push(travelogue);
-        }
-        let commentsList = [];
-        for (let x of curUser.commentId) {
-            let comment = await comments.getCommentsById(x.id);
-            commentsList.push(comment);
-        }
-        let deleteInfoList = []
-        if (req.admin) {
-            let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
-            deleteInfoList = deleteInfo.deleteInfo
-        }
-        return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
-    } catch (e) {
-        res.status(404).render('error/error', { error: e });
+    let spots = [];
+    for (let j = 0; j < curUser.spotsId.length; j++) {
+        let spot = await attractions.getAttraction(curUser.spotsId[j]);
+        spots.push(spot);
     }
+
+    let travelogueList = [];
+    for (let x of curUser.travelogueId) {
+        let travelogue = await travelogues.getTraveloguesById(x.id);
+        travelogueList.push(travelogue);
+    }
+
+    let commentsList = [];
+    for (let x of curUser.commentId) {
+        let comment = await comments.getCommentsById(x.id);
+        commentsList.push(comment);
+    }
+
+    let deleteInfoList = []
+    if (req.admin) {
+
+        let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
+
+        deleteInfoList = deleteInfo.deleteInfo
+    }
+
+    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
+  }catch(e){
+    res.status(404).render('error/error', { error: e });
+  }
 })
 
 router.post('/signup', async(req, res) => {
