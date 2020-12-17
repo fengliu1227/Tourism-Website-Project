@@ -36,9 +36,9 @@ async function createAdmin(email) {
 
     const newId = newInsertInformation.insertedId.toString();
 
-    const admin = await this.getAdminByEmail(newId);
-    admin._id = admin._id.toString();
-    return admin;
+    // const admin = await this.getAdminByEmail(newId);
+    // admin._id = admin._id.toString();
+    return;
 }
 
 async function updateDeleteInfo(email, deleteInfo) {
