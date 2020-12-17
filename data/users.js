@@ -49,10 +49,13 @@ async function createUser(email, password, userName, gender) {
     email = email.toLowerCase();
 
     const usersCollection = await users();
-    let allUser = await this.getAllUsers();
-    for (i in allUser) {
-        if (email == allUser[i].email) throw 'This email has been registered'
+    let existEmail = true;
+    try{
+        await getUserByEmail(email);
+    }catch(e){
+        existEmail = false;
     }
+    if(existEmail) throw 'This email has been registered';
 
     let newUser = {
         // _id: uuid(),
