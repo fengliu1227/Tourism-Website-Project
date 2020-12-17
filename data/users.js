@@ -31,8 +31,8 @@ async function getUserById(id) {
 
     return getUser;
 }
-async function getUserByEmail(email){
-    if(!email) throw "no email!";
+async function getUserByEmail(email) {
+    if (!email) throw "no email!";
     let reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
     if (!reg.test(email)) throw 'Email is not valid';
     const usersCollection = await users();
@@ -222,11 +222,11 @@ async function removeAttractionFromUserByAdmin(userId, attractionId) {
 }
 
 //add Attraction Id when a user add a comment
-async function addAttractionIdToUserWhenAddComment(userId, AtrractionId) {
+async function addAttractionIdToUserWhenAddComment(userId, AttractionId) {
     if (!userId) { throw 'no userId provided when add attractionId to user when add a comment' };
-    if (!attractionId) { throw 'no attractionId when add attractionId to user when add a comment' };
+    if (!AttractionId) { throw 'no attractionId when add attractionId to user when add a comment' };
     const usersCollection = await users();
-    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $addToSet: { commentedAttraction: { id: AtrractionId.toString() } } });
+    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $addToSet: { commentedAttraction: { id: AttractionId.toString() } } });
 
     if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
         // throw 'Error: update failed';
