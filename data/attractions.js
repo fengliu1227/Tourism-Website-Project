@@ -4,6 +4,8 @@ const mongoCollections = require("../config/mongoCollections");
 const attractions = mongoCollections.attractions;
 
 async function addAttractions(userId, description) {
+    if (!userId) { throw 'no userId provided when add an attraction' }
+    if (!description) { throw 'no description provided when add an attraction' }
     const attractionCollection = await attractions();
     let newAttractions = {
         userId: userId,
@@ -20,7 +22,7 @@ async function addAttractions(userId, description) {
 }
 
 async function getAttraction(id) {
-    if (!id) throw "id must be given";
+    if (!id) throw "id must be given when you want to get a certaian attraction";
     // if (typeof(id) === "string") id = ObjectId.createFromHexString(id);
     const attractionCollection = await attractions();
     const attraction = await attractionCollection.findOne({ _id: ObjectId(id) });
@@ -38,6 +40,9 @@ async function getAttractionBySearch(searchTerm) {
 
 //add Comment To Attraction data, added by feng liu
 async function addCommentToAttraction(attractionId, commentId, rating) {
+    if (!attractionId) { throw 'You need to provide id of this attraction when add a comment to attraction' };
+    if (!commentId) { throw 'You need to provide id of this comment when add a comment to attraction' };
+    if (!rating) { throw 'You need to provide rating in your comment when add a comment to attraction' };
     const attractionCollection = await attractions();
     const targetAttraction = await attractionCollection.findOne({ _id: ObjectId(attractionId) });
     let newRating = await caculateRating(Number(targetAttraction.description.Rating), Number(rating), targetAttraction.numOfComments);
@@ -66,6 +71,8 @@ async function addCommentToAttraction(attractionId, commentId, rating) {
 
 //remove Comment from Atrraction data, added by feng liu
 async function removeCommentFromAttraction(attractionId, commentId) {
+    if (!attractionId) { throw 'You need to provide id of this attraction when remove a comment from attraction' };
+    if (!commentId) { throw 'You need to provide id of this comment when remove a comment from attraction' };
     let currentAttaction = await this.getAttraction(attractionId);
     const newComment = {};
     newComment.relatedCommentsId = [];
@@ -81,7 +88,7 @@ async function removeCommentFromAttraction(attractionId, commentId) {
 }
 
 async function deleteAttraction(id) {
-    if (!id) throw 'Please provide an id';
+    if (!id) throw 'Please provide an id to delete a certain attraction';
     if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
 
     const attractionCollection = await attractions();
@@ -98,6 +105,9 @@ async function deleteAttraction(id) {
 }
 
 async function caculateRating(oldRating, newRating, number) {
+    if (!oldRating) { 'For caculating new rating, you need to provide old rating' };
+    if (!newRating) { 'For caculating new rating, you need to provide new rating in the new comment' };
+    if (!number) { 'For caculating new rating, you need to provide the numbers of total rating' };
     if (number == 0) {
         let result = (oldRating + newRating) / (number + 1);
         return result;

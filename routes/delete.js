@@ -27,15 +27,6 @@ router.get('/attractions/:id', async(req, res) => {
         };
         console.log(deleteInfo);
         await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
-
-        // for(let i=0; i<traveloguesList.length; i++) {
-        //     try {
-        //         await travelogues.removeTravelogue(traveloguesList[i]._id);
-        //     }catch(e) {
-        //         res.status(400).json({error: e})
-        //         return;
-        //     }
-        // }
         for (let i = 0; i < commentsList.length; i++) {
             try {
                 await comments.removeComment(commentsList[i]._id);
@@ -70,7 +61,7 @@ router.get('/travelogues/:id', async(req, res) => {
             Type: 'travelogue',
             Information: thisTravelogue.travelogue.title
         };
-        console.log(deleteInfo);
+        // console.log(deleteInfo);
         await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
 
         try {
@@ -113,6 +104,7 @@ router.get('/comments/:id', async(req, res) => {
 })
 
 router.get('/users/:id', async(req, res) => {
+
     try{
         const userInfo = await users.getUserById(req.params.id);
 
@@ -152,13 +144,6 @@ router.get('/users/:id', async(req, res) => {
                 return;
             }
         }
-        await users.deleteUser(req.params.id);
-        req.session.destroy();
-        res.redirect('/');
-    }catch(e){
-        res.status(500).json({error: e})
-        return
-    }
 })
 
 router.get('/userAttractions/:id', async(req, res) => {
