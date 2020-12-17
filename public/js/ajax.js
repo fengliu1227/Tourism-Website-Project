@@ -50,7 +50,10 @@
 
     newCommentButton.on('click', function() {
         event.preventDefault();
-
+        if (ratingFromComment.val() > 5 || ratingFromComment.val() < 0) {
+            alert("rating must in the range of 0 to 5!");
+            return;
+        }
         var requestConfig = {
             method: 'POST',
             url: '/api/addComment',
