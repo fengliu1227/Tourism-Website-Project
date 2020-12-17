@@ -54,6 +54,29 @@ let exportedMothod = {
         return comment;
     },
 
+    async updateComment(id, updatedRating, updatedComment) {
+        if (!id || typeof(id) != 'string') throw 'Error: id should be a string!';
+
+        let updatedCommentData = {};
+        const comment = await this.getCommentsById(id);
+        const difference = Number(updatedRating) - Number(comment.rating);
+        if (updatedRating && updatedComment) {
+            updatedCommentData = {
+                userId: comment.userId,
+                relatedAttractionId: comment.relatedAttractionId,
+                like: comment.like,
+                unlike: comment.unlike,
+                rating: updatedRating,
+                comment: updatedComment
+            }
+        }
+
+        const commentsCollection = await comments();
+        const updateInfo = await commentsCollection.updateOne({ _id: ObjectId(id) }, { $set: updatedCommentData }, );
+        await attractions.updateCommentToAttraction(comment.relatedAttractionId, difference);
+        if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) throw 'Error: Update failed!';
+        return await this.getCommentsById(id);
+    },
 
     async removeComment(id) {
         if (!id) throw 'no id provided';
@@ -65,14 +88,14 @@ let exportedMothod = {
             console.log(e);
         }
 
-        // try {
-        const deletionInfo = await commentsCollection.removeOne({ _id: ObjectId(id) });
-        if (deletionInfo.deletedCount === 0) throw 'Error: delete failed';
-        await attractions.removeCommentFromAttraction(comment.relatedAttractionId, id);
-        await users.removeCommentFromUser(comment.userId, id);
-        // } catch (e) {
-        //     throw "remove comment failed";
-        // }
+        try {
+            const deletionInfo = await commentsCollection.removeOne({ _id: ObjectId(id) });
+            if (deletionInfo.deletedCount === 0) throw 'Error: delete failed';
+            await attractions.removeCommentFromAttraction(comment.relatedAttractionId, id);
+            await users.removeCommentFromUser(comment.userId, id);
+        } catch (e) {
+            throw "remove comment failed";
+        }
         return { "CommentId": id, "deleted": true };
     }
 }

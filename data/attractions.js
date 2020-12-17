@@ -40,8 +40,6 @@ async function getAttractionBySearch(searchTerm) {
 async function addCommentToAttraction(attractionId, commentId, rating) {
     const attractionCollection = await attractions();
     const targetAttraction = await attractionCollection.findOne({ _id: ObjectId(attractionId) });
-    console.log(Number(targetAttraction.description.Rating));
-    console.log(targetAttraction.numOfComments);
     let newRating = await caculateRating(Number(targetAttraction.description.Rating), Number(rating), targetAttraction.numOfComments);
     newRating = Math.floor(newRating * 100) / 100;
     let newDescription = {
@@ -66,7 +64,7 @@ async function addCommentToAttraction(attractionId, commentId, rating) {
     return await this.getAttraction(attractionId);
 }
 
-//remove Travelogue from Atrraction data, added by feng liu
+//remove Comment from Atrraction data, added by feng liu
 async function removeCommentFromAttraction(attractionId, commentId) {
     let currentAttaction = await this.getAttraction(attractionId);
     const newComment = {};
@@ -111,11 +109,38 @@ async function caculateRating(oldRating, newRating, number) {
     }
 }
 
+async function updateCommentToAttraction(attractionId, difference) {
+    if (attractionId != null && difference != null) {
+        const attractionCollection = await attractions();
+        const targetAttraction = await attractionCollection.findOne({ _id: ObjectId(attractionId) });
+        let newRating = (Number(targetAttraction.description.Rating) * Number(targetAttraction.numOfComments) + Number(difference)) / Number(targetAttraction.numOfComments);
+        newRating = Math.floor(newRating * 100) / 100;
+        let newDescription = {
+            Name: targetAttraction.description.Name,
+            Category: targetAttraction.description.Category,
+            Rating: newRating.toString(),
+            Img: targetAttraction.description.Img,
+            Price: targetAttraction.description.Price,
+            Content: targetAttraction.description.Content,
+            Address: targetAttraction.description.Address
+        }
+        let updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: { description: newDescription } });
+        if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
+            throw 'Error: re-write the attraction rating failed';
+            return;
+        }
+        return await this.getAttraction(attractionId);
+    } else {
+        throw 'Lack some important information to re-write the attraction rating!!!';
+    }
+}
+
 module.exports = {
     addAttractions,
     getAttraction,
     getAttractionBySearch,
     addCommentToAttraction,
     removeCommentFromAttraction,
-    deleteAttraction
+    deleteAttraction,
+    updateCommentToAttraction
 }

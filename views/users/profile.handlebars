@@ -12,7 +12,9 @@
               <dd> 
                 <ul> 
                     {{#each Comments}}
-                    <li>{{this.comment}}</li>
+                    <li>Rating:{{this.rating}}<br>
+                    Comment:{{this.comment}}<br>
+                    <a href="/comments/update/{{this._id}}">Re-edit Your Comment</a></li>
                     {{/each}}
                 </ul> 
               </dd> 

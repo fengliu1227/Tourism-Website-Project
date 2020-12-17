@@ -4,11 +4,11 @@ const router = express.Router();
 const data = require('../data');
 const travelogues = data.travelogues;
 
-router.get('/', async(req, res) => {
-    let loggedIn = false;
-    if (req.session.user) loggedIn = true;
-    res.render('travelogues/search', { Research: false, Detail: false, loggedIn: loggedIn });
-});
+// router.get('/', async(req, res) => {
+//     let loggedIn = false;
+//     if (req.session.user) loggedIn = true;
+//     res.render('travelogues/search', { Research: false, Detail: false, loggedIn: loggedIn });
+// });
 
 // router.post('/', async(req, res) => {
 //     console.log(req.body);
