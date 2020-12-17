@@ -78,7 +78,7 @@
               <dd> 
                 <ul> 
                     {{#each Travelogues}}
-                    <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a> <a href="/delete/travelogues/{{this._id}}">Delete</a></li>
+                    <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a>{{#if isAdmin}} <a href="/delete/travelogues/{{this._id}}">Delete</a>{{/if}}</li>
                     {{/each}}
                 </ul> 
               </dd> 

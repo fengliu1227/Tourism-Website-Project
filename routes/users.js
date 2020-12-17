@@ -18,10 +18,6 @@ router.get('/', async(req, res) => {
     }
 });
 
-// router.get('/', async (req, res) => {
-//     return res.redirect('/users/login')
-// });
-
 router.get('/login', async(req, res) => {
     if (req.session.user) {
         return res.redirect('/users/private')
@@ -95,27 +91,35 @@ router.post('/login', async(req, res) => {
 });
 
 router.get('/private', async(req, res) => {
+    console.log(1);
     let curUser = await usersData.getUserById(req.session.user.userId);
+    console.log(2);
     let spots = [];
     for (let j = 0; j < curUser.spotsId.length; j++) {
         let spot = await attractions.getAttraction(curUser.spotsId[j]);
         spots.push(spot);
     }
+    console.log(3);
     let travelogueList = [];
     for (let x of curUser.travelogueId) {
         let travelogue = await travelogues.getTraveloguesById(x.id);
         travelogueList.push(travelogue);
     }
+    console.log(4);
     let commentsList = [];
     for (let x of curUser.commentId) {
         let comment = await comments.getCommentsById(x.id);
         commentsList.push(comment);
     }
+    console.log(5);
     let deleteInfoList = []
     if (req.admin) {
+        console.log(6);
         let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
+        console.log(7);
         deleteInfoList = deleteInfo.deleteInfo
     }
+    console.log(8);
     return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin })
 })
 
