@@ -45,11 +45,10 @@ router.post('/login', async(req, res) => {
     // let users = await usersData.getAllUsers();
     try{
         let user = await usersData.getUserByEmail(req.body.useremail);
-        console.log(user);
         let useremail = req.body.useremail;
         let password = req.body.password;
         let match = false;
-        if(useremail == user.email){
+        if(user.email == useremail){
             match = await bcrypt.compare(password, user.password);
         }
         if (match) {
@@ -93,63 +92,6 @@ router.post('/login', async(req, res) => {
             hashasLogInErrorsErrors: true
         });
     }
-    // console.log(useremail);
-    // console.log(password);
-    // try {
-    //     for (let i = 0; i < users.length; i++) {
-    //         // console.log(users[i]);
-    //         // console.log(users[i].password);
-    //         useremail = useremail.toLowerCase();
-    //         // console.log(useremail);
-    //         if(useremail == users[i].email){
-    //             match = await bcrypt.compare(password, users[i].password);
-    //         }
-    //         if (match) {
-    //             if (useremail == "admin@outlook.com") {
-    //                 req.session.user = {
-    //                     email: users[i].email,
-    //                     // firstName: users[i].userName.firstName,
-    //                     // lastName: users[i].userName.lastName,
-    //                     userId: users[i]._id,
-    //                     isAdmin: {
-    //                         type: Boolean,
-    //                         default: true
-    //                     }
-    //                 }
-    //             } else {
-    //                 req.session.user = {
-    //                     email: users[i].email,
-    //                     // firstName: users[i].userName.firstName,
-    //                     // lastName: users[i].userName.lastName,
-    //                     userId: users[i]._id,
-    //                     isAdmin: {
-    //                         type: Boolean,
-    //                         default: false
-    //                     }
-    //                 }
-    //             }
-    //             //modified
-    //             if (req.body.pageFrom && req.body.pageFrom == "profile") {
-    //                 res.redirect('/users/private');
-    //                 return;
-    //             }
-    //             if (req.body.pageFrom && req.body.pageFrom == "add" && req.body.attractionToAddId) {
-    //                 res.redirect('/attractions/found/' + req.body.attractionToAddId);
-    //                 return;
-    //             }
-    //             return res.render('partials/index', { loggedIn: true });
-    //         }
-    //     }
-    //     return res.status(401).render('users/login', {
-    //         error: 'Please provide a valid email or password',
-    //         hasLogInErrors: true
-    //     });
-    // } catch (e) {
-    //     return res.status(401).render('users/login', {
-    //         error: 'Please provide a valid email or password',
-    //         hashasLogInErrorsErrors: true
-    //     });
-    // }
 });
 
 
