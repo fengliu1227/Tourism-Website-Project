@@ -52,11 +52,7 @@ router.get('/attractions/:id', async(req, res) => {
         try {
             await attractions.deleteAttraction(req.params.id)
             await users.removeAttractionFromUserByAdmin(attraction.userId, req.params.id);
-            res.status(200).json({
-                "attractionId": req.params.id,
-                "deleted": true,
-                "deleteInfo": deleteInfo
-            })
+            res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
         }
@@ -83,11 +79,7 @@ router.get('/travelogues/:id', async(req, res) => {
 
         try {
             await travelogues.removeTravelogue(req.params.id)
-            res.status(200).json({
-                "attractionId": req.params.id,
-                "deleted": true,
-                "deleteInfo": deleteInfo
-            })
+            res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
         }
@@ -114,11 +106,7 @@ router.get('/comments/:id', async(req, res) => {
 
         try {
             await comments.removeComment(req.params.id)
-            res.status(200).json({
-                "attractionId": req.params.id,
-                "deleted": true,
-                "deleteInfo": deleteInfo
-            })
+            res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
         }

@@ -5,4 +5,7 @@
 <div>
     {{{Travelogue.travelogue.content}}}
 </div>
+{{#if isAdmin}}
+    <a href="/delete/travelogues/{{Travelogue._id}}">Delete</a>
+{{/if}}
 </div>
