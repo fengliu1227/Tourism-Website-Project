@@ -31,6 +31,15 @@ async function getUserById(id) {
 
     return getUser;
 }
+async function getUserByEmail(email){
+    if(!email) throw "no email!";
+    let reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
+    if (!reg.test(email)) throw 'Email is not valid';
+    const usersCollection = await users();
+    const getUser = await usersCollection.findOne({ email: email });
+    getUser._id = getUser._id + "";
+    return getUser;
+}
 
 async function createUser(email, password, userName, gender) {
     if (!email || !password || !userName || !gender) throw 'Please provide all fields when create a user'
@@ -237,5 +246,6 @@ module.exports = {
     addCommentToUser,
     removeCommentFromUser,
     removeAttractionFromUserByAdmin,
-    addAttractionIdToUserWhenAddComment
+    addAttractionIdToUserWhenAddComment,
+    getUserByEmail
 }
