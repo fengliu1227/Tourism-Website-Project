@@ -206,7 +206,7 @@ router.post('/signup', async(req, res) => {
 })
 
 router.patch('/private', async(req, res) => {
-    const { userFirstName, userLastName, gender } = req.body;
+    const { userFirstName, userLastName, gender, password } = req.body;
     let userName = {};
     let updatedObj = { userName };
     try {
@@ -227,6 +227,11 @@ router.patch('/private', async(req, res) => {
 
         if (gender && gender !== oldUser.gender)
             updatedObj.gender = gender;
+
+        if (password) {
+            updatedObj.password = password;
+        }
+
     } catch (e) {
         console.log(e);
         res.status(404).json({ error: e });
