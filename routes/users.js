@@ -45,6 +45,7 @@ router.post('/login', async(req, res) => {
     let users = await usersData.getAllUsers();
     let useremail = req.body.useremail;
     let password = req.body.password;
+    let match = false;
     // console.log(useremail);
     // console.log(password);
     try {
@@ -53,9 +54,10 @@ router.post('/login', async(req, res) => {
             // console.log(users[i].password);
             useremail = useremail.toLowerCase();
             // console.log(useremail);
-            let match = await bcrypt.compare(password, users[i].password);
-            // console.log(match);
-            if (match && useremail == users[i].email) {
+            if(useremail == users[i].email){
+                match = await bcrypt.compare(password, users[i].password);
+            }
+            if (match) {
                 if (useremail == "admin@outlook.com") {
                     req.session.user = {
                         email: users[i].email,
