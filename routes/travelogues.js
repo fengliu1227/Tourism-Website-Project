@@ -58,9 +58,9 @@ router.get("/add", async(req, res) => {
 
 router.post("/add", async(req, res) => {
     let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
-    console.log(currentTravelogue);
-    await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
-    res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
+    let travelogue = await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
+    travelogue._id = travelogue._id+"";
+    res.json({ success: true, Travelogue: travelogue });
 
 });
 

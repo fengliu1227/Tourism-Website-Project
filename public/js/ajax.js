@@ -66,6 +66,7 @@
 
         }
         $.ajax(requestConfig).then(function(responseMessage) {
+            console.log(responseMessage);
             var newElement = $(responseMessage);
             newComment.val('');
             ratingFromComment.val('');

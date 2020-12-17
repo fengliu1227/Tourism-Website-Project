@@ -41,7 +41,7 @@ router.post('/Search', async(req, res) => {
 
 
     if (req.session.user) loggedIn = true;
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList,sortedAttractions:sortedAttractionList,loggedIn: loggedIn });
+    res.render('partials/SearchResult', { sortBtn:true, searchTerm: req.body.searchTerm, attractions: attractionList,sortedAttractions:sortedAttractionList,loggedIn: loggedIn });
 });
 router.post("/add", async(req, res) => {
     // if(!user.session.user){
