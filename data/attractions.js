@@ -100,11 +100,9 @@ async function deleteAttraction(id) {
 async function caculateRating(oldRating, newRating, number) {
     if (number == 0) {
         let result = (oldRating + newRating) / (number + 1);
-        console.log("newRating = " + result);
         return result;
     } else {
         let result = (oldRating * number + newRating) / (number + 1);
-        console.log("newRating = " + result);
         return result;
     }
 }

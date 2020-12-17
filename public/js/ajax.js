@@ -20,8 +20,12 @@
     }
 
     function addComment(item) {
-        console.log(item);
-        console.log(item[0]);
+        if (item[0].error) {
+            if (item[0].error == "already") {
+                alert("You already commented this attraction!");
+                return;
+            }
+        }
         if (item) {
             rating.html(item[0].newRating);
             let commentUser = "<dt> From:" + item[0].user + "</dt>";
