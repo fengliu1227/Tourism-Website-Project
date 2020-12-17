@@ -13,11 +13,6 @@ router.get('/attractions/:id', async(req, res) => {
     }
     try {
         const attraction = await attractions.getAttraction(req.params.id);
-        // let traveloguesList = [];
-        // let index = 0;
-        // for (let x of attraction.relatedTravelogueId) {
-        //     traveloguesList[index++] = await travelogues.getTraveloguesById(x.id);
-        // }
         let commentsList = [];
         let index2 = 0;
         for (let x of attraction.relatedCommentsId) {
