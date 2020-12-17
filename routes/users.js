@@ -47,7 +47,7 @@ router.post('/login', async(req, res) => {
             let match = await bcrypt.compare(password, users[i].password);
             // console.log(match);
             if (match && useremail == users[i].email) {
-                if(useremail == "admin@outlook.com") {
+                if (useremail == "admin@outlook.com") {
                     req.session.user = {
                         email: users[i].email,
                         // firstName: users[i].userName.firstName,
@@ -58,7 +58,7 @@ router.post('/login', async(req, res) => {
                             default: true
                         }
                     }
-                }else{
+                } else {
                     req.session.user = {
                         email: users[i].email,
                         // firstName: users[i].userName.firstName,
@@ -70,12 +70,14 @@ router.post('/login', async(req, res) => {
                         }
                     }
                 }
-                    //modified
+                //modified
                 if (req.body.pageFrom && req.body.pageFrom == "profile") {
                     res.redirect('/users/private');
+                    return;
                 }
                 if (req.body.pageFrom && req.body.pageFrom == "add" && req.body.attractionToAddId) {
                     res.redirect('/attractions/found/' + req.body.attractionToAddId);
+                    return;
                 }
                 return res.render('partials/index', { loggedIn: true });
             }
@@ -110,11 +112,11 @@ router.get('/private', async(req, res) => {
         commentsList.push(comment);
     }
     let deleteInfoList = []
-    if(req.admin) {
+    if (req.admin) {
         let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
         deleteInfoList = deleteInfo.deleteInfo
     }
-    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin})
+    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin })
 })
 
 router.post('/signup', async(req, res) => {
@@ -171,7 +173,7 @@ router.post('/signup', async(req, res) => {
             userName,
             gender
         );
-        if(useremail == "admin@outlook.com") {
+        if (useremail == "admin@outlook.com") {
             req.session.user = {
                 email: useremail,
                 // firstName: userName.firstName,
@@ -183,18 +185,19 @@ router.post('/signup', async(req, res) => {
                 }
             }
             const createAdmin = await adminDeleteInfo.createAdmin(useremail);
-        }else{
+        } else {
             req.session.user = {
-            email: useremail,
-            // firstName: userName.firstName,
-            // lastName: userName.lastName,
-            userId: newUser._id,
-            isAdmin: {
-                type: Boolean,
-                default: false
+                email: useremail,
+                // firstName: userName.firstName,
+                // lastName: userName.lastName,
+                userId: newUser._id,
+                isAdmin: {
+                    type: Boolean,
+                    default: false
+                }
             }
-        }}
-        
+        }
+
         return res.render('partials/index', { loggedIn: true });
     } catch (e) {
         res.status(401).render('users/login', {

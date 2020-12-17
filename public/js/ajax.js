@@ -22,6 +22,10 @@
                 alert("You already commented this attraction!");
                 return;
             }
+            if (item[0].error == "notLogIn") {
+                window.location.href = "/users/login";
+                return;
+            }
         }
         if (item) {
             rating.html(item[0].newRating);
@@ -58,13 +62,10 @@
             data: { comment: newComment.val(), rating: ratingFromComment.val(), attractionId: attractionId.val() },
             dataType: "json",
             success: function(data) {},
-            error: function(err) {
-                window.location.href = "/users/login"
-            }
+            error: function(err) {}
 
         }
         $.ajax(requestConfig).then(function(responseMessage) {
-            console.log(responseMessage);
             var newElement = $(responseMessage);
             newComment.val('');
             ratingFromComment.val('');
