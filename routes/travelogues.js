@@ -33,6 +33,7 @@ router.get('/found/:id', async(req, res) => {
         // console.log(travelogue.travelogue.content);
         res.render('travelogues/travelogueDetail', {
             Travelogue: travelogue,
+            isAdmin: req.admin,
             loggedIn: loggedIn
         });
     } catch (e) {
