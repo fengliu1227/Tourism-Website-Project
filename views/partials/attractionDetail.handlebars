@@ -1,13 +1,13 @@
-<h1>{{Attractions.description.Name}}</h1>
-<div>
+<h1 class="profileTitle">{{Attractions.description.Name}}</h1>
+<div id="attractionDetailTable">
     <h2>Attraction Information:</h2>
     <ul>
-            <li id="detail-attration-rating">{{Attractions.description.Rating}}</li> 
+            <li id="detail-attration-rating">Rating : {{Attractions.description.Rating}}</li> 
             <li><img src= "{{Attractions.description.Img}}"/></li>
-            <li>${{Attractions.description.Price}}</li>
-            <li>{{Attractions.description.Content}}</li>
-            <li>{{Attractions.description.Category}}</li>
-            <li>{{Attractions.description.Address}}</li>
+            <li>Price: ${{Attractions.description.Price}} /per</li>
+            <li>Category: {{Attractions.description.Category}}</li>
+            <li>Address: {{Attractions.description.Address}}</li>
+            <li>Description: {{Attractions.description.Content}}</li>
     </ul>
 </div>
 
@@ -18,14 +18,21 @@
 
 <div id="show-comments">
     <h2>Comments:</h2>
-        <dl id="commentsList"></dl>
+        <dl id="commentsList">
+        </dl>
+
 </div>
-<div class="search-card-center">
+<div id="comments-editor" class="search-card-center">
     <form id="add-comment-form" method="POST">
+
+
         <label for="input-comment-attraction-rating">Rating for this attraction: </label><br>
         <input type="number" id="input-comment-attraction-rating" placeholder="from 0 to 5(need integer)" name="attractionRating" min="0" max="5"><br>
+        </div>
+        <div>
         <label for="new-comment-input">Leave your new comment:</label><br>
         <textarea id="new-comment-input" name="newComment" placeholder="before you submit your comment,log in first!"></textarea>
+        </div>
         <button type="submit" class="submit-btn" id="new-comment-submit">Submit</button>
     </form>
 </div>

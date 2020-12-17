@@ -22,7 +22,8 @@ router.get('/found/:id', async(req, res) => {
         res.render('partials/attractionDetail', {
             Attractions: attraction,
             Comments: commentsList,
-            isAdmin: req.admin
+            isAdmin: req.admin,
+            loggedIn: req.session.user
         });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
@@ -54,7 +55,7 @@ router.post("/add", async(req, res) => {
     }
     const attraction = await attractions.addAttractions(userId, description);
 
-    res.render('partials/attractionDetail', { searchTerm: req.body.searchTerm, Attractions: attraction, loggedIn: true });
+    res.render('partials/attractionDetail', {Attractions: attraction,isAdmin: req.admin, loggedIn: true });
 
 })
 
