@@ -27,7 +27,7 @@
             let commentUser = "<dt> From:" + item[0].user + "</dt>";
             let commentArating = "<dd> Rating:" + item[0].rating + "</dd>";
             let commentContent = "<dd> Content:" + item[0].comment + "</dd>";
-            commentsList.append("<div> class=\"search-card-center\"" + commentUser + commentArating + commentContent + "</div>");
+            commentsList.append("<div class=\"search-card-center\">" + commentUser + commentArating + commentContent + "</div>");
             // commentsList.append("<dt> From:" + item[0].user + "</dt>");
             // commentsList.append("<dd> Rating:" + item[0].rating + "<dd>");
             // commentsList.append("<dd> Content:" + item[0].comment + "</dd>");
