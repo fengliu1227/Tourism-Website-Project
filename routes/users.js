@@ -84,12 +84,12 @@ router.post('/login', async(req, res) => {
         }
         return res.status(401).render('users/login', {
             error: 'Please provide a valid email or password',
-            hasErrors: true
+            hasLogInErrors: true
         });
     } catch (e) {
         return res.status(401).render('users/login', {
             error: 'Please provide a valid email or password',
-            hasErrors: true
+            hashasLogInErrorsErrors: true
         });
     }
 });
@@ -125,7 +125,7 @@ router.post('/signup', async(req, res) => {
     if (!useremail) {
         res.status(401).render('users/login', {
             error: 'You need to provide user email',
-            hasErrors: true
+            hasSignUpErrors: true
         });
         // res.status(400).json({error: 'You need to provide user email'});
         return;
@@ -134,7 +134,7 @@ router.post('/signup', async(req, res) => {
     if (!password) {
         res.status(401).render('users/login', {
             error: 'You need to provide a password',
-            hasErrors: true
+            hasSignUpErrors: true
         });
         // res.status(400).json({error: 'You need to provide a password'});
         return;
@@ -142,7 +142,7 @@ router.post('/signup', async(req, res) => {
     if (!firstName) {
         res.status(401).render('users/login', {
             error: 'You need to provide a firstName',
-            hasErrors: true
+            hasSignUpErrors: true
         });
         // res.status(400).json({error: 'You need to provide a password'});
         return;
@@ -150,7 +150,7 @@ router.post('/signup', async(req, res) => {
     if (!lastName) {
         res.status(401).render('users/login', {
             error: 'You need to provide a lastName',
-            hasErrors: true
+            hasSignUpErrors: true
         });
         // res.status(400).json({error: 'You need to provide a password'});
         return;
@@ -158,7 +158,7 @@ router.post('/signup', async(req, res) => {
     if (!gender) {
         res.status(401).render('users/login', {
             error: 'You need to provide a gender',
-            hasErrors: true
+            hasSignUpErrors: true
         });
         // res.status(400).json({error: 'You need to provide a password'});
         return;
@@ -202,7 +202,7 @@ router.post('/signup', async(req, res) => {
     } catch (e) {
         res.status(401).render('users/login', {
             error: e,
-            hasErrors: true
+            hasSignUpErrors: true
         });
         // res.status(500).json({error: e});
     }

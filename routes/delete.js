@@ -58,6 +58,7 @@ router.get('/attractions/:id', async(req, res) => {
 })
 
 router.get('/travelogues/:id', async(req, res) => {
+    console.log("1111");
     if (!req.admin) {
         throw 'You are not administrator';
     }
