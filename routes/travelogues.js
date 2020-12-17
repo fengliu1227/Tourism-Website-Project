@@ -20,7 +20,7 @@ router.post('/Search', async(req, res) => {
     let travelogueList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
     let loggedIn = false;
     if (req.session.user) loggedIn = true;
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
+    res.render('partials/SearchResult', {travelogueSearch:true, searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
 })
 router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
@@ -58,9 +58,9 @@ router.get("/add", async(req, res) => {
 
 router.post("/add", async(req, res) => {
     let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
-    console.log(currentTravelogue);
-    await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
-    res.render('travelogues/add', { success: true, Travelogue: currentTravelogue });
+    let travelogue = await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
+    travelogue._id = travelogue._id+"";
+    res.json({ success: true, Travelogue: travelogue });
 
 });
 

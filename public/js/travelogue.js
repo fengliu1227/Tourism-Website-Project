@@ -12,7 +12,10 @@
                 travelogueContent :$('#editor').html()
             })
         }
-        $.ajax(requestConfig).then(function(returnData){
+        $.ajax(requestConfig).then(function(newTravelogue){
+            var newId = newTravelogue.Travelogue._id;
+            $('#travelogueForm').attr('action','/travelogues/found/'+newId).submit();
+
         });
     })
 

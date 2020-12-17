@@ -1,9 +1,12 @@
 <div id="searchTable">
 <div>
 <h1 id="searchTermForSort" class="searchTerm">Search Term: {{searchTerm}}</h1>
+{{#if sortBtn}}
 <button id="defualtBtn">Sort By default</button>
 <button id="sortBtn">Sort By Rating</button>
+{{/if}}
 </div>
+{{#if attractionSearch}}
 <div id="attractionTable">
 {{#each attractions}}
 <div class="attraction" onclick="location.href='/attractions/found/{{this._id}}';">
@@ -30,14 +33,19 @@
 </div>
 {{/each}}
 </div>
-<div>
+{{/if}}
+
+{{#if travelogueSearch}}
+<div id="travelogueShowTable">
     <ul>
         {{#each travelogues}}
             <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a></li>
         {{/each}}
     </ul>
 </div>
+{{/if}}
 </div>
+
 <script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
         crossorigin="anonymous"></script>
 <script src="/public/js/sort.js"></script>
