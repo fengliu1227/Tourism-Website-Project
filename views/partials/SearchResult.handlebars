@@ -1,8 +1,10 @@
 <div id="searchTable">
 <div>
 <h1 id="searchTermForSort" class="searchTerm">Search Term: {{searchTerm}}</h1>
+{{#if sortBtn}}
 <button id="defualtBtn">Sort By default</button>
 <button id="sortBtn">Sort By Rating</button>
+{{/if}}
 </div>
 <div id="attractionTable">
 {{#each attractions}}
