@@ -6,7 +6,7 @@ const users = require('../data/users');
 
 let exportedMothod = {
     async addTravelogues(userId, travelogue) {
-        if (!userId && !relatedAttractionId && !travelogue) throw 'all fields need to input a value';
+        if (!userId || !travelogue) throw 'all fields need to input a value to add a travelogue';
         const traveloguesCollection = await travelogues();
         let newTravelogues = {
             userId: userId.toString(),
@@ -24,7 +24,7 @@ let exportedMothod = {
         return currentTravelogue;
     },
     async getTraveloguesById(id) {
-        if (!id) throw "no id provided";
+        if (!id) throw "no id provided when get a tavelogue by id";
         const traveloguesCollection = await travelogues();
         const travelogue = await traveloguesCollection.findOne({ _id: ObjectId(id) });
         if (!travelogue) throw "travelogue with that id does not exist";
@@ -32,7 +32,7 @@ let exportedMothod = {
     },
 
     async getTraveloguesByUserId(userId) {
-        if (!userId) throw 'No useId provided';
+        if (!userId) throw 'No useId provided when get a travelogue by userId';
         const traveloguesCollection = await travelogues();
         const travelogue = await traveloguesCollection.findOne({ userId: userId });
         if (!travelogue) throw "Opps! Not Found the travelogues of that user";
@@ -48,7 +48,7 @@ let exportedMothod = {
     },
 
     async removeTravelogue(id) {
-        if (!id) throw 'no id provided';
+        if (!id) throw 'no id provided when remove a travelogue';
         const traveloguesCollection = await travelogues();
         let travelogue = null;
         try {

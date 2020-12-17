@@ -11,10 +11,14 @@ const { updateUser } = require('../data/users');
 const saltRounds = 16;
 
 router.get('/', async(req, res) => {
-    if (req.session.user) {
-        return res.redirect('/users/private')
-    } else {
-        return res.redirect('/users/login')
+    try {
+        if (req.session.user) {
+            return res.redirect('/users/private')
+        } else {
+            return res.redirect('/users/login')
+        }
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
 });
 
@@ -22,17 +26,26 @@ router.get('/', async(req, res) => {
 //     return res.redirect('/users/login')
 // });
 
+
 router.get('/login', async(req, res) => {
-    if (req.session.user) {
-        return res.redirect('/users/private')
-    } else {
-        res.render('users/login')
-        return
+    try {
+        if (req.session.user) {
+            return res.redirect('/users/private')
+        } else {
+            res.render('users/login')
+            return
+        }
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
     // res.render('users/login')
 })
 
 router.post('/login', async(req, res) => {
+    // if (req.body.useremail && req.body.password) {
+    //     const useremail = req.body.useremail;
+    //     const password = req.body.password;
+    // }
     let users = await usersData.getAllUsers();
     let useremail = req.body.useremail;
     let password = req.body.password;
@@ -94,29 +107,35 @@ router.post('/login', async(req, res) => {
     }
 });
 
+
 router.get('/private', async(req, res) => {
-    let curUser = await usersData.getUserById(req.session.user.userId);
-    let spots = [];
-    for (let j = 0; j < curUser.spotsId.length; j++) {
-        let spot = await attractions.getAttraction(curUser.spotsId[j]);
-        spots.push(spot);
+
+    try {
+        let curUser = await usersData.getUserById(req.session.user.userId);
+        let spots = [];
+        for (let j = 0; j < curUser.spotsId.length; j++) {
+            let spot = await attractions.getAttraction(curUser.spotsId[j]);
+            spots.push(spot);
+        }
+        let travelogueList = [];
+        for (let x of curUser.travelogueId) {
+            let travelogue = await travelogues.getTraveloguesById(x.id);
+            travelogueList.push(travelogue);
+        }
+        let commentsList = [];
+        for (let x of curUser.commentId) {
+            let comment = await comments.getCommentsById(x.id);
+            commentsList.push(comment);
+        }
+        let deleteInfoList = []
+        if (req.admin) {
+            let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
+            deleteInfoList = deleteInfo.deleteInfo
+        }
+        return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
-    let travelogueList = [];
-    for (let x of curUser.travelogueId) {
-        let travelogue = await travelogues.getTraveloguesById(x.id);
-        travelogueList.push(travelogue);
-    }
-    let commentsList = [];
-    for (let x of curUser.commentId) {
-        let comment = await comments.getCommentsById(x.id);
-        commentsList.push(comment);
-    }
-    let deleteInfoList = []
-    if (req.admin) {
-        let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
-        deleteInfoList = deleteInfo.deleteInfo
-    }
-    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin })
 })
 
 router.post('/signup', async(req, res) => {

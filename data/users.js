@@ -17,8 +17,8 @@ async function getAllUsers() {
 }
 
 async function getUserById(id) {
-    if (!id) throw 'You must provide an id';
-    if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
+    if (!id) throw 'You must provide an id when get a user';
+    if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid when get a user';
 
     const usersCollection = await users();
 
@@ -26,14 +26,14 @@ async function getUserById(id) {
     // console.log('Parsed it correctly, now I can pass parsedId into my query.');
 
     const getUser = await usersCollection.findOne({ _id: parsedId });
-    if (getUser === null) throw 'No user with that id';
+    if (getUser === null) throw 'No user with that id when get a user';
     getUser._id = getUser._id.toString();
 
     return getUser;
 }
 
 async function createUser(email, password, userName, gender) {
-    if (!email || !password || !userName || !gender) throw 'Please provide all fields'
+    if (!email || !password || !userName || !gender) throw 'Please provide all fields when create a user'
     let reg = /^\w+@[a-zA-Z0-9]{2,10}(?:\.[a-z]{2,4}){1,3}$/;
     if (!reg.test(email)) throw 'Email is not valid';
     const hashedPassword = await bcrypt.hash(password, saltRounds);
@@ -70,6 +70,7 @@ async function createUser(email, password, userName, gender) {
 async function updateUser(id, updateUser) {
     if (!id) throw 'Please provide an id';
     if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
+    if (!updateUser) { throw 'no update user data provided when updating a user' };
 
     const usersCollection = await users();
     const updatedUserData = {};
@@ -109,7 +110,7 @@ async function updateUser(id, updateUser) {
 }
 
 async function deleteUser(id) {
-    if (!id) throw 'Please provide an id';
+    if (!id) throw 'Please provide an id when delete a user';
     if (typeof id !== 'string' || id.trim().length == 0) throw 'Id is not valid';
 
     const usersCollection = await users();
@@ -127,6 +128,8 @@ async function deleteUser(id) {
 
 //add Travelogue To User data, added by feng liu
 async function addTravelogueToUser(userId, travelogueId) {
+    if (!userId) { throw 'no userId provided when add a travelogue to user data' };
+    if (!travelogueId) { throw 'no travelogueId provided when add a travelogue to user data' };
     let currentUser = await this.getUserById(userId);
 
     const usersCollection = await users();
@@ -141,6 +144,8 @@ async function addTravelogueToUser(userId, travelogueId) {
 
 //remove Travelogue from User data, added by feng liu
 async function removeTravelogueFromUser(userId, travelogueId) {
+    if (!userId) { throw 'no userId provided when remove a travelogue from user data' };
+    if (!travelogueId) { throw 'no travelogueId provided when remove a travelogue from user data' };
     let currentUser = await this.getUserById(userId);
     const newTravelogue = {};
     newTravelogue.travelogueId = [];
@@ -158,6 +163,8 @@ async function removeTravelogueFromUser(userId, travelogueId) {
 
 //add Comment To User data, added by feng liu
 async function addCommentToUser(userId, commentId) {
+    if (!userId) { throw 'no userId provided when add a comment to user data' };
+    if (!commentId) { throw 'no commentId provided when add a comment to user data' };
     let currentUser = await this.getUserById(userId);
 
     const usersCollection = await users();
@@ -172,6 +179,8 @@ async function addCommentToUser(userId, commentId) {
 
 //remove Comment from User data, added by feng liu
 async function removeCommentFromUser(userId, commentId) {
+    if (!userId) { throw 'no userId provided when remove a comment from user data' };
+    if (!commentId) { throw 'no commentId provided when remove a comment from user data' };
     let currentUser = await this.getUserById(userId);
     const newComment = {};
     newComment.commentId = [];
@@ -187,6 +196,8 @@ async function removeCommentFromUser(userId, commentId) {
 }
 
 async function removeAttractionFromUserByAdmin(userId, attractionId) {
+    if (!userId) { throw 'no userId provided when remove a attaction by admin' };
+    if (!attractionId) { throw 'no attractionId provided when remove a attaction by admin' };
     let currentUser = await this.getUserById(userId);
     const newAttraction = {};
     newAttraction.spotsId = [];
@@ -203,7 +214,8 @@ async function removeAttractionFromUserByAdmin(userId, attractionId) {
 
 //add Attraction Id when a user add a comment
 async function addAttractionIdToUserWhenAddComment(userId, AtrractionId) {
-
+    if (!userId) { throw 'no userId provided when add attractionId to user when add a comment' };
+    if (!attractionId) { throw 'no attractionId when add attractionId to user when add a comment' };
     const usersCollection = await users();
     const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $addToSet: { commentedAttraction: { id: AtrractionId.toString() } } });
 

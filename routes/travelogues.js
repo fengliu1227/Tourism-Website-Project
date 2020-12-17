@@ -4,23 +4,15 @@ const router = express.Router();
 const data = require('../data');
 const travelogues = data.travelogues;
 
-// router.get('/', async(req, res) => {
-//     let loggedIn = false;
-//     if (req.session.user) loggedIn = true;
-//     res.render('travelogues/search', { Research: false, Detail: false, loggedIn: loggedIn });
-// });
-
-// router.post('/', async(req, res) => {
-//     console.log(req.body);
-//     let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
-//     res.render('travelogues/search', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, Travelogue: traveloguesList });
-// });
-
 router.post('/Search', async(req, res) => {
-    let travelogueList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
-    let loggedIn = false;
-    if (req.session.user) loggedIn = true;
-    res.render('partials/SearchResult', {travelogueSearch:true, searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
+    try {
+        let travelogueList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+        let loggedIn = false;
+        if (req.session.user) loggedIn = true;
+        res.render('partials/SearchResult', { travelogueSearch: true, searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
+    }
 })
 router.get('/found/:id', async(req, res) => {
     if (!req.params.id) {
@@ -42,37 +34,51 @@ router.get('/found/:id', async(req, res) => {
 });
 
 router.post('/result', async(req, res) => {
-    console.log(req.body);
-    let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
-    res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, travelogue: traveloguesList });
+    try {
+        console.log(req.body);
+        let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+        res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, travelogue: traveloguesList });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
+    }
 });
 
-
 router.get("/add", async(req, res) => {
-    if (req.session.user) {
-        res.render('travelogues/add', { loggedIn: true });
-    } else {
-        res.redirect('/users/login')
+    try {
+        if (req.session.user) {
+            res.render('travelogues/add', { loggedIn: true });
+        } else {
+            res.redirect('/users/login')
+        }
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
 });
 
 router.post("/add", async(req, res) => {
-    let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
-    let travelogue = await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
-    travelogue._id = travelogue._id+"";
-    res.json({ success: true, Travelogue: travelogue });
-
+    try {
+        let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
+        let travelogue = await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
+        travelogue._id = travelogue._id + "";
+        res.json({ success: true, Travelogue: travelogue });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
+    }
 });
 
 
-router.get("/mine", async(req, res) => {
-    if (req.session.user) {
-        let travelogueList = await travelogues.getTraveloguesByUserId(req.session.user.userId);
-        res.render('travelogues/myTravelogues'), { travelogue: travelogueList };
-    } else {
-        res.redirect('/users/login')
-    }
-})
+// router.get("/mine", async(req, res) => {
+//     try{
+//         if (req.session.user) {
+//             let travelogueList = await travelogues.getTraveloguesByUserId(req.session.user.userId);
+//             res.render('travelogues/myTravelogues'), { travelogue: travelogueList };
+//         } else {
+//             res.redirect('/users/login')
+//         }
+//     }catch(e){
+//         res.status(404).render('error/error', { error: e });
+//     }
+// })
 
 
 module.exports = router;

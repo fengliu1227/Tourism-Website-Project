@@ -8,19 +8,24 @@ const attractions = data.attractions;
 
 
 router.get('/comments/:id', async(req, res) => {
-    const currentAttraction = await attractions.getAttraction(req.params.id);
-    let commentsList = [];
-    let i = 0;
-    for (let x of currentAttraction.relatedCommentsId) {
-        commentsList[i++] = await comments.getCommentsById(x.id);
+    try {
+        const currentAttraction = await attractions.getAttraction(req.params.id);
+        let commentsList = [];
+        let i = 0;
+        for (let x of currentAttraction.relatedCommentsId) {
+            commentsList[i++] = await comments.getCommentsById(x.id);
+        }
+        let commentWithUserName = [];
+        let index = 0;
+        for (let x of commentsList) {
+            let user = await users.getUserById(x.userId);
+            commentWithUserName[index++] = { user: user.userName.firstName + " " + user.userName.lastName, rating: x.rating, comment: x.comment };
+        }
+        res.json(commentWithUserName);
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
+        return;
     }
-    let commentWithUserName = [];
-    let index = 0;
-    for (let x of commentsList) {
-        let user = await users.getUserById(x.userId);
-        commentWithUserName[index++] = { user: user.userName.firstName + " " + user.userName.lastName, rating: x.rating, comment: x.comment };
-    }
-    res.json(commentWithUserName);
 });
 
 router.post('/addComment', async(req, res) => {

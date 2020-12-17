@@ -31,38 +31,44 @@ router.get('/found/:id', async(req, res) => {
 });
 
 router.post('/Search', async(req, res) => {
-    let attractionList = await attractions.getAttractionBySearch(req.body.searchTerm);
-    let loggedIn = false;
-    let sortedAttractionList = [];
-    for(x of attractionList){
-        sortedAttractionList.push(x);
+    try {
+        let attractionList = await attractions.getAttractionBySearch(req.body.searchTerm);
+        let loggedIn = false;
+        let sortedAttractionList = [];
+        for (x of attractionList) {
+            sortedAttractionList.push(x);
+        }
+        sortedAttractionList.sort(function(a, b) { return b.description.Rating - a.description.Rating });
+
+
+        if (req.session.user) loggedIn = true;
+        res.render('partials/SearchResult', { attractionSearch: true, sortBtn: true, searchTerm: req.body.searchTerm, attractions: attractionList, sortedAttractions: sortedAttractionList, loggedIn: loggedIn });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
-    sortedAttractionList.sort(function(a,b){return b.description.Rating - a.description.Rating});
-
-
-    if (req.session.user) loggedIn = true;
-    res.render('partials/SearchResult', {attractionSearch:true,sortBtn:true, searchTerm: req.body.searchTerm, attractions: attractionList,sortedAttractions:sortedAttractionList,loggedIn: loggedIn });
 });
 router.post("/add", async(req, res) => {
     // if(!user.session.user){
     //     res.render('/');
     //     return;
     // }
-    console.log(req.body);
-    userId = req.session.user.userId;
-    description = {
-        Name: req.body.attractionName,
-        Category: req.body.attractionCategory,
-        Rating: req.body.attractionRating,
-        Img: req.body.attractionImg,
-        Price: req.body.attractionPrice,
-        Content: req.body.attractionContent,
-        Address: req.body.attractionAddress
+    try {
+        userId = req.session.user.userId;
+        description = {
+            Name: req.body.attractionName,
+            Category: req.body.attractionCategory,
+            Rating: req.body.attractionRating,
+            Img: req.body.attractionImg,
+            Price: req.body.attractionPrice,
+            Content: req.body.attractionContent,
+            Address: req.body.attractionAddress
+        }
+        const attraction = await attractions.addAttractions(userId, description);
+
+        res.render('partials/attractionDetail', { Attractions: attraction, isAdmin: req.admin, loggedIn: true });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
-    const attraction = await attractions.addAttractions(userId, description);
-
-    res.render('partials/attractionDetail', {Attractions: attraction,isAdmin: req.admin, loggedIn: true });
-
 })
 
 module.exports = router;
