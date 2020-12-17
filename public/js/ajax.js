@@ -13,9 +13,6 @@
             let rating = "<dd> Rating:" + i.rating + "</dd>";
             let content = "<dd> Content:" + i.comment + "</dd>";
             commentsList.append("<div class=\"search-card-center\">" + user + rating + content + "</div>");
-            // commentsList.append("<dt> From:" + i.user + "<dt>");
-            // commentsList.append("<dd> Rating:" + i.rating + "<dd>");
-            // commentsList.append("<dd> Content:" + i.comment + "<dd>");
         }
     }
 
@@ -32,9 +29,6 @@
             let commentArating = "<dd> Rating:" + item[0].rating + "</dd>";
             let commentContent = "<dd> Content:" + item[0].comment + "</dd>";
             commentsList.append("<div class=\"search-card-center\">" + commentUser + commentArating + commentContent + "</div>");
-            // commentsList.append("<dt> From:" + item[0].user + "</dt>");
-            // commentsList.append("<dd> Rating:" + item[0].rating + "<dd>");
-            // commentsList.append("<dd> Content:" + item[0].comment + "</dd>");
         } else {
             return;
         }
