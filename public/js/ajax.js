@@ -9,18 +9,26 @@
 
     function appendComments(List) {
         for (var i of List) {
-            commentsList.append("<dt> From:" + i.user + "<dt>");
-            commentsList.append("<dd> Rating:" + i.rating + "<dd>");
-            commentsList.append("<dd> Content:" + i.comment + "<dd>");
+            let user = "<dt> From:" + i.user + "<dt>";
+            let rating = "<dd> Rating:" + i.rating + "<dd>";
+            let content = "<dd> Content:" + i.comment + "<dd>";
+            commentsList.append("<div class=\"search-card-center\">" + user + rating + content + "</div>");
+            // commentsList.append("<dt> From:" + i.user + "<dt>");
+            // commentsList.append("<dd> Rating:" + i.rating + "<dd>");
+            // commentsList.append("<dd> Content:" + i.comment + "<dd>");
         }
     }
 
     function addComment(item) {
         if (item) {
             rating.html(item[0].newRating);
-            commentsList.append("<dt> From:" + item[0].user + "</dt>");
-            commentsList.append("<dd> Rating:" + item[0].rating + "<dd>");
-            commentsList.append("<dd> Content:" + item[0].comment + "</dd>");
+            let user = "<dt> From:" + item[0].user + "<dt>";
+            let rating = "<dd> Rating:" + item[0].rating + "<dd>";
+            let content = "<dd> Content:" + item[0].comment + "<dd>";
+            commentsList.append("<div> class=\"search-card-center\"" + user + rating + content + "</div>");
+            // commentsList.append("<dt> From:" + item[0].user + "</dt>");
+            // commentsList.append("<dd> Rating:" + item[0].rating + "<dd>");
+            // commentsList.append("<dd> Content:" + item[0].comment + "</dd>");
         } else {
             return;
         }
