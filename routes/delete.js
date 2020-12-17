@@ -114,6 +114,44 @@ router.get('/comments/:id', async(req, res) => {
 
 router.get('/users/:id', async(req, res) => {
     try{
+        const userInfo = await users.getUserById(req.params.id);
+
+        for(let x of userInfo.spotsId) {
+            // console.log(x);
+            const attraction = await attractions.getAttraction(x);
+            // console.log(attraction)
+            let commentsList = [];
+            let index2 = 0;
+            for (let y of attraction.relatedCommentsId) {
+                console.log(y)
+                commentsList[index2++] = await comments.getCommentsById(y.id);
+                console.log(commentsList);
+            }
+            for (let i = 0; i < commentsList.length; i++) {
+                try {
+                    await comments.removeComment(commentsList[i]._id);
+                } catch (e) {
+                    res.status(400).json({ error: e })
+                    return;
+                }
+            }
+            await attractions.deleteAttraction(x);
+        }
+        let travelouguesList = [];
+        let index3 = 0;
+        for(let i of userInfo.travelogueId) {
+            console.log(i);
+            travelouguesList[index3++] = await travelogues.getTraveloguesById(i.id);
+            console.log(travelouguesList);
+        }
+        for (let i = 0; i < travelouguesList.length; i++) {
+            try {
+                await travelogues.removeTravelogue(travelouguesList[i]._id);
+            } catch (e) {
+                res.status(400).json({ error: e })
+                return;
+            }
+        }
         await users.deleteUser(req.params.id);
         req.session.destroy();
         res.redirect('/');

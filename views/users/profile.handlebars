@@ -10,7 +10,7 @@
           <p>Gender: {{user.gender}}</p>
       </div>
       <div>    
-      <form id="profile-form" method="get" action="/delete/users/{{user._id}}">
+      <form id="profile-form" method="post" action="/users/private">
         <div id="userInfo" hidden>
             <div>
               <div>
@@ -45,9 +45,9 @@
             </div>
         </div>
         <button type="button" class="submit-btn" id="edit">edit</button>
-        <button type="submit">Delete this account!!</button>
         <input name="_method" value="patch" hidden/>
       </form>
+      <a href="/delete/users/{{user._id}}">Delete this account!!</a>
       </div>
   </article>
   </div>
