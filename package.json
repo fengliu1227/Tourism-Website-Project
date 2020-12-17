@@ -4,7 +4,7 @@
   "description": "Final Project for CS-546: Web Programming, 2020 Fall<br>\r  ## Intorduction\r This project aimed to build a tourism website that offers traveling information and provides review and rating function. Users can add tourist spots and share their rating, recommendations, and traveling tips with others.  The sharing information will help us update, replenish and perfect the travel data of the tourism website.<br>\r ## About us\r Group member:<br>\r 1.Feng Liu<br>\r 2.Xiaolin Yang<br>\r 3.Xintang He<br>\r 4.Zheng Liu<br>",
   "main": "app.js",
   "scripts": {
-    "seed":"node ./tasks/seed.js",
+    "seed": "node ./tasks/seed.js",
     "start": "node app.js"
   },
   "repository": {
