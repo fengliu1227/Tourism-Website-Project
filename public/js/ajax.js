@@ -12,7 +12,7 @@
             let user = "<dt> From:" + i.user + "</dt>";
             let rating = "<dd> Rating:" + i.rating + "</dd>";
             let content = "<dd> Content:" + i.comment + "</dd>";
-            commentsList.append("<div class=\"search-card-center\">" + user + rating + content + "</div>");
+            commentsList.append("<div class=\"comment-card\">" + user + rating + content + "</div>");
         }
     }
 
@@ -32,7 +32,7 @@
             let commentUser = "<dt> From:" + item[0].user + "</dt>";
             let commentArating = "<dd> Rating:" + item[0].rating + "</dd>";
             let commentContent = "<dd> Content:" + item[0].comment + "</dd>";
-            commentsList.append("<div class=\"search-card-center\">" + commentUser + commentArating + commentContent + "</div>");
+            commentsList.append("<div class=\"comment-card\">" + commentUser + commentArating + commentContent + "</div>");
         } else {
             return;
         }

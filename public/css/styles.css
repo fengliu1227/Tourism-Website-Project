@@ -58,7 +58,12 @@ nav a:hover{
     margin: auto;
     margin-top: 5%
 }
+#userTable{
+    margin-top: 5%;
+    margin-bottom: 5%;
+}
 #userInfoTable{
+    float: left;
     font-size: large;
     color: #150800;
     background-color:#95f0d9;
@@ -67,10 +72,32 @@ nav a:hover{
     /* text-align: center; */
     width: 40%;
     padding: 1%;
-    margin: auto;
-    margin-top: 1%;
+    margin: 5%;
+    /* margin-top: 1%; */
     box-shadow: 0 4px 8px 0 rgba(218, 243, 149, 0.2);
     border-radius: 15px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+#functionEditor{
+    float: left;
+    font-size: large;
+    color: #150800;
+    background-color:#95f0d9;
+    display:block;
+    box-sizing: border-box;
+    /* text-align: center; */
+    width: 40%;
+    padding: 1%;
+    margin: 5%;
+    /* margin-top: 1%; */
+    box-shadow: 0 4px 8px 0 rgba(218, 243, 149, 0.2);
+    border-radius: 15px;
+    word-break: break-all;
+    word-wrap: break-word;
+}
+#functionEditor dt{
+    font-weight: bold;
 }
 #userInfoTable a:hover{
     color:#f509c2;
@@ -79,7 +106,7 @@ nav a:hover{
     color:#f509c2;
 }
 #userInfoTable button{
-    width: 20%;
+    width: 30%;
     text-decoration: none;
     display: inline-block;
     font-size: 16px;
@@ -96,7 +123,12 @@ nav a:hover{
     background-color: red;
     color: white;
 }
+div{
+    overflow: hidden;
+}
 #comments-editor{
+    overflow: hidden;
+    margin: auto;
     width:20%;
     font-size: large;
     font-weight: bold;
@@ -168,6 +200,9 @@ ul li{
 .profileTitle{
     text-align:center;
     color: #c1f0ed;
+}
+#functionH1 h1{
+    margin-top: 20%;
 }
 #functionTable{
     background-color:#95f0d9;
@@ -314,6 +349,7 @@ ul li{
 
 
 #travelogueDetailTable{
+    overflow: hidden;
     opacity: 0.8;
     background-color: #ffffff;
     box-sizing: border-box;
@@ -393,4 +429,52 @@ ul li{
     margin-top: 5%;
     font-size:30px;
     font-weight: bold;
+}
+#show-comments{
+    height:500px;
+}
+.comment-card{
+    overflow: hidden;
+    font-size:auto;
+    float:left;
+    opacity: 0.8;
+    background-color: #a9e7ff;
+    box-sizing: border-box;
+    display: block;
+    text-align: center;
+    width: 10%;
+    height:100px;
+    box-shadow: 0 4px 8px 0 rgba(218, 243, 149, 0.2);
+    border-radius: 15px;
+    /* padding: 1%; */
+    margin: 0.5%; 
+    border:2px solid #ceeceb
+}
+.comment-card dd{
+    word-break: break-all;
+    word-wrap: break-word;
+    width: auto;
+}
+
+.comment-card dt{
+    padding-top: 2%;
+}
+
+.searchSortBtn{
+    width:20%;
+    text-decoration: none;
+    display: inline-block;
+    font-size: 16px;
+    margin: 4px 2px;
+    -webkit-transition-duration: 0.4s; /* Safari */
+    transition-duration: 0.4s;
+    cursor: pointer;
+    border-radius: 12px;
+    background-color: white; 
+    color: black; 
+    border: 2px solid #ee0511;
+}
+.searchSortBtn:hover{
+    background-color: red;
+    color:white;
 }

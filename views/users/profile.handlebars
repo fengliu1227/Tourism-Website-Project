@@ -1,4 +1,5 @@
 <main>
+  <div id="userTable">
   <h1 class="profileTitle">User Info Card</h1>
   <div id="userInfoTable">
   <article class="post">
@@ -7,53 +8,9 @@
           <p>Username: firstName: {{ user.userName.firstName }}, lastName: {{user.userName.lastName}}</p>
           <p>Email: {{user.email}}</p>
           <p>Gender: {{user.gender}}</p>
-          <dl>
-              <dt>Comments:</dt> 
-              <dd> 
-                <ul> 
-                    {{#each Comments}}
-                    <li>Rating:{{this.rating}}<br>
-                    Comment:{{this.comment}}<br>
-                    <a href="/comments/update/{{this._id}}">Re-edit Your Comment</a></li>
-                    {{/each}}
-                </ul> 
-              </dd> 
-              <dt>Spots:</dt> 
-              <dd> 
-                <ul> 
-                    {{#each spots}}
-                    <li>
-                      <a href="/attractions/found/{{this._id}}">{{this.description.Name}}</a>
-                      <a id='delete-atrraction' href="/delete/userAttractions/{{this._id}}">Delete</a>
-                    </li>
-                    {{/each}}
-                </ul> 
-              </dd> 
-              <dt>travelogue:</dt> 
-              <dd> 
-                <ul> 
-                    {{#each Travelogues}}
-                    <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a></li>
-                    {{/each}}
-                </ul> 
-              </dd> 
-              {{#if isAdmin}}
-              <dt>Delete Information:</dt> 
-              <dd> 
-                <ul> 
-                    {{#each DeleteInfo}}
-                    <li>Time: {{this.Time}}</li>
-                    <li>Type: {{this.Type}}</li>
-                    <li>Information: {{this.Information}}</li>
-                    <br>
-                    {{/each}}
-                </ul> 
-              </dd> 
-              {{/if}}
-          </dl>
       </div>
       <div>    
-      <form id="profile-form" method="post">
+      <form id="profile-form" method="get" action="/delete/users/{{user._id}}">
         <div id="userInfo" hidden>
             <div>
               <div>
@@ -88,11 +45,59 @@
             </div>
         </div>
         <button type="button" class="submit-btn" id="edit">edit</button>
+        <button type="submit">Delete this account!!</button>
         <input name="_method" value="patch" hidden/>
       </form>
       </div>
   </article>
   </div>
+  <div id="functionEditor">
+            <dl>
+              <dt>Comments:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each Comments}}
+                    <li>Rating:{{this.rating}}<br>
+                    Comment:{{this.comment}}
+                    <a href="/comments/update/{{this._id}}">Re-edit</a></li>
+                    {{/each}}
+                </ul> 
+              </dd> 
+              <dt>Spots:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each spots}}
+                    <li>
+                      <a href="/attractions/found/{{this._id}}">{{this.description.Name}}</a>
+                      <a id='delete-atrraction' href="/delete/userAttractions/{{this._id}}">Delete</a>
+                    </li>
+                    {{/each}}
+                </ul> 
+              </dd> 
+              <dt>travelogue:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each Travelogues}}
+                    <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a> <a href="/delete/travelogues/{{Travelogue._id}}">Delete</a></li>
+                    {{/each}}
+                </ul> 
+              </dd> 
+              {{#if isAdmin}}
+              <dt>Delete Information:</dt> 
+              <dd> 
+                <ul> 
+                    {{#each DeleteInfo}}
+                    <li>Time: {{this.Time}}</li>
+                    <li>Type: {{this.Type}}</li>
+                    <li>Information: {{this.Information}}</li>
+                    <br>
+                    {{/each}}
+                </ul> 
+              </dd> 
+              {{/if}}
+          </dl>
+  </div>
+  <div id="functionH1">
   <h1 class="profileTitle">Write your own attractions or travelogue!</h1>
   <div id="functionTable">
   <form id="attraction-form" method="post" action="/attractions/add">
@@ -129,7 +134,6 @@
           <a href="/travelogues/add"> Write Travelogue</a>
   </div>
 
-  <a href="/delete/users/{{user._id}}">Delete this account!!</a>
 
 <script type="text/javascript">
     localStorage.setItem('pageDeriveFrom', "profile");
