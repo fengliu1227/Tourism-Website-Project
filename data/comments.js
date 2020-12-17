@@ -7,7 +7,7 @@ const attractions = require('../data/attractions');
 
 let exportedMothod = {
     async addComments(userId, relatedAttractionId, rating, comment) {
-        if (!userId && !relatedAttractionId && !comment) throw 'all fields need to input a value';
+        if (!userId || !relatedAttractionId || !rating || !comment) throw 'all fields need to input a value when add a comment';
         const commentsCollection = await comments();
         let newComments = {
             userId: userId.toString(),
@@ -47,6 +47,7 @@ let exportedMothod = {
     },
 
     async getCommentsByAttractionId(attractionId) {
+        if (!attractionId) { throw 'no attractionId provided when get comments by this' };
         const commentsCollection = await comments();
         const comment = await commentsCollection.find({ relatedAttractionId: attractionId });
 
@@ -56,6 +57,8 @@ let exportedMothod = {
 
     async updateComment(id, updatedRating, updatedComment) {
         if (!id || typeof(id) != 'string') throw 'Error: id should be a string!';
+        if (!updatedRating) { throw 'no updated rating provided when update a comment' };
+        if (!updatedComment) { throw 'no updated comment provided when update a comment' };
 
         let updatedCommentData = {};
         const comment = await this.getCommentsById(id);

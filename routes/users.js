@@ -11,112 +11,182 @@ const { updateUser } = require('../data/users');
 const saltRounds = 16;
 
 router.get('/', async(req, res) => {
-    if (req.session.user) {
-        return res.redirect('/users/private')
-    } else {
-        return res.redirect('/users/login')
+    try {
+        if (req.session.user) {
+            return res.redirect('/users/private')
+        } else {
+            return res.redirect('/users/login')
+        }
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
 });
 
-// router.get('/', async (req, res) => {
-//     return res.redirect('/users/login')
-// });
 
 router.get('/login', async(req, res) => {
-    if (req.session.user) {
-        return res.redirect('/users/private')
-    } else {
-        res.render('users/login')
-        return
+    try {
+        if (req.session.user) {
+            return res.redirect('/users/private')
+        } else {
+            res.render('users/login')
+            return
+        }
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
     // res.render('users/login')
 })
 
 router.post('/login', async(req, res) => {
-    let users = await usersData.getAllUsers();
-    let useremail = req.body.useremail;
-    let password = req.body.password;
-    // console.log(useremail);
-    // console.log(password);
-    try {
-        for (let i = 0; i < users.length; i++) {
-            // console.log(users[i]);
-            // console.log(users[i].password);
-            useremail = useremail.toLowerCase();
-            // console.log(useremail);
-            let match = await bcrypt.compare(password, users[i].password);
-            // console.log(match);
-            if (match && useremail == users[i].email) {
-                if (useremail == "admin@outlook.com") {
-                    req.session.user = {
-                        email: users[i].email,
-                        // firstName: users[i].userName.firstName,
-                        // lastName: users[i].userName.lastName,
-                        userId: users[i]._id,
-                        isAdmin: {
-                            type: Boolean,
-                            default: true
-                        }
+    // if (req.body.useremail && req.body.password) {
+    //     const useremail = req.body.useremail;
+    //     const password = req.body.password;
+    // }
+    // let users = await usersData.getAllUsers();
+    try{
+        let user = await usersData.getUserByEmail(req.body.useremail);
+        console.log(user);
+        let useremail = req.body.useremail;
+        let password = req.body.password;
+        let match = false;
+        if(useremail == user.email){
+            match = await bcrypt.compare(password, user.password);
+        }
+        if (match) {
+            if (useremail == "admin@outlook.com") {
+                req.session.user = {
+                    email: user.email,
+                // firstName: users[i].userName.firstName,
+                // lastName: users[i].userName.lastName,
+                    userId: user._id,
+                    isAdmin: {
+                        type: Boolean,
+                        default: true
                     }
-                } else {
-                    req.session.user = {
-                        email: users[i].email,
-                        // firstName: users[i].userName.firstName,
-                        // lastName: users[i].userName.lastName,
-                        userId: users[i]._id,
-                        isAdmin: {
-                            type: Boolean,
-                            default: false
-                        }
-                    }
+            }
+        } else {
+            req.session.user = {
+                email: user.email,
+                // firstName: users[i].userName.firstName,
+                // lastName: users[i].userName.lastName,
+                userId: user._id,
+                isAdmin: {
+                    type: Boolean,
+                    default: false
                 }
-                //modified
-                if (req.body.pageFrom && req.body.pageFrom == "profile") {
-                    res.redirect('/users/private');
-                    return;
-                }
-                if (req.body.pageFrom && req.body.pageFrom == "add" && req.body.attractionToAddId) {
-                    res.redirect('/attractions/found/' + req.body.attractionToAddId);
-                    return;
-                }
-                return res.render('partials/index', { loggedIn: true });
             }
         }
-        return res.status(401).render('users/login', {
-            error: 'Please provide a valid email or password',
-            hasLogInErrors: true
-        });
+        //modified
+            if (req.body.pageFrom && req.body.pageFrom == "profile") {
+                res.redirect('/users/private');
+                return;
+            }
+            if (req.body.pageFrom && req.body.pageFrom == "add" && req.body.attractionToAddId) {
+                res.redirect('/attractions/found/' + req.body.attractionToAddId);
+                return;
+            }
+            return res.render('partials/index', { loggedIn: true });
+            }
     } catch (e) {
         return res.status(401).render('users/login', {
             error: 'Please provide a valid email or password',
             hashasLogInErrorsErrors: true
         });
     }
+    // console.log(useremail);
+    // console.log(password);
+    // try {
+    //     for (let i = 0; i < users.length; i++) {
+    //         // console.log(users[i]);
+    //         // console.log(users[i].password);
+    //         useremail = useremail.toLowerCase();
+    //         // console.log(useremail);
+    //         if(useremail == users[i].email){
+    //             match = await bcrypt.compare(password, users[i].password);
+    //         }
+    //         if (match) {
+    //             if (useremail == "admin@outlook.com") {
+    //                 req.session.user = {
+    //                     email: users[i].email,
+    //                     // firstName: users[i].userName.firstName,
+    //                     // lastName: users[i].userName.lastName,
+    //                     userId: users[i]._id,
+    //                     isAdmin: {
+    //                         type: Boolean,
+    //                         default: true
+    //                     }
+    //                 }
+    //             } else {
+    //                 req.session.user = {
+    //                     email: users[i].email,
+    //                     // firstName: users[i].userName.firstName,
+    //                     // lastName: users[i].userName.lastName,
+    //                     userId: users[i]._id,
+    //                     isAdmin: {
+    //                         type: Boolean,
+    //                         default: false
+    //                     }
+    //                 }
+    //             }
+    //             //modified
+    //             if (req.body.pageFrom && req.body.pageFrom == "profile") {
+    //                 res.redirect('/users/private');
+    //                 return;
+    //             }
+    //             if (req.body.pageFrom && req.body.pageFrom == "add" && req.body.attractionToAddId) {
+    //                 res.redirect('/attractions/found/' + req.body.attractionToAddId);
+    //                 return;
+    //             }
+    //             return res.render('partials/index', { loggedIn: true });
+    //         }
+    //     }
+    //     return res.status(401).render('users/login', {
+    //         error: 'Please provide a valid email or password',
+    //         hasLogInErrors: true
+    //     });
+    // } catch (e) {
+    //     return res.status(401).render('users/login', {
+    //         error: 'Please provide a valid email or password',
+    //         hashasLogInErrorsErrors: true
+    //     });
+    // }
 });
 
+
 router.get('/private', async(req, res) => {
+  try{
     let curUser = await usersData.getUserById(req.session.user.userId);
+
     let spots = [];
     for (let j = 0; j < curUser.spotsId.length; j++) {
         let spot = await attractions.getAttraction(curUser.spotsId[j]);
         spots.push(spot);
     }
+
     let travelogueList = [];
     for (let x of curUser.travelogueId) {
         let travelogue = await travelogues.getTraveloguesById(x.id);
         travelogueList.push(travelogue);
     }
+
     let commentsList = [];
     for (let x of curUser.commentId) {
         let comment = await comments.getCommentsById(x.id);
         commentsList.push(comment);
     }
+
     let deleteInfoList = []
     if (req.admin) {
+
         let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
+
         deleteInfoList = deleteInfo.deleteInfo
     }
-    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin })
+
+    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
+  }catch(e){
+    res.status(404).render('error/error', { error: e });
+  }
 })
 
 router.post('/signup', async(req, res) => {
