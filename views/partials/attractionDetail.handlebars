@@ -9,12 +9,11 @@
             <li>Address: {{Attractions.description.Address}}</li>
             <li>Description: {{Attractions.description.Content}}</li>
     </ul>
+    {{#if isAdmin}}
+    <a id='admin-delete-atrraction' href="/delete/attractions/{{Attractions._id}}">Delete</a>
+    {{/if}}
 </div>
 
-{{#if isAdmin}}
-<p>You can delete this attraction</p>
-    <a id='admin-delete-atrraction' href="/delete/attractions/{{Attractions._id}}">Delete</a>
-{{/if}}
 
 <div id="show-comments">
     <h2>Comments:</h2>
