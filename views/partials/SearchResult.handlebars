@@ -1,7 +1,24 @@
 <div id="searchTable">
-<h1 class="searchTerm">Search Term : {{searchTerm}}</h1>
+<div>
+<h1 id="searchTermForSort" class="searchTerm">Search Term: {{searchTerm}}</h1>
+<button id="defualtBtn">Sort By default</button>
+<button id="sortBtn">Sort By Rating</button>
+</div>
 <div id="attractionTable">
 {{#each attractions}}
+<div class="attraction" onclick="location.href='/attractions/found/{{this._id}}';">
+    <div class="attraction_img" style="float:left"><img src= "{{description.Img}}" width="150" height="144" alt="{{description.Name}}"/></div>
+    <div class="attraction_text">
+        <p>{{description.Name}}</p>
+        <p>Rating : {{description.Rating}}/5 | {{relatedCommentsId.length}} comments | $ {{description.Price}} /per</p>
+        <p>{{description.Category}} | {{description.Address}}</p>
+        {{description.Content}}
+    </div>
+</div>
+{{/each}}
+</div>
+<div id="attractionTableSorted" hidden>
+{{#each sortedAttractions}}
 <div class="attraction" onclick="location.href='/attractions/found/{{this._id}}';">
     <div class="attraction_img" style="float:left"><img src= "{{description.Img}}" width="150" height="144" alt="{{description.Name}}"/></div>
     <div class="attraction_text">
@@ -21,3 +38,6 @@
     </ul>
 </div>
 </div>
+<script src="https://code.jquery.com/jquery-2.2.4.min.js" integrity="sha256-BbhdlvQf/xTY9gja0Dq3HiwQF8LaCRTXxZKRutelT44="
+        crossorigin="anonymous"></script>
+<script src="/public/js/sort.js"></script>

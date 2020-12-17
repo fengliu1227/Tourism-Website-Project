@@ -30,12 +30,18 @@ router.get('/found/:id', async(req, res) => {
     }
 });
 
-
 router.post('/Search', async(req, res) => {
     let attractionList = await attractions.getAttractionBySearch(req.body.searchTerm);
     let loggedIn = false;
+    let sortedAttractionList = [];
+    for(x of attractionList){
+        sortedAttractionList.push(x);
+    }
+    sortedAttractionList.sort(function(a,b){return b.description.Rating - a.description.Rating});
+
+
     if (req.session.user) loggedIn = true;
-    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList, loggedIn: loggedIn });
+    res.render('partials/SearchResult', { searchTerm: req.body.searchTerm, attractions: attractionList,sortedAttractions:sortedAttractionList,loggedIn: loggedIn });
 });
 router.post("/add", async(req, res) => {
     // if(!user.session.user){
