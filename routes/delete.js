@@ -29,14 +29,6 @@ router.get('/attractions/:id', async(req, res) => {
         console.log(deleteInfo);
         await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
 
-        // for(let i=0; i<traveloguesList.length; i++) {
-        //     try {
-        //         await travelogues.removeTravelogue(traveloguesList[i]._id);
-        //     }catch(e) {
-        //         res.status(400).json({error: e})
-        //         return;
-        //     }
-        // }
         for (let i = 0; i < commentsList.length; i++) {
             try {
                 await comments.removeComment(commentsList[i]._id);
@@ -174,14 +166,6 @@ router.get('/userAttractions/:id', async(req, res) => {
             commentsList[index2++] = await comments.getCommentsById(x.id);
         }
 
-        // for(let i=0; i<traveloguesList.length; i++) {
-        //     try {
-        //         await travelogues.removeTravelogue(traveloguesList[i]._id);
-        //     }catch(e) {
-        //         res.status(400).json({error: e})
-        //         return;
-        //     }
-        // }
         for (let i = 0; i < commentsList.length; i++) {
             try {
                 await comments.removeComment(commentsList[i]._id);
@@ -203,4 +187,37 @@ router.get('/userAttractions/:id', async(req, res) => {
     }
 })
 
+router.get('/userTravelogues/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
+    try {
+        const travelogue = await travelogues.getTraveloguesById(req.params.id);
+
+        try {
+            await travelogues.removeTravelogue(req.params.id);
+            res.redirect('/users/private')
+        } catch (e) {
+            res.status(500).json({ error: e })
+        }
+    } catch (e) {
+        res.status(404).json({ error: 'travelogue you want to delete not found' });
+        return;
+    }
+})
+
+router.get('/userComments/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
+    try {
+        const comment = await comments.getCommentsById(req.params.id);
+
+        try {
+            await comments.removeComment(req.params.id);
+            res.redirect('/users/private')
+        } catch (e) {
+            res.status(500).json({ error: e })
+        }
+    } catch (e) {
+        res.status(404).json({ error: 'travelogue you want to delete not found' });
+        return;
+    }
+})
 module.exports = router;

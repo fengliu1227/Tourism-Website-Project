@@ -128,7 +128,8 @@ router.get('/private', async(req, res) => {
             deleteInfoList = deleteInfo.deleteInfo
         }
 
-        return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
+        // return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
+        return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
     }
