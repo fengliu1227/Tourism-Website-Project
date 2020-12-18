@@ -20,7 +20,16 @@ async function addAttractions(userId, description) {
     await users.updateUser(userId, { spotsId: newId });
     return attraction;
 }
+async function getAllAttraction(){
+    const attractionCollection = await attractions();
+    let attractionList = await attractionCollection.find({}).toArray();
 
+    for (i in attractionList) {
+        attractionList[i]._id = attractionList[i]._id.toString();
+    }
+ 
+    return attractionList;
+}
 async function getAttraction(id) {
     if (!id) throw "id must be given when you want to get a certaian attraction";
     // if (typeof(id) === "string") id = ObjectId.createFromHexString(id);
@@ -150,5 +159,6 @@ module.exports = {
     addCommentToAttraction,
     removeCommentFromAttraction,
     deleteAttraction,
-    updateCommentToAttraction
+    updateCommentToAttraction,
+    getAllAttraction
 }
