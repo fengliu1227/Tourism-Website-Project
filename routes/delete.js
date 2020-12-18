@@ -148,6 +148,7 @@ router.get('/users/:id', async(req, res) => {
                 return;
             }
         }
+
         await users.deleteUser(xss(req.params.id));
 
         req.session.destroy();
