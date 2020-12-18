@@ -50,11 +50,17 @@
 
 
 
-    newCommentButton.on('click', function() {
+    newCommentButton.on('click', function(event) {
         event.preventDefault();
         if (ratingFromComment.val() > 5 || ratingFromComment.val() < 0) {
             alert("rating must in the range of 0 to 5!");
             return;
+        }
+        var commentContent = $('#input-comment-attraction-rating');
+        var commentRating = $('#new-comment-input');
+        if($.trim(commentContent.val())=="" || $.trim(commentRating.val())==""){
+            alert("please enter non-space input");
+            return false;
         }
         var requestConfig = {
             method: 'POST',
