@@ -43,39 +43,41 @@ router.post('/login', async(req, res) => {
     //     const password = req.body.password;
     // }
     // let users = await usersData.getAllUsers();
-    try{
+    if (!req.body.useremail) { throw 'No user email provided when login (stage2)'; }
+    if (!req.body.password) { throw 'No travelogueId provided when login (stage2)'; }
+    try {
         let user = await usersData.getUserByEmail(req.body.useremail);
         let useremail = req.body.useremail;
         let password = req.body.password;
         let match = false;
-        if(user.email == useremail){
+        if (user.email == useremail) {
             match = await bcrypt.compare(password, user.password);
         }
         if (match) {
             if (useremail == "admin@outlook.com") {
                 req.session.user = {
                     email: user.email,
-                // firstName: users[i].userName.firstName,
-                // lastName: users[i].userName.lastName,
+                    // firstName: users[i].userName.firstName,
+                    // lastName: users[i].userName.lastName,
                     userId: user._id,
                     isAdmin: {
                         type: Boolean,
                         default: true
                     }
-            }
-        } else {
-            req.session.user = {
-                email: user.email,
-                // firstName: users[i].userName.firstName,
-                // lastName: users[i].userName.lastName,
-                userId: user._id,
-                isAdmin: {
-                    type: Boolean,
-                    default: false
+                }
+            } else {
+                req.session.user = {
+                    email: user.email,
+                    // firstName: users[i].userName.firstName,
+                    // lastName: users[i].userName.lastName,
+                    userId: user._id,
+                    isAdmin: {
+                        type: Boolean,
+                        default: false
+                    }
                 }
             }
-        }
-        //modified
+            //modified
             if (req.body.pageFrom && req.body.pageFrom == "profile") {
                 res.redirect('/users/private');
                 return;
@@ -85,55 +87,56 @@ router.post('/login', async(req, res) => {
                 return;
             }
             return res.render('partials/index', { loggedIn: true });
-            }
+        }
     } catch (e) {
         return res.status(401).render('users/login', {
             error: 'Please provide a valid email or password',
-            hashasLogInErrorsErrors: true
+            hasLogInErrors: true
         });
     }
 });
 
 
 router.get('/private', async(req, res) => {
-  try{
-    let curUser = await usersData.getUserById(req.session.user.userId);
+    if (!req.session.user.userId) { throw 'No user id provided when visiting profile page(stage2)'; }
+    try {
+        let curUser = await usersData.getUserById(req.session.user.userId);
 
-    let spots = [];
-    for (let j = 0; j < curUser.spotsId.length; j++) {
-        let spot = await attractions.getAttraction(curUser.spotsId[j]);
-        spots.push(spot);
+        let spots = [];
+        for (let j = 0; j < curUser.spotsId.length; j++) {
+            let spot = await attractions.getAttraction(curUser.spotsId[j]);
+            spots.push(spot);
+        }
+
+        let travelogueList = [];
+        for (let x of curUser.travelogueId) {
+            let travelogue = await travelogues.getTraveloguesById(x.id);
+            travelogueList.push(travelogue);
+        }
+
+        let commentsList = [];
+        for (let x of curUser.commentId) {
+            let comment = await comments.getCommentsById(x.id);
+            commentsList.push(comment);
+        }
+
+        let deleteInfoList = []
+        if (req.admin) {
+
+            let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
+
+            deleteInfoList = deleteInfo.deleteInfo
+        }
+
+        return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
+    } catch (e) {
+        res.status(404).render('error/error', { error: e });
     }
-
-    let travelogueList = [];
-    for (let x of curUser.travelogueId) {
-        let travelogue = await travelogues.getTraveloguesById(x.id);
-        travelogueList.push(travelogue);
-    }
-
-    let commentsList = [];
-    for (let x of curUser.commentId) {
-        let comment = await comments.getCommentsById(x.id);
-        commentsList.push(comment);
-    }
-
-    let deleteInfoList = []
-    if (req.admin) {
-
-        let deleteInfo = await adminDeleteInfo.getAdminByEmail("admin@outlook.com")
-
-        deleteInfoList = deleteInfo.deleteInfo
-    }
-
-    return res.render('users/profile', { user: curUser, spots: spots, Comments: commentsList, Travelogues: travelogueList, DeleteInfo: deleteInfoList, loggedIn: true, isAdmin: req.admin });
-  }catch(e){
-    res.status(404).render('error/error', { error: e });
-  }
 })
 
 router.post('/signup', async(req, res) => {
+    if (!req.body) { throw 'No input provided when sign up (stage2)'; }
     let { useremail, password, firstName, lastName, gender } = req.body;
-
     if (!useremail) {
         res.status(401).render('users/login', {
             error: 'You need to provide user email',
@@ -221,13 +224,13 @@ router.post('/signup', async(req, res) => {
 })
 
 router.patch('/private', async(req, res) => {
+    if (!req.body) { throw 'No input provided when patch your profile (stage2)'; }
+    if (!req.session.user.userId) { throw 'No input provided when patch your profile (stage2)'; }
     const { userFirstName, userLastName, gender, password } = req.body;
     let userName = {};
     let updatedObj = { userName };
     try {
         const oldUser = await usersData.getUserById(req.session.user.userId);
-        // console.log(oldUser);
-        console.log(userFirstName.trim().length)
         if (userFirstName.trim().length && userFirstName !== oldUser.userName.firstName) {
             updatedObj.userName.firstName = userFirstName;
         } else {

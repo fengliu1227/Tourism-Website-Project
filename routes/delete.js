@@ -8,6 +8,7 @@ const travelogues = data.travelogues;
 const adminDeleteInfo = data.adminDeleteInfo;
 
 router.get('/attractions/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No attractionId provided when delete an attraction (stage2)'; }
     if (!req.admin) {
         throw 'You are not administrator';
     }
@@ -58,7 +59,7 @@ router.get('/attractions/:id', async(req, res) => {
 })
 
 router.get('/travelogues/:id', async(req, res) => {
-    console.log("1111");
+    if (!req.params.id) { throw 'No travelogueId provided when delete a travelogue (stage2)'; }
     if (!req.admin) {
         throw 'You are not administrator';
     }
@@ -86,6 +87,7 @@ router.get('/travelogues/:id', async(req, res) => {
 })
 
 router.get('/comments/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No commentId provided when delete a comment (stage2)'; }
     if (!req.admin) {
         throw 'You are not administrator';
     }
@@ -113,10 +115,11 @@ router.get('/comments/:id', async(req, res) => {
 })
 
 router.get('/users/:id', async(req, res) => {
-    try{
+    if (!req.params.id) { throw 'No userId provided when delete an user (stage2)'; }
+    try {
         const userInfo = await users.getUserById(req.params.id);
 
-        for(let x of userInfo.spotsId) {
+        for (let x of userInfo.spotsId) {
             // console.log(x);
             const attraction = await attractions.getAttraction(x);
             // console.log(attraction)
@@ -139,7 +142,7 @@ router.get('/users/:id', async(req, res) => {
         }
         let travelouguesList = [];
         let index3 = 0;
-        for(let i of userInfo.travelogueId) {
+        for (let i of userInfo.travelogueId) {
             console.log(i);
             travelouguesList[index3++] = await travelogues.getTraveloguesById(i.id);
             console.log(travelouguesList);
@@ -155,13 +158,14 @@ router.get('/users/:id', async(req, res) => {
         await users.deleteUser(req.params.id);
         req.session.destroy();
         res.redirect('/');
-    }catch(e){
-        res.status(500).json({error: e})
+    } catch (e) {
+        res.status(500).json({ error: e })
         return
     }
 })
 
 router.get('/userAttractions/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
     try {
         const attraction = await attractions.getAttraction(req.params.id);
         let commentsList = [];

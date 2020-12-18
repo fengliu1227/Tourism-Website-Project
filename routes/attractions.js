@@ -8,11 +8,9 @@ const travelogues = data.travelogues;
 //router added(FL)
 router.get('/found/:id', async(req, res) => {
 
-    if (!req.params.id) {
-        throw 'You must provide an id!!!';
-    }
+    if (!req.params.id) { throw 'You must provide an id (stage2)!!!'; }
+
     try {
-        // console.log(typeof(req.params.id) + "  in the router " + req.params.id);
         const attraction = await attractions.getAttraction(req.params.id);
         let commentsList = [];
         let index2 = 0;
@@ -31,6 +29,7 @@ router.get('/found/:id', async(req, res) => {
 });
 
 router.post('/Search', async(req, res) => {
+
     try {
         let attractionList = await attractions.getAttractionBySearch(req.body.searchTerm);
         let loggedIn = false;
@@ -52,6 +51,14 @@ router.post("/add", async(req, res) => {
     //     res.render('/');
     //     return;
     // }
+    if (!req.session.user.userId) { throw 'No userId provided when add an attraction (stage2)'; }
+    if (!req.body.attractionName) { throw 'No attractionName provided when add an attraction (stage2)'; }
+    if (!req.body.attractionCategory) { throw 'No Category provided when add an attraction (stage2)'; }
+    if (!req.body.attractionRating) { throw 'No rating provided when add an attraction (stage2)'; }
+    if (!req.body.attractionImg) { throw 'No img provided when add an attraction (stage2)'; }
+    if (!req.body.attractionPrice) { throw 'No price provided when add an attraction (stage2)'; }
+    if (!req.body.attractionContent) { throw 'No Content provided when add an attraction (stage2)'; }
+    if (!req.body.attractionAddress) { throw 'No Address provided when add an attraction (stage2)'; }
     try {
         userId = req.session.user.userId;
         description = {
