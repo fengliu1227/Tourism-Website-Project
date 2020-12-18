@@ -58,24 +58,13 @@ let exportedMothod = {
     async updateComment(id, updatedRating, updatedComment) {
         if (!id || typeof(id) != 'string') throw 'Error: id should be a string!';
         if (!updatedRating) { throw 'no updated rating provided when update a comment' };
-        if (!updatedComment) { throw 'no updated comment provided when update a comment' };
+        // if (updatedComment !== null) { throw 'no updated comment provided when update a comment' };
 
-        let updatedCommentData = {};
         const comment = await this.getCommentsById(id);
         const difference = Number(updatedRating) - Number(comment.rating);
-        if (updatedRating && updatedComment) {
-            updatedCommentData = {
-                userId: comment.userId,
-                relatedAttractionId: comment.relatedAttractionId,
-                like: comment.like,
-                unlike: comment.unlike,
-                rating: updatedRating,
-                comment: updatedComment
-            }
-        }
 
         const commentsCollection = await comments();
-        const updateInfo = await commentsCollection.updateOne({ _id: ObjectId(id) }, { $set: updatedCommentData }, );
+        const updateInfo = await commentsCollection.updateOne({ _id: ObjectId(id) }, { $set: { rating: updatedRating, comment: updatedComment } }, );
         await attractions.updateCommentToAttraction(comment.relatedAttractionId, difference);
         if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) throw 'Error: Update failed!';
         return await this.getCommentsById(id);

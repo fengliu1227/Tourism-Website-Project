@@ -5,7 +5,7 @@ const usersRoutes = require('./users')
 const commentsRoute = require('./comments');
 const travelogueRoute = require('./travelogues');
 const apiRoutes = require('./api');
-const deleteRoutes = require('./delete')
+const deleteRoutes = require('./delete');
 
 const constructorMethod = (app) => {
     app.get('/', (req, res) => {

@@ -9,6 +9,7 @@ const adminDeleteInfo = data.adminDeleteInfo;
 const bcrypt = require('bcrypt');
 const { updateUser } = require('../data/users');
 const saltRounds = 16;
+const xss = require('xss');
 
 router.get('/', async(req, res) => {
     try {
@@ -43,10 +44,10 @@ router.post('/login', async(req, res) => {
     //     const password = req.body.password;
     // }
     // let users = await usersData.getAllUsers();
-    if (!req.body.useremail) { throw 'No user email provided when login (stage2)'; }
-    if (!req.body.password) { throw 'No travelogueId provided when login (stage2)'; }
+    if (!xss(req.body.useremail)) { throw 'No user email provided when login (stage2)'; }
+    if (!xss(req.body.password)) { throw 'No travelogueId provided when login (stage2)'; }
     try {
-        let user = await usersData.getUserByEmail(req.body.useremail);
+        let user = await usersData.getUserByEmail(xss(req.body.useremail));
         let useremail = req.body.useremail;
         let password = req.body.password;
         let match = false;
@@ -82,8 +83,8 @@ router.post('/login', async(req, res) => {
                 res.redirect('/users/private');
                 return;
             }
-            if (req.body.pageFrom && req.body.pageFrom == "add" && req.body.attractionToAddId) {
-                res.redirect('/attractions/found/' + req.body.attractionToAddId);
+            if ((req.body.pageFrom) && req.body.pageFrom == "add" && req.body.attractionToAddId) {
+                res.redirect('/attractions/found/' + xss(req.body.attractionToAddId));
                 return;
             }
             return res.render('partials/index', { loggedIn: true });
@@ -100,7 +101,7 @@ router.post('/login', async(req, res) => {
 router.get('/private', async(req, res) => {
     if (!req.session.user.userId) { throw 'No user id provided when visiting profile page(stage2)'; }
     try {
-        let curUser = await usersData.getUserById(req.session.user.userId);
+        let curUser = await usersData.getUserById(xss(req.session.user.userId));
 
         let spots = [];
         for (let j = 0; j < curUser.spotsId.length; j++) {
@@ -136,8 +137,13 @@ router.get('/private', async(req, res) => {
 })
 
 router.post('/signup', async(req, res) => {
-    if (!req.body) { throw 'No input provided when sign up (stage2)'; }
-    let { useremail, password, firstName, lastName, gender } = req.body;
+    if (!xss(req.body)) { throw 'No input provided when sign up (stage2)'; }
+    // let { useremail, password, firstName, lastName, gender } = xss(req.body);
+    let useremail = xss(req.body.useremail);
+    let password = xss(req.body.password);
+    let firstName = xss(req.body.firstName);
+    let lastName = xss(req.body.lastName);
+    let gender = xss(req.body.gender);
     if (!useremail) {
         res.status(401).render('users/login', {
             error: 'You need to provide user email',
@@ -225,30 +231,36 @@ router.post('/signup', async(req, res) => {
 })
 
 router.patch('/private', async(req, res) => {
-    if (!req.body) { throw 'No input provided when patch your profile (stage2)'; }
-    if (!req.session.user.userId) { throw 'No input provided when patch your profile (stage2)'; }
-    const { userFirstName, userLastName, gender, password } = req.body;
+    if (!xss(req.body)) { throw 'No input provided when patch your profile (stage2)'; }
+    if (!xss(req.session.user.userId)) { throw 'No input provided when patch your profile (stage2)'; }
+    // const { userFirstName, userLastName, gender, password } = xss(req.body);
     let userName = {};
     let updatedObj = { userName };
     try {
-        const oldUser = await usersData.getUserById(req.session.user.userId);
-        if (userFirstName.trim().length && userFirstName !== oldUser.userName.firstName) {
-            updatedObj.userName.firstName = userFirstName;
+        const { userFirstName, userLastName, gender, password } = xss(req.body);
+        console.log("body:  " + xss(req.body.userFirstName));
+        console.log("body:  " + xss(req.body.userLastName));
+        console.log("body:  " + xss(req.body.gender));
+        console.log("body:  " + xss(req.body.password));
+        console.log("body22:  " + userFirstName + "  " + userLastName + "   " + gender + "  " + password);
+        const oldUser = await usersData.getUserById(xss(req.session.user.userId));
+        if (xss(req.body.userFirstName).trim().length && xss(req.body.userFirstName) !== oldUser.userName.firstName) {
+            updatedObj.userName.firstName = xss(req.body.userFirstName);
         } else {
             updatedObj.userName.firstName = oldUser.userName.firstName;
         }
 
-        if (userLastName.trim().length && userLastName !== oldUser.userName.lastName) {
-            updatedObj.userName.lastName = userLastName;
+        if (xss(req.body.userLastName).trim().length && xss(req.body.userLastName) !== oldUser.userName.lastName) {
+            updatedObj.userName.lastName = xss(req.body.userLastName);
         } else {
             updatedObj.userName.lastName = oldUser.userName.lastName;
         }
 
-        if (gender && gender !== oldUser.gender)
-            updatedObj.gender = gender;
+        if (xss(req.body.gender) && xss(req.body.gender) !== oldUser.gender)
+            updatedObj.gender = xss(req.body.gender);
 
-        if (password) {
-            updatedObj.password = password;
+        if (xss(req.body.password)) {
+            updatedObj.password = xss(req.body.password);
         }
 
     } catch (e) {
@@ -260,20 +272,20 @@ router.patch('/private', async(req, res) => {
     if (Object.keys(updatedObj).length !== 0 && Object.keys(userName).length !== 0) {
         try {
             const updateUser = await usersData.updateUser(
-                req.session.user.userId,
+                xss(req.session.user.userId),
                 updatedObj
             );
             return res.redirect('/users/private');
         } catch (e) {
             res.status(401).render('users/profile', {
-                user: await usersData.getUserById(req.session.user.userId),
+                user: await usersData.getUserById(xss(req.session.user.userId)),
                 error: 'You need to provide infomation',
                 hasErrors: true
             });
         }
     } else {
         res.status(401).render('users/profile', {
-            user: await usersData.getUserById(req.session.user.userId),
+            user: await usersData.getUserById(xss(req.session.user.userId)),
             error: 'You need to provide infomation',
             hasErrors: true,
             loggedIn: true
