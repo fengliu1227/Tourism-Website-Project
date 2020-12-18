@@ -15,6 +15,7 @@ router.post('/Search', async(req, res) => {
     }
 })
 router.get('/found/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No travelogueId provided when get a travelogue (stage2)'; }
     if (!req.params.id) {
         throw 'You must provide an id!!!';
     }
@@ -35,7 +36,6 @@ router.get('/found/:id', async(req, res) => {
 
 router.post('/result', async(req, res) => {
     try {
-        console.log(req.body);
         let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
         res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, travelogue: traveloguesList });
     } catch (e) {
@@ -56,6 +56,9 @@ router.get("/add", async(req, res) => {
 });
 
 router.post("/add", async(req, res) => {
+    if (!req.body.travelogueTitle) { throw 'No travelogue title provided when add a travelogue (stage2)'; }
+    if (!req.body.travelogueContent) { throw 'No travelogue content provided when add a travelogue (stage2)'; }
+    if (!req.session.user.userId) { throw 'No userId provided when add a travelogue (stage2)'; }
     try {
         let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
         let travelogue = await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);

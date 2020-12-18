@@ -8,6 +8,7 @@ const attractions = data.attractions;
 
 
 router.get('/comments/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No commentId provided (stage2)'; }
     try {
         const currentAttraction = await attractions.getAttraction(req.params.id);
         let commentsList = [];
@@ -31,6 +32,10 @@ router.get('/comments/:id', async(req, res) => {
 router.post('/addComment', async(req, res) => {
 
     if (req.session.user) {
+        if (!req.session.user.userId) { throw 'No userId supplied when add a comment (stage2)'; }
+        if (!req.body.attractionId) { throw 'No attractionId provided when add a comment (stage2)'; }
+        if (!req.body.rating) { throw 'No rating provided when add a comment (stage2)'; }
+        if (!req.body.comment) { throw 'No comment provided when add a comment (stage2)'; }
         try {
             let user = await users.getUserById(req.session.user.userId);
             for (let x in user.commentedAttraction) {

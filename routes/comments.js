@@ -17,6 +17,9 @@ router.get('/update/:id', async(req, res) => {
 });
 
 router.post('/update/:id', async(req, res) => {
+    if (!req.params.id) { throw 'No commentId provided when update a comment (stage2)'; }
+    if (!req.body.updatedRating && !req.body.updatedComment) { throw 'you need provieded rating or comment of all of them when update a comment (stage2)'; }
+    if (!req.params.id) { throw 'No commentId provided when update a comment (stage2)'; }
     if (req.session.user) {
         if (req.body.changeWhich == "ratingOnly") {
             try {
