@@ -69,7 +69,7 @@
                     {{#each spots}}
                     <li>
                       <a href="/attractions/found/{{this._id}}">{{this.description.Name}}</a>
-                      <a id='delete-atrraction' href="/delete/userAttractions/{{this._id}}">Delete</a>
+                      <a href="/delete/userAttractions/{{this._id}}">Delete</a>
                     </li>
                     {{/each}}
                 </ul> 
@@ -97,11 +97,12 @@
               {{/if}}
           </dl>
   </div>
+  </div>
   <div id="functionH1">
   <h1 class="profileTitle">Write your own attractions or travelogue!</h1>
   <div id="functionTable">
   <form id="attraction-form" method="post" action="/attractions/add">
-          <button type="button"class="submit-btn"id="addAttraction">add Attraction</button>
+          <button type="button" class="submit-btn" id="addAttraction">add Attraction</button>
           <div id="attractionInfo" class="attraction-group" hidden>
               <div>
                 <label for="input-attraction-name">Attraction Name : </label>
@@ -123,19 +124,20 @@
                 <input type="number" id="input-attraction-price" name="attractionPrice" min="0">
             <div> 
                 <label for="input-attraction-content">Attraction Content : </label>
-                <textarea type="text" id="input-attraction-content" name="attractionContent"></textarea>
+                <textarea id="input-attraction-content" name="attractionContent"></textarea>
             </div>
             <div>
-            <button type="submit"class="submit-btn"id="submit-new-attraction">submit</button>
-            <button type="button"class="submit-btn"id="cancel-new-attraction">cancel</button>
+            <button type="submit" class="submit-btn" id="submit-new-attraction">submit</button>
+            <button type="button" class="submit-btn" id="cancel-new-attraction">cancel</button>
             </div>
           </div>
         </form>
           <a href="/travelogues/add"> Write Travelogue</a>
   </div>
+  </div>
 
 
-<script type="text/javascript">
+<script>
     localStorage.setItem('pageDeriveFrom', "profile");
 </script>
 
