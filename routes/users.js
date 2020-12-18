@@ -88,6 +88,11 @@ router.post('/login', async(req, res) => {
                 return;
             }
             return res.render('partials/index', { loggedIn: true });
+        }else{
+            return res.status(401).render('users/login', {
+                error: 'Please provide a valid email or password',
+                hasLogInErrors: true
+            });
         }
     } catch (e) {
         return res.status(401).render('users/login', {
