@@ -3,13 +3,14 @@ const express = require("express");
 const router = express.Router();
 const data = require('../data');
 const travelogues = data.travelogues;
+const xss = require('xss');
 
 router.post('/Search', async(req, res) => {
     try {
-        let travelogueList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
+        let travelogueList = await travelogues.getTraveloguesBySearch(xss(req.body.searchTerm));
         let loggedIn = false;
-        if (req.session.user) loggedIn = true;
-        res.render('partials/SearchResult', { travelogueSearch: true, searchTerm: req.body.searchTerm, travelogues: travelogueList, loggedIn: loggedIn });
+        if (xss(req.session.user)) loggedIn = true;
+        res.render('partials/SearchResult', { travelogueSearch: true, searchTerm: xss(req.body.searchTerm), travelogues: travelogueList, loggedIn: loggedIn });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
     }
@@ -22,7 +23,7 @@ router.get('/found/:id', async(req, res) => {
     let loggedIn = false;
     if (req.session.user) loggedIn = true;
     try {
-        const travelogue = await travelogues.getTraveloguesById(req.params.id);
+        const travelogue = await travelogues.getTraveloguesById(xss(req.params.id));
         // console.log(travelogue.travelogue.content);
         res.render('travelogues/travelogueDetail', {
             Travelogue: travelogue,
@@ -36,8 +37,8 @@ router.get('/found/:id', async(req, res) => {
 
 router.post('/result', async(req, res) => {
     try {
-        let traveloguesList = await travelogues.getTraveloguesBySearch(req.body.searchTerm);
-        res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + req.body.searchTerm, travelogue: traveloguesList });
+        let traveloguesList = await travelogues.getTraveloguesBySearch(xss(req.body.searchTerm));
+        res.render('travelogues/result', { Research: true, Detail: false, keyword: "result of " + xss(req.body.searchTerm), travelogue: traveloguesList });
     } catch (e) {
         res.status(404).render('error/error', { error: e });
     }
@@ -56,12 +57,12 @@ router.get("/add", async(req, res) => {
 });
 
 router.post("/add", async(req, res) => {
-    if (!req.body.travelogueTitle) { throw 'No travelogue title provided when add a travelogue (stage2)'; }
-    if (!req.body.travelogueContent) { throw 'No travelogue content provided when add a travelogue (stage2)'; }
-    if (!req.session.user.userId) { throw 'No userId provided when add a travelogue (stage2)'; }
+    if (!xss(req.body.travelogueTitle)) { throw 'No travelogue title provided when add a travelogue (stage2)'; }
+    if (!xss(req.body.travelogueContent)) { throw 'No travelogue content provided when add a travelogue (stage2)'; }
+    if (!xss(req.session.user.userId)) { throw 'No userId provided when add a travelogue (stage2)'; }
     try {
-        let currentTravelogue = { title: req.body.travelogueTitle, content: req.body.travelogueContent }
-        let travelogue = await travelogues.addTravelogues(req.session.user.userId, currentTravelogue);
+        let currentTravelogue = { title: xss(req.body.travelogueTitle), content: xss(req.body.travelogueContent) }
+        let travelogue = await travelogues.addTravelogues(xss(req.session.user.userId), currentTravelogue);
         travelogue._id = travelogue._id + "";
         res.json({ success: true, Travelogue: travelogue });
     } catch (e) {

@@ -6,14 +6,15 @@ const attractions = data.attractions;
 const comments = data.comments;
 const travelogues = data.travelogues;
 const adminDeleteInfo = data.adminDeleteInfo;
+const xss = require('xss');
 
 router.get('/attractions/:id', async(req, res) => {
-    if (!req.params.id) { throw 'No attractionId provided when delete an attraction (stage2)'; }
-    if (!req.admin) {
+    if (!xss(req.params.id)) { throw 'No attractionId provided when delete an attraction (stage2)'; }
+    if (!xss(req.admin)) {
         throw 'You are not administrator';
     }
     try {
-        const attraction = await attractions.getAttraction(req.params.id);
+        const attraction = await attractions.getAttraction(xss(req.params.id));
         let commentsList = [];
         let index2 = 0;
         for (let x of attraction.relatedCommentsId) {
@@ -38,8 +39,8 @@ router.get('/attractions/:id', async(req, res) => {
             }
         }
         try {
-            await attractions.deleteAttraction(req.params.id)
-            await users.removeAttractionFromUserByAdmin(attraction.userId, req.params.id);
+            await attractions.deleteAttraction(xss(req.params.id))
+            await users.removeAttractionFromUserByAdmin(attraction.userId, xss(req.params.id));
             res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
@@ -51,12 +52,12 @@ router.get('/attractions/:id', async(req, res) => {
 })
 
 router.get('/travelogues/:id', async(req, res) => {
-    if (!req.params.id) { throw 'No travelogueId provided when delete a travelogue (stage2)'; }
-    if (!req.admin) {
+    if (!xss(req.params.id)) { throw 'No travelogueId provided when delete a travelogue (stage2)'; }
+    if (!xss(req.admin)) {
         throw 'You are not administrator';
     }
     try {
-        const thisTravelogue = await travelogues.getTraveloguesById(req.params.id)
+        const thisTravelogue = await travelogues.getTraveloguesById(xss(req.params.id))
         const currentTime = new Date().toString();
         let deleteInfo = {
             Time: currentTime,
@@ -67,7 +68,7 @@ router.get('/travelogues/:id', async(req, res) => {
         await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
 
         try {
-            await travelogues.removeTravelogue(req.params.id)
+            await travelogues.removeTravelogue(xss(req.params.id))
             res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
@@ -79,12 +80,12 @@ router.get('/travelogues/:id', async(req, res) => {
 })
 
 router.get('/comments/:id', async(req, res) => {
-    if (!req.params.id) { throw 'No commentId provided when delete a comment (stage2)'; }
-    if (!req.admin) {
+    if (!xss(req.params.id)) { throw 'No commentId provided when delete a comment (stage2)'; }
+    if (!xss(req.admin)) {
         throw 'You are not administrator';
     }
     try {
-        const thisComment = await comments.getCommentsById(req.params.id)
+        const thisComment = await comments.getCommentsById(xss(req.params.id))
         const currentTime = new Date().toString();
         let deleteInfo = {
             Time: currentTime,
@@ -95,7 +96,7 @@ router.get('/comments/:id', async(req, res) => {
         await adminDeleteInfo.updateDeleteInfo('admin@outlook.com', deleteInfo);
 
         try {
-            await comments.removeComment(req.params.id)
+            await comments.removeComment(xss(req.params.id))
             res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
@@ -107,9 +108,9 @@ router.get('/comments/:id', async(req, res) => {
 })
 
 router.get('/users/:id', async(req, res) => {
-    if (!req.params.id) { throw 'No userId provided when delete an user (stage2)'; }
+    if (!xss(req.params.id)) { throw 'No userId provided when delete an user (stage2)'; }
     try {
-        const userInfo = await users.getUserById(req.params.id);
+        const userInfo = await users.getUserById(xss(req.params.id));
 
         for (let x of userInfo.spotsId) {
             // console.log(x);
@@ -147,8 +148,9 @@ router.get('/users/:id', async(req, res) => {
                 return;
             }
         }
-        
-        await users.deleteUser(req.params.id);
+
+        await users.deleteUser(xss(req.params.id));
+
         req.session.destroy();
         res.redirect('/');
     } catch (e) {
@@ -158,9 +160,9 @@ router.get('/users/:id', async(req, res) => {
 })
 
 router.get('/userAttractions/:id', async(req, res) => {
-    if (!req.params.id) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
+    if (!xss(req.params.id)) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
     try {
-        const attraction = await attractions.getAttraction(req.params.id);
+        const attraction = await attractions.getAttraction(xss(req.params.id));
         let commentsList = [];
         let index2 = 0;
         for (let x of attraction.relatedCommentsId) {
@@ -176,8 +178,8 @@ router.get('/userAttractions/:id', async(req, res) => {
             }
         }
         try {
-            await attractions.deleteAttraction(req.params.id)
-            await users.removeAttractionFromUserByAdmin(attraction.userId, req.params.id);
+            await attractions.deleteAttraction(xss(req.params.id))
+            await users.removeAttractionFromUserByAdmin(attraction.userId, xss(req.params.id));
             res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
@@ -189,12 +191,12 @@ router.get('/userAttractions/:id', async(req, res) => {
 })
 
 router.get('/userTravelogues/:id', async(req, res) => {
-    if (!req.params.id) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
+    if (!xss(req.params.id)) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
     try {
-        const travelogue = await travelogues.getTraveloguesById(req.params.id);
+        const travelogue = await travelogues.getTraveloguesById(xss(req.params.id));
 
         try {
-            await travelogues.removeTravelogue(req.params.id);
+            await travelogues.removeTravelogue(xss(req.params.id));
             res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
@@ -206,12 +208,12 @@ router.get('/userTravelogues/:id', async(req, res) => {
 })
 
 router.get('/userComments/:id', async(req, res) => {
-    if (!req.params.id) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
+    if (!xss(req.params.id)) { throw 'No AttractionId provided when delete an attraction from user (stage2)'; }
     try {
-        const comment = await comments.getCommentsById(req.params.id);
+        const comment = await comments.getCommentsById(xss(req.params.id));
 
         try {
-            await comments.removeComment(req.params.id);
+            await comments.removeComment(xss(req.params.id));
             res.redirect('/users/private')
         } catch (e) {
             res.status(500).json({ error: e })
