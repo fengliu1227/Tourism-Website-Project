@@ -47,7 +47,7 @@
             alert("please enter non-space input");
             return false;
         }
-        $('#profile-attraction-form').submit();
+        $('#attraction-form').submit();
     })
 
     var commentContentUpdate = $('#updated-comment-input');
