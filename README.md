@@ -27,6 +27,7 @@ npm start : start the server
 
 Then, navigate to localhost:3000 to experience our site.
 ## About us
+**Presentation Video : https://www.youtube.com/watch?v=mACEoz10KFI&t=2s**
 Group member:<br>
 1.Feng Liu<br>
 2.Xiaolin Yang<br>
