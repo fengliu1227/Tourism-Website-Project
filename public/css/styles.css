@@ -450,6 +450,9 @@ ul li{
 #show-comments{
     height:500px;
 }
+#show-comments h2{
+    color:wheat;
+}
 .comment-card{
     overflow: hidden;
     font-size:auto;
