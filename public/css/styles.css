@@ -428,9 +428,10 @@ ul li{
 #editor{
     background-color:rgb(245, 247, 248);
     border: 1px solid #ccc;
-    height: 400px;
+    height: auto;
     width:100%;
     outline: auto;
+    min-height: 500px;
 }
 #travelogueShowTable{
     opacity: 0.8;
