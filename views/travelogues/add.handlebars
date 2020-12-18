@@ -22,7 +22,7 @@
         <label for="travelogueTitle">Title:</label>
         <input type="text" id="travelogueTitle" name="travelogueTitle">
     </div>
-    <div id="editor" class="editor" contenteditable="true" name="travelogueContent"></div>   
+    <div id="editor" class="editor" contenteditable="true" ></div>   
     <div>
     <button type="submit" class="searchbtn" id="travelogue_submit_btn">submit</button>
     </div>
@@ -47,7 +47,7 @@
     btn3.onclick=()=>{
         img_bar.removeAttribute("hidden");
         submit_img_link.addEventListener("click",function(){
-            document.execCommand('insertHTML', 0, '<img src="' + img_link.value + '" alt="' + "add image successfully!" + '" />');
+            document.execCommand('insertHTML', 0, '<img src="' + img_link.value + '" alt="' + "add image failed!" + '" />');
             img_link.value ="";
             img_bar.hidden = true;
         }) 

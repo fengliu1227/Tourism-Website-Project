@@ -137,6 +137,10 @@ nav a:hover{
 .attraction_img{
     width: 30%;
 }
+.attraction_img img{
+    width:100%;
+    height:100%;
+}
 #comments-editor button{
     overflow: hidden;
     width: 20%;

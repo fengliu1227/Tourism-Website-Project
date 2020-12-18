@@ -3,7 +3,7 @@
     <h2>Attraction Information:</h2>
     <ul>
             <li id="detail-attration-rating">Rating : {{Attractions.description.Rating}}</li> 
-            <li><img src= "{{Attractions.description.Img}}" width="80%"height="50%"/></li>
+            <li><img src= "{{Attractions.description.Img}}" style="width: 80%;height:50% " alt="Image Failed!"/></li>
             <li>Price: ${{Attractions.description.Price}} /per</li>
             <li>Category: {{Attractions.description.Category}}</li>
             <li>Address: {{Attractions.description.Address}}</li>
@@ -37,11 +37,11 @@
     </form>
 </div>
 
-    <div type="hidden">
-        <input id="attractionId-add-travelogue" name="attractionIdDetailPage"type="hidden" value={{Attractions._id}} />
-    </div>
+    {{!-- <div hidden>
+        <input id="attractionId-add-travelogue" name="attractionIdDetailPage" value={{Attractions._id}} />
+    </div> --}}
 
-<script type="text/javascript">
+<script>
     localStorage.setItem('attractionIdForAddTravelogue', document.getElementById("attractionId-add-travelogue").value);
     localStorage.setItem('pageDeriveFrom', "add");
     localStorage.setItem('attractionIdToAdd', document.getElementById("attractionId-add-travelogue").value);
