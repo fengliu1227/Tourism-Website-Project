@@ -50,17 +50,28 @@
         $('#profile-attraction-form').submit();
     })
 
-    var commentContent = $('#updated-comment-input');
-    var commentRating = $('#input-update-rating');
+    var commentContentUpdate = $('#updated-comment-input');
+    var commentRatingUpdata = $('#input-update-rating');
     $('#updated-comment-submit').click(function(event){
         event.preventDefault();
-        if($.trim(commentContent.val())==""|| $.trim(commentRating.val())==""){
+        if($.trim(commentContentUpdate.val())=="" && $.trim(commentRatingUpdata.val())==""){
             alert("please enter non-space input");
             return false;
         }
-        $('#add-comment-form').submit();
+        $('#add-comment-form-update').submit();
     })
 
+    // var commentContent = $('#input-comment-attraction-rating');
+    // var commentRating = $('#new-comment-input');
+
+    // $('#new-comment-submit').click(function(event){
+    //     event.preventDefault();
+    //     if($.trim(commentContent.val())=="" || $.trim(commentRating.val())==""){
+    //         alert("please enter non-space input");
+    //         return false;
+    //     }
+    //     $('#add-comment-form').submit();
+    // })
 
 
 
