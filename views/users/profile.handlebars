@@ -59,7 +59,7 @@
                     {{#each Comments}}
                     <li>Rating:{{this.rating}}<br>
                     Comment:{{this.comment}}
-                    <a href="/comments/update/{{this._id}}">Re-edit</a></li>
+                    <a href="/comments/update/{{this._id}}">Re-edit</a> <a href="/delete/userComments/{{this._id}}">Delete</a></li>
                     {{/each}}
                 </ul> 
               </dd> 
@@ -78,7 +78,7 @@
               <dd> 
                 <ul> 
                     {{#each Travelogues}}
-                    <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a>{{#if isAdmin}} <a href="/delete/travelogues/{{this._id}}">Delete</a>{{/if}}</li>
+                    <li><a href="/travelogues/found/{{this._id}}">{{this.travelogue.title}}</a>  <a href="/delete/userTravelogues/{{this._id}}">Delete</a></li>
                     {{/each}}
                 </ul> 
               </dd> 

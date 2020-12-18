@@ -94,8 +94,8 @@ let exportedMothod = {
         try {
             const deletionInfo = await commentsCollection.removeOne({ _id: ObjectId(id) });
             if (deletionInfo.deletedCount === 0) throw 'Error: delete failed';
-            await attractions.removeCommentFromAttraction(comment.relatedAttractionId, id);
-            await users.removeCommentFromUser(comment.userId, id);
+            await attractions.removeCommentFromAttraction(comment.relatedAttractionId, id, comment.rating);
+            await users.removeCommentFromUser(comment.userId, comment.relatedAttractionId, id);
         } catch (e) {
             throw "remove comment failed";
         }

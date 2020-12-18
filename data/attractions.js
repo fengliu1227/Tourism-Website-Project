@@ -79,20 +79,37 @@ async function addCommentToAttraction(attractionId, commentId, rating) {
 }
 
 //remove Comment from Atrraction data, added by feng liu
-async function removeCommentFromAttraction(attractionId, commentId) {
+async function removeCommentFromAttraction(attractionId, commentId, rating) {
     if (!attractionId) { throw 'You need to provide id of this attraction when remove a comment from attraction' };
     if (!commentId) { throw 'You need to provide id of this comment when remove a comment from attraction' };
+    if (!rating) { throw 'You need to provide rating in your comment when remove a comment to attraction' };
     let currentAttaction = await this.getAttraction(attractionId);
     const newComment = {};
     newComment.relatedCommentsId = [];
+    let newRating = (Number(currentAttaction.description.Rating) * Number(currentAttaction.numOfComments) - Number(rating)) / (Number(currentAttaction.numOfComments) - 1);
+    newRating = Math.floor(newRating * 100) / 100;
+    let newDescription = {
+        Name: currentAttaction.description.Name,
+        Category: currentAttaction.description.Category,
+        Rating: newRating.toString(),
+        Img: currentAttaction.description.Img,
+        Price: currentAttaction.description.Price,
+        Content: currentAttaction.description.Content,
+        Address: currentAttaction.description.Address
+    }
     let index = 0;
     for (let i of currentAttaction.relatedCommentsId) {
         if (i.id.toString() == commentId) continue;
         newComment.relatedCommentsId[index++] = i;
     }
     const attractionCollection = await attractions();
-    const updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: newComment });
+    let updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: newComment });
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
+    updateInfo = await attractionCollection.updateOne({ _id: ObjectId(attractionId) }, { $set: { numOfComments: currentAttaction.numOfComments - 1, description: newDescription } });
+    if (!updateInfo.matchedCount && !updatedInfo.modifiedCount) {
+        // throw 'Error: update failed';
+        return;
+    }
     await this.getAttraction(attractionId);
 }
 

@@ -21,12 +21,13 @@ module.exports = {
     privilege: 0,
     commentId: [],
     spotsId: [],
-    travelogueId: [] 
+    travelogueId: [] ,
+    commentedAttraction: []
 
 attaction data format:
-    userId : userId,
-    relatedCommentsId : relatedCommentsId,
-    relatedTravelogueId : relatedCommentsId,
+    userId: userId,
+    relatedCommentsId: [],
+    numOfComments: 1,
     description :{Name,Category,Rating,Img,Price,Content,Address}
 
 travelogue data format:

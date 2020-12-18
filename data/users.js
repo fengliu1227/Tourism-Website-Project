@@ -190,19 +190,25 @@ async function addCommentToUser(userId, commentId) {
 }
 
 //remove Comment from User data, added by feng liu
-async function removeCommentFromUser(userId, commentId) {
+async function removeCommentFromUser(userId, attractionId, commentId) {
     if (!userId) { throw 'no userId provided when remove a comment from user data' };
     if (!commentId) { throw 'no commentId provided when remove a comment from user data' };
     let currentUser = await this.getUserById(userId);
     const newComment = {};
-    newComment.commentId = [];
+    let newCommentId = [];
+    let newCommentedAttraction = [];
     let index = 0;
     for (let i of currentUser.commentId) {
         if (i.id.toString() == commentId) continue;
-        newComment.commentId[index++] = i;
+        newCommentId[index++] = i;
+    }
+    let index2 = 0;
+    for (let i of currentUser.commentedAttraction) {
+        if (i.id.toString() == attractionId) continue;
+        newCommentedAttraction[index2++] = i;
     }
     const usersCollection = await users();
-    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $set: newComment });
+    const updateInfo = await usersCollection.updateOne({ _id: ObjectId(userId) }, { $set: { commentId: newCommentId, commentedAttraction: newCommentedAttraction } });
     if (!updateInfo.matchedCount && !updateInfo.modifiedCount) throw 'Error: delete failed';
     return await this.getUserById(userId);
 }
