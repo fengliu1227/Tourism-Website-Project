@@ -3,7 +3,7 @@
  ## Intorduction
 This project aimed to build a tourism website that offers traveling information and provides review and rating function. Users can add tourist spots and share their rating, recommendations, and traveling tips with others.  The sharing information will help us update, replenish and perfect the travel data of the tourism website.<br>
 ### Database structure
-                  User
+![image](https://github.com/fengliu1227/Tourism-Website-Project/blob/main/Toursim%20Website%20Databse%20Structure.jpg)
 ## How to Use
 In the terminal, navigate to the directory containing app.js, and run the following commands:
 npm install : install all the dependencies for the project
